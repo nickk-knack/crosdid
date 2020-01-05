@@ -1,6 +1,6 @@
 module.exports.secretMessages = {
 	// need to replace these ids with discord user ids
-	32344351: [
+	'250815455315492864': [
 		'fuck off, andrew',
 		'are you done puking yet, andrew?',
 		'andrew fucks his cat for relief',
@@ -10,12 +10,12 @@ module.exports.secretMessages = {
 		'my cat has aids 😂',
 		'ayyy john arbuckle whats crackalackin binglebanger',
 	],
-	23245751: [
+	'140225600966098944': [
 		'nick is a bitch',
 		'high nick',
 		'danny rick lookin\' fucker',
 	],
-	37488539: [
+	'206037113433620480': [
 		'go photoshop a bigger dick on yourself, jake',
 		'.bad jake',
 		'jake go back to no lifing wow classic',
