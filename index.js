@@ -9,8 +9,9 @@ const bodyParser = require('body-parser');
 const Discord = require('discord.js');
 
 // Plugins
-const secretMessages = require('./plugins/secrets.js').secretMessages;
-const guildPhrases = require('./plugins/secrets.js').guildPhrases;
+const secrets = require('./plugins/secrets.js');
+const replies = secrets.replies;
+const guildPhrases = secrets.guildPhrases;
 const eventHelpers = require('./plugins/events.js');
 
 // Environment constants
@@ -60,6 +61,21 @@ client.on('message', msg => {
 		// This is a regular message, do any other processing on it
 		// This includes testing for secret phrases, deciding to send a secret message, etc.
 		// Auto-dogan goes here too, but I should add a guild check
+		// Check that the guild is configured with secret messages and reacts AND that the user has configured messages/reacts
+		if (Object.keys(replies).find(guild_id => guild_id === msg.guild.id) !== undefined &&
+			Object.keys(replies[msg.guild.id]).find(user_id => user_id === msg.author.id) !== undefined) {
+			// Calculate if we want to send a message
+			// Calculate if we want to react
+			// Get random message to send
+			const message = getRandomFromArray(replies[msg.guild.id][msg.author.id].messages);
+			// Reply with message
+			msg.reply(message);
+
+			// Get random reaction
+			const reaction = getRandomFromArray(replies[msg.guild.id][msg.author.id].reactions);
+			// React with reaction
+			msg.react(reaction.custom ? msg.guild.emojis.get(reaction.emoji) : reaction.emoji);
+		}
 		// if (msg.author.id === '182615528383184896') {
 		// 	if (Math.floor(Math.random() * 20) == 1) {
 		// 		msg.react('268177866926194690');
@@ -67,13 +83,12 @@ client.on('message', msg => {
 		// }
 
 		// Guild-based, phrase-activated messages
-		// this is kinda not right, it causes a typeerror saying 625766841779879967 is not a function
-		// if (Object.keys(guildPhrases).find(msg.guild.id) !== undefined) {
-		//	// for (let phrase of Object.keys(guildPhrases[msg.guild.id])) {
-		//		// Regex match phrase in msg.content
-		//		// If it exists, msg.channel.send guildPhrases[msg.guild.id][phrase]
-		//	// }
-		// }
+		if (Object.keys(guildPhrases).find(guild_id => guild_id === msg.guild.id) !== undefined) {
+			for (let phrase of Object.keys(guildPhrases[msg.guild.id])) {
+				// Regex match phrase in msg.content
+				// If it exists, msg.channel.send(guildPhrases[msg.guild.id][phrase])
+			}
+		}
 
 		// Ass-fixer (does not work, sends bot into infinite message loop)
 		// const assMessages = [];
@@ -158,8 +173,8 @@ client.on('message', msg => {
 });
 
 // Disconnect event
-client.on('disconnect', () => {
-	console.log('bye bitch');
+client.on('disconnect', event => {
+	console.log('bye bitch', event);
 });
 
 // Emoji creation event
@@ -206,7 +221,11 @@ client.on('emojiUpdate', (oldEmoji, newEmoji) => {
 
 // Message reaction add event
 client.on('messageReactionAdd', (reaction, user) => {
-	// Maybe change message out to be a rich embed
+	// Any other reaction processing goes here:
+	// (i.e., giving a user a role on a react; add some stuff to events.js plugin to support this)
+
+	// Auto-alert on react code
+	// TODO: Maybe change message out to be a rich embed
 	// Get message author, and begin message content
 	const author = reaction.message.author;
 	let message = `${user.tag} reacted to your message,\n> ${reaction.message.content}\nwith `;
@@ -221,6 +240,31 @@ client.on('messageReactionAdd', (reaction, user) => {
 
 	// Send message to author
 	author.sendMessage(message);
+});
+
+// Rate limiting event
+client.on('rateLimit', info => {
+	// Not sure if there's anything I really want to do, so just log it as a warning
+	// (which may or may not appear as just an error)
+	console.warn('Rate limiting shit:', info);
+});
+
+client.on('channelCreate', channel => {
+	// Only notify the creation of text and voice channels (when enabled)
+	if (channel.type !== 'text' && channel.type !== 'voice' && !eventHelpers.announcements.channel_create.enabled) return;
+
+	// Get channel from eventHelpers.announcements.announcements_channel
+	// Send random message from appropriate messages array to channel
+	const message = getRandomFromArray(eventHelpers.announcements.channel_create.messages);
+});
+
+client.on('channelDelete', channel => {
+	// Only notify the deletion of text and voice channels (when enabled)
+	if (channel.type !== 'text' && channel.type !== 'voice' && !eventHelpers.announcements.channel_delete.enabled) return;
+
+	// Get channel from eventHelpers.announcements.announcements_channel
+	// Send random message from appropriate messages array to channel
+	const message = getRandomFromArray(eventHelpers.announcements.channel_delete.messages);
 });
 
 console.log('\tEvents loaded.');
