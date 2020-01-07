@@ -14,7 +14,10 @@ module.exports.replies = {
 				'ayyy john arbuckle whats crackalackin binglebanger',
 			],
 			reactions: [
-				{ custom: false, emoji: '' },
+				{ custom: true, emoji: '649669223844544512' },
+				{ custom: true, emoji: '652195997916594186' },
+				{ custom: true, emoji: '660988667057143808' },
+				{ custom: false, emoji: '😂' },
 			],
 		},
 		'140225600966098944': {
@@ -24,7 +27,8 @@ module.exports.replies = {
 				'danny rick lookin\' fucker',
 			],
 			reactions: [
-				{ custom: false, emoji: '' },
+				{ custom: true, emoji: '652593020373303336' },
+				{ custom: true, emoji: '653691299953639427' },
 			],
 		},
 		'206037113433620480': {
@@ -36,22 +40,28 @@ module.exports.replies = {
 				'stay in nam',
 			],
 			reactions: [
-				{ custom: false, emoji: '' },
+				{ custom: true, emoji: '649815621210603531' },
+				{ custom: true, emoji: '650367361458896936' },
+				{ custom: true, emoji: '663079480255840287' },
 			],
 		},
-		38353365: {
+		'621804005865029632': {
 			messages: [
-				'max, shouldn\'t you be on call? lil ho',
 				'max, you MUST contact me',
 				'want a sprite cranberry?',
 				'max, are you a believer?',
 				'smart ass grad school lookin motherfucker',
+				'QUICK MAC WHAT DOES IT MEAN????? MMMAC!!!!!!!!',
+				'mac',
 			],
 			reactions: [
-				{ custom: false, emoji: '' },
+				{ custom: true, emoji: '650081690429161533' },
+				{ custom: true, emoji: '649996187780251658' },
+				{ custom: true, emoji: '649815673966559263' },
+				{ custom: true, emoji: '659504191214977034' },
 			],
 		},
-		29852683: {
+		'438132534555967509': {
 			messages: [
 				'matt, what\'s the derivative of e^x? bitch',
 				'who is this dude?',
@@ -59,20 +69,21 @@ module.exports.replies = {
 				'oh my god you\'re alive',
 			],
 			reactions: [
-				{ custom: false, emoji: '' },
+				{ custom: true, emoji: '653328280660738048' },
 			],
 		},
-		57184367: {
+		'518290855757348888': {
 			messages: [
 				'the epic memer has spoken',
 				'guys i lost my mom',
 				'this guy needs more random messages',
 			],
 			reactions: [
-				{ custom: false, emoji: '' },
+				{ custom: true, emoji: '649996307175571458' },
+				{ custom: true, emoji: '653993827106816030' },
 			],
 		},
-		43198226: {
+		'189821621626732554': {
 			messages: [
 				'faewfwexxdb', 'babdnerionpko', 'zxvcxnkvrnoiniogarwniogsre', 'ajfewanoifjewanfewajifewjaoifewaioj', 'zxcvzxc', 'badabadbabdbadba',
 				'badabingbadaboom',
@@ -81,11 +92,23 @@ module.exports.replies = {
 				'sSSSSS AAaAAA  R EWwE e eeE xDDDDDDDD',
 			],
 			reactions: [
-				{ custom: false, emoji: '' },
+				{ custom: true, emoji: '650846853470093322' },
+				{ custom: true, emoji: '654752279517331457' },
+				{ custom: true, emoji: '654752346534051855' },
+			],
+		},
+		'180151466789437440': {
+			messages: [
+				'the machine',
+			],
+			reactions: [
+				{ custom: true, emoji: '652261387518869506' },
+				{ custom: true, emoji: '653691936468762626' },
+				{ custom: true, emoji: '643917245516480533' },
 			],
 		},
 	},
-	'og server id': {
+	'140225766720798721': {
 		'182615528383184896': {
 			messages: [
 				'tik tok',
