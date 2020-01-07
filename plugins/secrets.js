@@ -35,7 +35,6 @@ module.exports.replies = {
 			messages: [
 				'go photoshop a bigger dick on yourself, jake',
 				'.bad jake',
-				'jake go back to no lifing wow classic',
 				'shut up anprim',
 				'stay in nam',
 			],
@@ -105,16 +104,6 @@ module.exports.replies = {
 				{ custom: true, emoji: '652261387518869506' },
 				{ custom: true, emoji: '653691936468762626' },
 				{ custom: true, emoji: '643917245516480533' },
-			],
-		},
-	},
-	'140225766720798721': {
-		'182615528383184896': {
-			messages: [
-				'tik tok',
-			],
-			reactions: [
-				{ custom: true, emoji: '268177866926194690' },
 			],
 		},
 	},
