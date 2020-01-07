@@ -46,14 +46,14 @@ module.exports = {
 			.then(() => {
 				if (message.channel.type !== 'dm') {
 					if (!args.length) {
-						message.channel.send('I slid into your DMs with my commands, babe.');
+						message.reply('check your DMs for a list of my commands.');
 					}
 					else {
-						message.channel.send('I slid into your DMs with help, babe.');
+						message.reply(`check your DMs for help with the ${commands.get(args[0]).name} command.`);
 					}
 				}
 			}).catch(() => {
-				message.reply('I can\'t slide into your DMs :(');
+				message.reply('I seem to have failed to DM you. Try again later.');
 			});
 	},
 };
