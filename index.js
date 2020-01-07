@@ -124,7 +124,7 @@ client.on('message', msg => {
 
 		// Guild-based, phrase-activated messages
 		if (Object.keys(guildPhrases).find(guild_id => guild_id === msg.guild.id) !== undefined) {
-			for (let phrase of Object.keys(guildPhrases[msg.guild.id])) {
+			for (const phrase of Object.keys(guildPhrases[msg.guild.id])) {
 				if (msg.content.includes(phrase)) {
 					msg.channel.send(guildPhrases[msg.guild.id][phrase]);
 				}
@@ -297,6 +297,7 @@ client.on('channelCreate', channel => {
 
 	// Get channel from eventHelpers.announcements.announcements_channel
 	const announcementsChannel = channel.guild.channels.find(c => c.name === eventHelpers.announcements.announcements_channel);
+	// TODO: Should check that the channel actually exists, and bail if it dont
 
 	// Send random message from appropriate messages array + the new channel name to announcements channel
 	const message = `${getRandomFromArray(eventHelpers.announcements.channel_create.messages)} ${channel.toString()}`;
@@ -310,6 +311,7 @@ client.on('channelDelete', channel => {
 
 	// Get channel from eventHelpers.announcements.announcements_channel
 	const announcementsChannel = channel.guild.channels.find(c => c.name === eventHelpers.announcements.announcements_channel);
+	// TODO: Should check that the channel actually exists, and bail if it dont
 
 	// Send random message from appropriate messages array + the new channel name to announcements channel
 	const message = `${getRandomFromArray(eventHelpers.announcements.channel_delete.messages)} #${channel.name}`;
