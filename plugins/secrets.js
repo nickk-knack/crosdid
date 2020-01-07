@@ -33,6 +33,7 @@ module.exports.replies = {
 				'.bad jake',
 				'jake go back to no lifing wow classic',
 				'shut up anprim',
+				'stay in nam',
 			],
 			reactions: [
 				{ custom: false, emoji: '' },
@@ -44,6 +45,7 @@ module.exports.replies = {
 				'max, you MUST contact me',
 				'want a sprite cranberry?',
 				'max, are you a believer?',
+				'smart ass grad school lookin motherfucker',
 			],
 			reactions: [
 				{ custom: false, emoji: '' },
@@ -54,6 +56,7 @@ module.exports.replies = {
 				'matt, what\'s the derivative of e^x? bitch',
 				'who is this dude?',
 				'dumb question',
+				'oh my god you\'re alive',
 			],
 			reactions: [
 				{ custom: false, emoji: '' },
