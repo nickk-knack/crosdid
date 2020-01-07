@@ -64,5 +64,8 @@ typings/
 *.code-workspace
 .vscode
 
+# ignore local db file
+db.json
+
 # temporarily ignoring this module while i continue to develop it
 modules/reddit.js
