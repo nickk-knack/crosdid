@@ -11,3 +11,9 @@
 5. Update the rest of the command modules from previous bots
 6. Finish updating image module
 7. Fix reddit module
+8. Rich embeds everywhere
+   1. index.js
+      1. `messageReactionAdd` event
+      2. `channelCreate` and `channelDelete` events
+   2. commands
+9. Additional reaction procesing (role on react type of thing?)
