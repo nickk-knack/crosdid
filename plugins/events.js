@@ -4,7 +4,6 @@
 module.exports.emojiCreateChannel = {
 	// cuddling bar : emoji-town
 	'625766841779879967': {
-		channel_id: '649660798221680652',
 		channel: 'emoji-town',
 		send_emoji: true,
 		send_message: true,
@@ -19,7 +18,6 @@ module.exports.emojiCreateChannel = {
 module.exports.emojiUpdateChannel = {
 	// cuddling bar : emoji-town
 	'625766841779879967': {
-		channel_id: '649660798221680652',
 		channel: 'emoji-town',
 		send_old_emoji: true,
 		send_new_emoji: true,
@@ -48,4 +46,5 @@ module.exports.announcements = {
 			'i deleted the shit out of a channel:',
 		],
 	},
+	// add guildmemberadd, delete, etc
 };
