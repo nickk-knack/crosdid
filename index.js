@@ -18,7 +18,7 @@ const eventHelpers = require('./plugins/events.js');
 const prefix = process.env.PREFIX;
 const token = process.env.TOKEN;
 const port = process.env.PORT || 3000;
-const DEBUG = process.env.DEBUG || false;
+const DEBUG = false; // process.env.DEBUG || false;
 
 // Discord.js globals
 const client = new Discord.Client();
@@ -34,6 +34,7 @@ const getRandomFromArray = array => array[Math.floor(Math.random() * array.lengt
 console.log('Starting bot...');
 
 // Load in all modules (TODO: rename all command-related things to module!)
+// Also todo: support a command loading blacklist
 console.log('\tLoading commands...');
 for (const file of commandFiles) {
 	const command = require(`./modules/${file}`);
@@ -55,13 +56,13 @@ client.on('ready', () => {
 
 // Message event (command processing)
 client.on('message', msg => {
-	if (!msg.author.bot) console.log(msg);
+	if (DEBUG) if (!msg.author.bot) console.log(msg);
 
 	// Command needs to start with prefix
 	const prefixRegex = new RegExp(`^(<@!?${client.user.id}> |\\${prefix})\\s*`);
 
 	// Test if the message was a command
-	if (!prefixRegex.test(msg.content) || msg.author.bot) {
+	if ((!prefixRegex.test(msg.content) || msg.author.bot) && typeof msg.guild !== 'undefined') {
 		// This is a regular message, do any other processing on it
 		// Check that the guild is configured with secret messages and reacts AND that the user has configured messages/reacts
 		if (Object.keys(replies).find(guild_id => guild_id === msg.guild.id) !== undefined &&
@@ -86,7 +87,7 @@ client.on('message', msg => {
 		// Guild-based, phrase-activated messages
 		if (Object.keys(guildPhrases).find(guild_id => guild_id === msg.guild.id) !== undefined) {
 			for (let phrase of Object.keys(guildPhrases[msg.guild.id])) {
-				if (msg.content.contains(phrase)) {
+				if (msg.content.includes(phrase)) {
 					msg.channel.send(guildPhrases[msg.guild.id][phrase]);
 				}
 			}
@@ -250,7 +251,7 @@ client.on('rateLimit', info => {
 
 client.on('channelCreate', channel => {
 	// Only notify the creation of text and voice channels (when enabled)
-	if (channel.type !== 'text' && channel.type !== 'voice' && !eventHelpers.announcements.channel_create.enabled) return;
+	if (channel.type !== 'text' && channel.type !== 'voice' || !eventHelpers.announcements.channel_create.enabled) return;
 
 	// Get channel from eventHelpers.announcements.announcements_channel
 	const announcementsChannel = channel.guild.channels.find(c => c.name === eventHelpers.announcements.announcements_channel);
@@ -262,7 +263,7 @@ client.on('channelCreate', channel => {
 
 client.on('channelDelete', channel => {
 	// Only notify the deletion of text and voice channels (when enabled)
-	if (channel.type !== 'text' && channel.type !== 'voice' && !eventHelpers.announcements.channel_delete.enabled) return;
+	if (channel.type !== 'text' && channel.type !== 'voice' || !eventHelpers.announcements.channel_delete.enabled) return;
 
 	// Get channel from eventHelpers.announcements.announcements_channel
 	const announcementsChannel = channel.guild.channels.find(c => c.name === eventHelpers.announcements.announcements_channel);
