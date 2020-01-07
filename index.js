@@ -1,5 +1,6 @@
 // Load .env environment configuration
 require('dotenv').config();
+console.log('Parsed environment variables');
 
 // Packages
 const fs = require('fs');
@@ -7,6 +8,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const Discord = require('discord.js');
+const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
 
 // Plugins
 const secrets = require('./plugins/secrets.js');
@@ -18,12 +21,27 @@ const eventHelpers = require('./plugins/events.js');
 const prefix = process.env.PREFIX;
 const token = process.env.TOKEN;
 const port = process.env.PORT || 3000;
-const DEBUG = false; // process.env.DEBUG || false;
+const DEBUG = process.env.PRINT_DEBUG || false;
+const dbFileName = process.env.DB_FILE_NAME || 'db.json';
 
 // Discord.js globals
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const cooldowns = new Discord.Collection();
+
+// lowdb setup
+const adapter = new FileSync(dbFileName, {
+	defaultValue: {
+		// default disabled commands
+		disabledCmdModules: [
+			'reddit',
+			'cmdAliases',
+		],
+	},
+});
+
+const db = low(adapter);
+console.log(`Loaded local database file from ${dbFileName}`);
 
 // Extra functions
 const getRandomFromArray = array => array[Math.floor(Math.random() * array.length)];
@@ -36,15 +54,17 @@ console.log('Starting bot...');
 console.log('\tLoading command modules...');
 
 const commandModules = fs.readdirSync('./modules');
-
 for (const file of commandModules) {
-	if (!file.endsWith('.js')) return;
+	// If file is not a .js file or contained in the blacklist, skip it
+	if (!file.endsWith('.js')) continue;
+	if (db.get('disabledCmdModules').includes(file.split('.')[0]).value()) continue;
 
+	// Require the command module and set it in the client
 	const command = require(`./modules/${file}`);
 	client.commands.set(command.name, command);
 }
 
-console.log('\tCommand modules loaded.');
+console.log(`\tCommand modules loaded. Skipped the following: ${db.get('disabledCmdModules').value().join(', ')}.`);
 
 // Events
 console.log('\tLoading events...');
@@ -53,6 +73,18 @@ console.log('\tLoading events...');
 client.on('ready', () => {
 	console.log(`\tLogged in as ${client.user.tag}!`);
 
+	// Go through joined guilds, make sure there is a per-guild config in db
+	client.guilds.forEach(g => {
+		// Create guild config if non-existent
+		if (!db.has(g.id).value()) {
+			db.set(g.id, {
+				reactionNotify: false,
+				users: [],
+			}).write();
+		}
+	});
+
+	// Set the bot activity text
 	client.user.setActivity('over my children', { type: 'WATCHING' });
 
 	console.log('Finished loading!');
@@ -60,8 +92,6 @@ client.on('ready', () => {
 
 // Message event (command processing)
 client.on('message', msg => {
-	if (DEBUG) if (!msg.author.bot) console.log(msg);
-
 	// Command needs to start with prefix
 	const prefixRegex = new RegExp(`^(<@!?${client.user.id}> |\\${prefix})\\s*`);
 
@@ -69,11 +99,8 @@ client.on('message', msg => {
 	if (!prefixRegex.test(msg.content)) {
 		// This is a regular message, do any other processing on it
 
-		// Ignore messages from bots (especially yourself)
-		if (msg.author.bot) return;
-
-		// Only want the following to run in a guild, not a DM
-		if (typeof msg.guild === 'undefined' || msg.guild === null) return;
+		// Ignore messages from bots (especially yourself), and don't process non-guild messages
+		if (msg.author.bot || typeof msg.guild === 'undefined' || msg.guild === null) return;
 
 		// Check that the guild is configured with secret messages and reacts AND that the user has configured messages/reacts
 		if (Object.keys(replies).find(guild_id => guild_id === msg.guild.id) !== undefined &&
@@ -238,22 +265,24 @@ client.on('messageReactionAdd', (reaction, user) => {
 	// Any other reaction processing goes here:
 	// (i.e., giving a user a role on a react; add some stuff to events.js plugin to support this)
 
-	// Auto-alert on react code
+	// Auto-alert on react code (enabled on a per-guild basis)
 	// TODO: Maybe change message out to be a rich embed
-	// Get message author, and begin message content
-	// const author = reaction.message.author;
-	// let message = `${user.tag} reacted to your message,\n> ${reaction.message.content}\nwith `;
+	if (db.get(`${reaction.message.guild.id}.reactionNotify`).value()) {
+		// Get message author, and begin message content
+		const author = reaction.message.author;
+		let message = `${user.tag} reacted to your message,\n> ${reaction.message.content}\nwith `;
 
-	// detect if the emoji is a guild emoji (true) or regular emoji (false), append to message
-	// if (typeof reaction.emoji.url !== 'undefined') {
-	// 	message += `guild emoji ${reaction.emoji.name} (${reaction.emoji.url})`;
-	// }
-	// else {
-	// 	message += `${reaction.emoji}`;
-	// }
+		// detect if the emoji is a guild emoji (true) or regular emoji (false), append to message
+		if (typeof reaction.emoji.url !== 'undefined') {
+			message += `guild emoji ${reaction.emoji.name} (${reaction.emoji.url})`;
+		}
+		else {
+			message += `${reaction.emoji}`;
+		}
 
-	// Send message to author
-	// author.send(message);
+		// Send message to author
+		author.send(message);
+	}
 });
 
 // Rate limiting event
@@ -290,7 +319,7 @@ client.on('channelDelete', channel => {
 // Logging events
 client.on('error', error => console.error(error));
 client.on('warn', warn => console.warn(warn));
-if (DEBUG) client.on('debug', info => console.info(info));
+// if (DEBUG) client.on('debug', info => console.info(info));
 
 console.log('\tEvents loaded.');
 
