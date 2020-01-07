@@ -126,7 +126,7 @@ client.on('message', msg => {
 	// Get command args and command name
 	const [, matchedPrefix] = msg.content.match(prefixRegex);
 	const args = msg.content.slice(matchedPrefix.length).split(/ +/);
-	const commandName = args.shift();
+	const commandName = args.shift().toLowerCase();
 
 	// Get the actual command object, check if it exists
 	const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
@@ -192,7 +192,7 @@ client.on('disconnect', event => {
 
 // Emoji creation event
 client.on('emojiCreate', emoji => {
-	// Maybe create a rich embed instead
+	// Maybe create a rich embed instead, send a full size version of the emoji?
 	const settings = eventHelpers.emojiCreateChannel[emoji.guild.id];
 	const emojiChannel = emoji.guild.channels.find(c => c.name === settings.channel);
 
