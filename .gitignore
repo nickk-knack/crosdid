@@ -61,3 +61,6 @@ typings/
 .next
 
 *.code-workspace
+
+# temporarily ignoring this module while i continue to develop it
+modules/reddit.js
