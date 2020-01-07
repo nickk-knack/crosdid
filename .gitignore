@@ -60,7 +60,9 @@ typings/
 # next.js build output
 .next
 
+# VS Code related ignores
 *.code-workspace
+.vscode
 
 # temporarily ignoring this module while i continue to develop it
 modules/reddit.js
