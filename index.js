@@ -258,9 +258,7 @@ client.on('messageReactionAdd', (reaction, user) => {
 
 // Rate limiting event
 client.on('rateLimit', info => {
-	// Not sure if there's anything I really want to do, so just log it as a warning
-	// (which may or may not appear as just an error)
-	console.warn('Rate limiting shit:', info);
+	if (DEBUG) console.warn('Rate limiting shit:', info);
 });
 
 // Channel creation event (for announcement)
