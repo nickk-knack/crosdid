@@ -1,7 +1,5 @@
 const Discord = require('discord.js');
 
-const prefix = process.env.PREFIX;
-
 module.exports = {
 	name: 'help',
 	aliases: ['commands'],
@@ -9,6 +7,7 @@ module.exports = {
 	usage: '[command name]',
 	cooldown: 3,
 	execute(message, args) {
+		const prefix = process.env.PREFIX || message.client.user.toString();
 		const { commands } = message.client;
 
 		const embed = new Discord.RichEmbed().setColor('#DD11FF');
