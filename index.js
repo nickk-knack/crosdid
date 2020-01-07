@@ -25,22 +25,26 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 
-// TODO: rename commandFiles to moduleFiles
-const commandFiles = fs.readdirSync('./modules');
-
 // Extra functions
 const getRandomFromArray = array => array[Math.floor(Math.random() * array.length)];
 
+// Start of the main bot code
 console.log('Starting bot...');
 
-// Load in all modules (TODO: rename all command-related things to module!)
+// Load in all command modules
 // Also todo: support a command loading blacklist
-console.log('\tLoading commands...');
-for (const file of commandFiles) {
+console.log('\tLoading command modules...');
+
+const commandModules = fs.readdirSync('./modules');
+
+for (const file of commandModules) {
+	if (!file.endsWith('.js')) return;
+
 	const command = require(`./modules/${file}`);
 	client.commands.set(command.name, command);
 }
-console.log('\tCommands loaded.');
+
+console.log('\tCommand modules loaded.');
 
 // Events
 console.log('\tLoading events...');
@@ -49,7 +53,7 @@ console.log('\tLoading events...');
 client.on('ready', () => {
 	console.log(`\tLogged in as ${client.user.tag}!`);
 
-	client.user.setActivity('porn', { type: 'WATCHING' });
+	client.user.setActivity('over my children', { type: 'WATCHING' });
 
 	console.log('Finished loading!');
 });
@@ -62,8 +66,15 @@ client.on('message', msg => {
 	const prefixRegex = new RegExp(`^(<@!?${client.user.id}> |\\${prefix})\\s*`);
 
 	// Test if the message was a command
-	if ((!prefixRegex.test(msg.content) || msg.author.bot) && typeof msg.guild !== 'undefined') {
+	if (!prefixRegex.test(msg.content)) {
 		// This is a regular message, do any other processing on it
+
+		// Ignore messages from bots (especially yourself)
+		if (msg.author.bot) return;
+
+		// Only want the following to run in a guild, not a DM
+		if (typeof msg.guild === 'undefined' || msg.guild === null) return;
+
 		// Check that the guild is configured with secret messages and reacts AND that the user has configured messages/reacts
 		if (Object.keys(replies).find(guild_id => guild_id === msg.guild.id) !== undefined &&
 			Object.keys(replies[msg.guild.id]).find(user_id => user_id === msg.author.id) !== undefined) {
@@ -94,6 +105,8 @@ client.on('message', msg => {
 		}
 
 		// Ass-fixer (does not work, sends bot into infinite message loop)
+		// TODO: I likely fixed the infinite looping, but it tried to fix a message that didn't need fixing I think
+		// Look further into this
 		// const assMessages = [];
 		// const assTokens = msg.content.toLowerCase().match(/(\w*[\s-])ass(\s\w*)/g);
 
@@ -197,7 +210,7 @@ client.on('emojiCreate', emoji => {
 	}
 });
 
-// Emoji update event
+// Emoji update event (didnt fire for updating emoji name, should figure it out)
 client.on('emojiUpdate', (oldEmoji, newEmoji) => {
 	// Similar to creation, inform about updates to an emoji
 	const settings = eventHelpers.emojiCreateChannel[oldEmoji.guild.id];
@@ -219,7 +232,8 @@ client.on('emojiUpdate', (oldEmoji, newEmoji) => {
 	}
 });
 
-// Message reaction add event
+// Message reaction add event (temporarily disabled, causes crashing)
+// Enable on a per-guild basis!
 client.on('messageReactionAdd', (reaction, user) => {
 	// Any other reaction processing goes here:
 	// (i.e., giving a user a role on a react; add some stuff to events.js plugin to support this)
@@ -227,19 +241,19 @@ client.on('messageReactionAdd', (reaction, user) => {
 	// Auto-alert on react code
 	// TODO: Maybe change message out to be a rich embed
 	// Get message author, and begin message content
-	const author = reaction.message.author;
-	let message = `${user.tag} reacted to your message,\n> ${reaction.message.content}\nwith `;
+	// const author = reaction.message.author;
+	// let message = `${user.tag} reacted to your message,\n> ${reaction.message.content}\nwith `;
 
 	// detect if the emoji is a guild emoji (true) or regular emoji (false), append to message
-	if (typeof reaction.emoji.url !== 'undefined') {
-		message += `guild emoji ${reaction.emoji.name} (${reaction.emoji.url})`;
-	}
-	else {
-		message += `${reaction.emoji}`;
-	}
+	// if (typeof reaction.emoji.url !== 'undefined') {
+	// 	message += `guild emoji ${reaction.emoji.name} (${reaction.emoji.url})`;
+	// }
+	// else {
+	// 	message += `${reaction.emoji}`;
+	// }
 
 	// Send message to author
-	author.sendMessage(message);
+	// author.send(message);
 });
 
 // Rate limiting event
@@ -249,6 +263,7 @@ client.on('rateLimit', info => {
 	console.warn('Rate limiting shit:', info);
 });
 
+// Channel creation event (for announcement)
 client.on('channelCreate', channel => {
 	// Only notify the creation of text and voice channels (when enabled)
 	if (channel.type !== 'text' && channel.type !== 'voice' || !eventHelpers.announcements.channel_create.enabled) return;
@@ -257,10 +272,11 @@ client.on('channelCreate', channel => {
 	const announcementsChannel = channel.guild.channels.find(c => c.name === eventHelpers.announcements.announcements_channel);
 
 	// Send random message from appropriate messages array + the new channel name to announcements channel
-	const message = `${getRandomFromArray(eventHelpers.announcements.channel_create.messages)} #${channel.name}`;
+	const message = `${getRandomFromArray(eventHelpers.announcements.channel_create.messages)} ${channel.toString()}`;
 	announcementsChannel.send(message);
 });
 
+// Channel deletion event (for announcement)
 client.on('channelDelete', channel => {
 	// Only notify the deletion of text and voice channels (when enabled)
 	if (channel.type !== 'text' && channel.type !== 'voice' || !eventHelpers.announcements.channel_delete.enabled) return;
@@ -273,6 +289,7 @@ client.on('channelDelete', channel => {
 	announcementsChannel.send(message);
 });
 
+// Logging events
 client.on('error', error => console.error(error));
 client.on('warn', warn => console.warn(warn));
 if (DEBUG) client.on('debug', info => console.info(info));
