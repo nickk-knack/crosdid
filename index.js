@@ -18,6 +18,7 @@ const eventHelpers = require('./plugins/events.js');
 const prefix = process.env.PREFIX;
 const token = process.env.TOKEN;
 const port = process.env.PORT || 3000;
+const DEBUG = process.env.DEBUG || false;
 
 // Discord.js globals
 const client = new Discord.Client();
@@ -46,6 +47,9 @@ console.log('\tLoading events...');
 // Ready event
 client.on('ready', () => {
 	console.log(`\tLogged in as ${client.user.tag}!`);
+
+	client.user.setActivity('porn', { type: 'WATCHING' });
+
 	console.log('Finished loading!');
 });
 
@@ -59,34 +63,32 @@ client.on('message', msg => {
 	// Test if the message was a command
 	if (!prefixRegex.test(msg.content) || msg.author.bot) {
 		// This is a regular message, do any other processing on it
-		// This includes testing for secret phrases, deciding to send a secret message, etc.
-		// Auto-dogan goes here too, but I should add a guild check
 		// Check that the guild is configured with secret messages and reacts AND that the user has configured messages/reacts
 		if (Object.keys(replies).find(guild_id => guild_id === msg.guild.id) !== undefined &&
 			Object.keys(replies[msg.guild.id]).find(user_id => user_id === msg.author.id) !== undefined) {
-			// Calculate if we want to send a message
-			// Calculate if we want to react
-			// Get random message to send
-			const message = getRandomFromArray(replies[msg.guild.id][msg.author.id].messages);
-			// Reply with message
-			msg.reply(message);
+			// Calculate if we want to send a message and/or react
+			const sendSecretMessage = Math.random() > (1 - process.env.SECRET_MESSAGE_CHANCE);
+			const secretlyReact = Math.random() > (1 - process.env.SECRET_REACT_CHANCE);
 
-			// Get random reaction
-			const reaction = getRandomFromArray(replies[msg.guild.id][msg.author.id].reactions);
-			// React with reaction
-			msg.react(reaction.custom ? msg.guild.emojis.get(reaction.emoji) : reaction.emoji);
+			// Get random message to send, send it
+			if (sendSecretMessage) {
+				const message = getRandomFromArray(replies[msg.guild.id][msg.author.id].messages);
+				msg.reply(message);
+			}
+
+			// Get random reaction, react with it
+			if (secretlyReact) {
+				const reaction = getRandomFromArray(replies[msg.guild.id][msg.author.id].reactions);
+				msg.react(reaction.custom ? msg.guild.emojis.get(reaction.emoji) : reaction.emoji);
+			}
 		}
-		// if (msg.author.id === '182615528383184896') {
-		// 	if (Math.floor(Math.random() * 20) == 1) {
-		// 		msg.react('268177866926194690');
-		// 	}
-		// }
 
 		// Guild-based, phrase-activated messages
 		if (Object.keys(guildPhrases).find(guild_id => guild_id === msg.guild.id) !== undefined) {
 			for (let phrase of Object.keys(guildPhrases[msg.guild.id])) {
-				// Regex match phrase in msg.content
-				// If it exists, msg.channel.send(guildPhrases[msg.guild.id][phrase])
+				if (msg.content.contains(phrase)) {
+					msg.channel.send(guildPhrases[msg.guild.id][phrase]);
+				}
 			}
 		}
 
@@ -102,9 +104,6 @@ client.on('message', msg => {
 		// }
 
 		// msg.reply(assMessages.join(', '));
-
-		// Secret messages
-		// will be kinda like the gbpa messages from above
 
 		// At the end, return.
 		return;
@@ -181,7 +180,7 @@ client.on('disconnect', event => {
 client.on('emojiCreate', emoji => {
 	// Maybe create a rich embed instead
 	const settings = eventHelpers.emojiCreateChannel[emoji.guild.id];
-	const emojiChannel = emoji.guild.channels.get(settings.channel_id);
+	const emojiChannel = emoji.guild.channels.find(c => c.name === settings.channel);
 
 	if (settings.send_emoji) {
 		let message = '';
@@ -201,7 +200,7 @@ client.on('emojiCreate', emoji => {
 client.on('emojiUpdate', (oldEmoji, newEmoji) => {
 	// Similar to creation, inform about updates to an emoji
 	const settings = eventHelpers.emojiCreateChannel[oldEmoji.guild.id];
-	const emojiChannel = oldEmoji.guild.channels.get(settings.channel_id);
+	const emojiChannel = oldEmoji.guild.channels.find(c => c.name === settings.channel);
 
 	let message = '';
 
@@ -254,8 +253,11 @@ client.on('channelCreate', channel => {
 	if (channel.type !== 'text' && channel.type !== 'voice' && !eventHelpers.announcements.channel_create.enabled) return;
 
 	// Get channel from eventHelpers.announcements.announcements_channel
-	// Send random message from appropriate messages array to channel
-	const message = getRandomFromArray(eventHelpers.announcements.channel_create.messages);
+	const announcementsChannel = channel.guild.channels.find(c => c.name === eventHelpers.announcements.announcements_channel);
+
+	// Send random message from appropriate messages array + the new channel name to announcements channel
+	const message = `${getRandomFromArray(eventHelpers.announcements.channel_create.messages)} #${channel.name}`;
+	announcementsChannel.send(message);
 });
 
 client.on('channelDelete', channel => {
@@ -263,9 +265,16 @@ client.on('channelDelete', channel => {
 	if (channel.type !== 'text' && channel.type !== 'voice' && !eventHelpers.announcements.channel_delete.enabled) return;
 
 	// Get channel from eventHelpers.announcements.announcements_channel
-	// Send random message from appropriate messages array to channel
-	const message = getRandomFromArray(eventHelpers.announcements.channel_delete.messages);
+	const announcementsChannel = channel.guild.channels.find(c => c.name === eventHelpers.announcements.announcements_channel);
+
+	// Send random message from appropriate messages array + the new channel name to announcements channel
+	const message = `${getRandomFromArray(eventHelpers.announcements.channel_delete.messages)} #${channel.name}`;
+	announcementsChannel.send(message);
 });
+
+client.on('error', error => console.error(error));
+client.on('warn', warn => console.warn(warn));
+if (DEBUG) client.on('debug', info => console.info(info));
 
 console.log('\tEvents loaded.');
 
