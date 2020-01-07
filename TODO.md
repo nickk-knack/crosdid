@@ -17,3 +17,4 @@
       2. `channelCreate` and `channelDelete` events
    2. commands
 9. Additional reaction procesing (role on react type of thing?)
+10. idk, to be safe just ctrl-f "todo" in the index and command module files
