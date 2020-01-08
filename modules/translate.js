@@ -125,7 +125,7 @@ Use "${process.env.PREFIX}translate <lang>" to see what language a language code
 		translate.translate(text, { to: lang }, (err, res) => {
 			if (err || res.code != 200) {
 				console.error(err);
-				message.reply('Shit is fucked up, cunt.');
+				message.reply('shits fucked cunt');
 			}
 
 			const toFromLang = res.lang.split('-');
