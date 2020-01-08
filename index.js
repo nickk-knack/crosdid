@@ -15,7 +15,6 @@ const FileSync = require('lowdb/adapters/FileSync');
 const secrets = require('./plugins/secrets.js');
 const replies = secrets.replies;
 const guildPhrases = secrets.guildPhrases;
-const eventHelpers = require('./plugins/events.js');
 
 // Environment constants
 const prefix = process.env.PREFIX;
@@ -103,6 +102,7 @@ client.on('message', msg => {
 		if (msg.author.bot || typeof msg.guild === 'undefined' || msg.guild === null) return;
 
 		// Check that the guild is configured with secret messages and reacts AND that the user has configured messages/reacts
+		// Todo: rewrite to support the way the db has the data organized
 		if (Object.keys(replies).find(guild_id => guild_id === msg.guild.id) !== undefined &&
 			Object.keys(replies[msg.guild.id]).find(user_id => user_id === msg.author.id) !== undefined) {
 			// Calculate if we want to send a message and/or react
@@ -220,8 +220,29 @@ client.on('disconnect', event => {
 // Emoji creation event
 client.on('emojiCreate', emoji => {
 	// Maybe create a rich embed instead, send a full size version of the emoji?
-	const settings = eventHelpers.emojiCreateChannel[emoji.guild.id];
-	const emojiChannel = emoji.guild.channels.find(c => c.name === settings.channel);
+	const settings = db.get(`${emoji.guild.id}.announcements.emoji_create`).value();
+	const emojiChannelName = typeof settings.channel_override !== 'undefined' ? settings.channel_override : db.get(`${emoji.guild.id}.announcements.channel`).value();
+	const emojiChannel = emoji.guild.channels.find(c => c.name === emojiChannelName);
+
+	if (settings.send_emoji) {
+		let message = '';
+
+		if (settings.send_message) {
+			message = settings.message_prepend ? `${getRandomFromArray(settings.messages)} ${emoji.toString()}` : `${emoji.toString()} ${getRandomFromArray(settings.messages)}`;
+		}
+		else {
+			message = emoji.toString();
+		}
+
+		emojiChannel.send(message);
+	}
+});
+
+client.on('emojiDelete', emoji => {
+	// need to send something other than the emoji bc that wont work lol
+	const settings = db.get(`${emoji.guild.id}.announcements.emoji_delete`).value();
+	const emojiChannelName = typeof settings.channel_override !== 'undefined' ? settings.channel_override : db.get(`${emoji.guild.id}.announcements.channel`).value();
+	const emojiChannel = emoji.guild.channels.find(c => c.name === emojiChannelName);
 
 	if (settings.send_emoji) {
 		let message = '';
@@ -240,8 +261,9 @@ client.on('emojiCreate', emoji => {
 // Emoji update event (didnt fire for updating emoji name, should figure it out)
 client.on('emojiUpdate', (oldEmoji, newEmoji) => {
 	// Similar to creation, inform about updates to an emoji
-	const settings = eventHelpers.emojiCreateChannel[oldEmoji.guild.id];
-	const emojiChannel = oldEmoji.guild.channels.find(c => c.name === settings.channel);
+	const settings = db.get(`${newEmoji.guild.id}.announcements.emoji_update`).value();
+	const emojiChannelName = typeof settings.channel_override !== 'undefined' ? settings.channel_override : db.get(`${newEmoji.guild.id}.announcements.channel`).value();
+	const emojiChannel = newEmoji.guild.channels.find(c => c.name === emojiChannelName);
 
 	let message = '';
 
@@ -268,6 +290,9 @@ client.on('messageReactionAdd', (reaction, user) => {
 	// Auto-alert on react code (enabled on a per-guild basis)
 	// TODO: Maybe change message out to be a rich embed
 	if (db.get(`${reaction.message.guild.id}.reactionNotify`).value()) {
+		// first check that you can send pms to the author! (i.e. that its not a bot)
+		if (reaction.message.author.bot) return;
+
 		// Get message author, and begin message content
 		const author = reaction.message.author;
 		let message = `${user.tag} reacted to your message,\n> ${reaction.message.content}\nwith `;
@@ -292,29 +317,37 @@ client.on('rateLimit', info => {
 
 // Channel creation event (for announcement)
 client.on('channelCreate', channel => {
-	// Only notify the creation of text and voice channels (when enabled)
-	if (channel.type !== 'text' && channel.type !== 'voice' || !eventHelpers.announcements.channel_create.enabled) return;
+	// Get settings for this event from the db
+	const settings = db.get(`${channel.guild.id}.announcements.channel_create`).value();
 
-	// Get channel from eventHelpers.announcements.announcements_channel
-	const announcementsChannel = channel.guild.channels.find(c => c.name === eventHelpers.announcements.announcements_channel);
-	// TODO: Should check that the channel actually exists, and bail if it dont
+	// Only notify the creation of text and voice channels (when enabled)
+	if (channel.type !== 'text' && channel.type !== 'voice' || !settings.enabled) return;
+
+	// Get a reference to the defined announcements channel
+	const announcementsChannel = channel.guild.channels.find(c => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
+	// Bail if the channel doesn't exist
+	if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
 
 	// Send random message from appropriate messages array + the new channel name to announcements channel
-	const message = `${getRandomFromArray(eventHelpers.announcements.channel_create.messages)} ${channel.toString()}`;
+	const message = `${getRandomFromArray(settings.messages)} ${channel.toString()}`;
 	announcementsChannel.send(message);
 });
 
 // Channel deletion event (for announcement)
 client.on('channelDelete', channel => {
-	// Only notify the deletion of text and voice channels (when enabled)
-	if (channel.type !== 'text' && channel.type !== 'voice' || !eventHelpers.announcements.channel_delete.enabled) return;
+	// Get settings for this event from the db
+	const settings = db.get(`${channel.guild.id}.announcements.channel_delete`).value();
 
-	// Get channel from eventHelpers.announcements.announcements_channel
-	const announcementsChannel = channel.guild.channels.find(c => c.name === eventHelpers.announcements.announcements_channel);
-	// TODO: Should check that the channel actually exists, and bail if it dont
+	// Only notify the deletion of text and voice channels (when enabled)
+	if (channel.type !== 'text' && channel.type !== 'voice' || !settings.enabled) return;
+
+	// Get a reference to the defined announcements channel
+	const announcementsChannel = channel.guild.channels.find(c => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
+	// Bail if the channel doesn't exist
+	if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
 
 	// Send random message from appropriate messages array + the new channel name to announcements channel
-	const message = `${getRandomFromArray(eventHelpers.announcements.channel_delete.messages)} #${channel.name}`;
+	const message = `${getRandomFromArray(settings.messages)} ${channel.toString()}`;
 	announcementsChannel.send(message);
 });
 
