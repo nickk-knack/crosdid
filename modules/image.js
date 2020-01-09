@@ -21,6 +21,7 @@ module.exports = {
 			.then(images => {
 				// Get random image
 				const randomImage = images[Math.floor(Math.random() * images.length)];
+				if (typeof randomImage === 'undefined') message.reply(`No results found for \`${query}\``);
 
 				const embed = new Discord.RichEmbed()
 					.setColor(randomHex.generate())
