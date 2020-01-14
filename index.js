@@ -46,25 +46,37 @@ console.log(`Loaded local database file from ${dbFileName}`);
 
 // Extra functions
 const getRandomFromArray = array => array[Math.floor(Math.random() * array.length)];
+const reload = (reloadDB, reloadCommands) => {
+	if (reloadDB) {
+		console.log('Reading database...');
+		db.read();
+	}
+
+	if (reloadCommands) {
+		console.log('Loading command modules...');
+		client.commands.clear();
+
+		const commandModules = fs.readdirSync('./modules');
+
+		for (const file of commandModules) {
+			// If file is not a .js file or contained in the blacklist, skip it
+			if (!file.endsWith('.js')) continue;
+			if (db.get('globalDisabledCmdModules').includes(file.split('.')[0]).value()) continue;
+
+			// Require the command module and set it in the client
+			const command = require(`./modules/${file}`);
+			client.commands.set(command.name, command);
+		}
+
+		console.log(`\tCommand modules loaded. Skipped the following: ${db.get('globalDisabledCmdModules').value().join(', ')}.`);
+	}
+};
 
 // Start of the main bot code
 console.log('Starting bot...');
 
 // Load in all command modules
-console.log('\tLoading command modules...');
-
-const commandModules = fs.readdirSync('./modules');
-for (const file of commandModules) {
-	// If file is not a .js file or contained in the blacklist, skip it
-	if (!file.endsWith('.js')) continue;
-	if (db.get('globalDisabledCmdModules').includes(file.split('.')[0]).value()) continue;
-
-	// Require the command module and set it in the client
-	const command = require(`./modules/${file}`);
-	client.commands.set(command.name, command);
-}
-
-console.log(`\tCommand modules loaded. Skipped the following: ${db.get('globalDisabledCmdModules').value().join(', ')}.`);
+reload({ reloadDB: false, reloadCommands: true });
 
 // Events
 console.log('\tLoading events...');
@@ -184,11 +196,8 @@ client.on('message', msg => {
 			}
 
 			// Ass-fixer
-			// TODO: tried to fix a message that didn't need fixing I think
-			// Should just retest this tbh
 			const assMessages = [];
 			const assTokens = msg.content.toLowerCase().match(/(\w*[\s-])ass(\s\w*)/g);
-
 			if (assTokens && assTokens !== null) {
 				for (const assToken of assTokens) {
 					const fixedAss = assToken.match(/ass(\s\w*)/g)[0].replace(/\s/, '-');
@@ -207,6 +216,20 @@ client.on('message', msg => {
 		const args = msg.content.slice(matchedPrefix.length).split(/ +/);
 		const commandName = args.shift().toLowerCase();
 
+		// Get other related info
+		const isOp = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id }).get('operator').value();
+		const disabledCmdModules = db.get(`${msg.guild.id}.disabledCmdModules`).value();
+
+		// Special case: reload command
+		if (commandName === 'reload') {
+			reload({
+				reloadDB: args ? args[0] === 'db' || args[0] === 'both' : true,
+				reloadCommands: args ? args[0] === 'commands' || args[0] === 'cmds' || args[0] === 'both' : true,
+			});
+
+			return msg.reply('reload complete!');
+		}
+
 		// Get the actual command object, check if it exists
 		const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 		if (!command) {
@@ -214,18 +237,13 @@ client.on('message', msg => {
 		}
 
 		// Check if the command is in the guild's disabledCmdModules list
-		const disabledCmdModules = db.get(`${msg.guild.id}.disabledCmdModules`).value();
 		if (disabledCmdModules && disabledCmdModules.includes(command.name)) {
 			return msg.reply('That command does not exist!');
 		}
 
 		// Check if the user can execute the command (opOnly)
-		if (command.opOnly) {
-			const isOp = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id }).get('operator').value();
-
-			if (!isOp) {
-				return msg.reply('you do not have permission to execute that command!');
-			}
+		if (command.opOnly && !isOp) {
+			return msg.reply('you do not have permission to execute that command!');
 		}
 
 		// Check if command needs to be sent in a server
