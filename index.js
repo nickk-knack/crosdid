@@ -11,11 +11,6 @@ const Discord = require('discord.js');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
-// Plugins
-const secrets = require('./plugins/secrets.js');
-const replies = secrets.replies;
-const guildPhrases = secrets.guildPhrases;
-
 // Environment constants
 const prefix = process.env.PREFIX;
 const token = process.env.TOKEN;
@@ -32,7 +27,7 @@ const cooldowns = new Discord.Collection();
 const adapter = new FileSync(dbFileName, {
 	defaultValue: {
 		// default disabled commands
-		disabledCmdModules: [
+		globalDisabledCmdModules: [
 			'reddit',
 			'cmdAliases',
 		],
@@ -52,18 +47,19 @@ console.log('Starting bot...');
 // Also todo: support a command loading blacklist
 console.log('\tLoading command modules...');
 
+// Todo: put this in a function, add a reload command that calls it
 const commandModules = fs.readdirSync('./modules');
 for (const file of commandModules) {
 	// If file is not a .js file or contained in the blacklist, skip it
 	if (!file.endsWith('.js')) continue;
-	if (db.get('disabledCmdModules').includes(file.split('.')[0]).value()) continue;
+	if (db.get('globalDisabledCmdModules').includes(file.split('.')[0]).value()) continue;
 
 	// Require the command module and set it in the client
 	const command = require(`./modules/${file}`);
 	client.commands.set(command.name, command);
 }
 
-console.log(`\tCommand modules loaded. Skipped the following: ${db.get('disabledCmdModules').value().join(', ')}.`);
+console.log(`\tCommand modules loaded. Skipped the following: ${db.get('globalDisabledCmdModules').value().join(', ')}.`);
 
 // Events
 console.log('\tLoading events...');
@@ -79,6 +75,7 @@ client.on('ready', () => {
 			db.set(g.id, {
 				reactionNotify: false,
 				users: [],
+				disabledCmdModules: [],
 			}).write();
 		}
 	});
@@ -102,31 +99,34 @@ client.on('message', msg => {
 		if (msg.author.bot || typeof msg.guild === 'undefined' || msg.guild === null) return;
 
 		// Check that the guild is configured with secret messages and reacts AND that the user has configured messages/reacts
-		// Todo: rewrite to support the way the db has the data organized
-		if (Object.keys(replies).find(guild_id => guild_id === msg.guild.id) !== undefined &&
-			Object.keys(replies[msg.guild.id]).find(user_id => user_id === msg.author.id) !== undefined) {
+		const userSecrets = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id }).value();
+		if (typeof userSecrets !== 'undefined') {
 			// Calculate if we want to send a message and/or react
 			const sendSecretMessage = Math.random() > (1 - process.env.SECRET_MESSAGE_CHANCE);
 			const secretlyReact = Math.random() > (1 - process.env.SECRET_REACT_CHANCE);
 
 			// Get random message to send, send it
 			if (sendSecretMessage) {
-				const message = getRandomFromArray(replies[msg.guild.id][msg.author.id].messages);
+				const message = getRandomFromArray(userSecrets.messages);
 				msg.reply(message);
 			}
 
 			// Get random reaction, react with it
 			if (secretlyReact) {
-				const reaction = getRandomFromArray(replies[msg.guild.id][msg.author.id].reactions);
+				const reaction = getRandomFromArray(userSecrets.reactions);
 				msg.react(reaction.custom ? msg.guild.emojis.get(reaction.emoji) : reaction.emoji);
 			}
 		}
 
 		// Guild-based, phrase-activated messages
-		if (Object.keys(guildPhrases).find(guild_id => guild_id === msg.guild.id) !== undefined) {
-			for (const phrase of Object.keys(guildPhrases[msg.guild.id])) {
-				if (msg.content.includes(phrase)) {
-					msg.channel.send(guildPhrases[msg.guild.id][phrase]);
+		const enablePhrases = db.get(`${msg.guild.id}.enablePhrases`).value();
+		if (enablePhrases) {
+			const guildPhrases = db.get(`${msg.guild.id}.phrases`).value();
+			if (typeof guildPhrases !== 'undefined') {
+				for (const guildPhrase of guildPhrases) {
+					if (msg.content.includes(guildPhrase.trigger) && guildPhrase.responses) {
+						msg.channel.send(getRandomFromArray(guildPhrase.responses));
+					}
 				}
 			}
 		}
@@ -144,7 +144,7 @@ client.on('message', msg => {
 			}
 		}
 
-		msg.reply(assMessages.join(', '));
+		if (assMessages.length > 0) msg.reply(assMessages.join(', '));
 
 		// At the end, return.
 		return;
@@ -158,7 +158,17 @@ client.on('message', msg => {
 	// Get the actual command object, check if it exists
 	const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 	if (!command) {
-		return 'That command does not exist!';
+		return msg.reply('That command does not exist!');
+	}
+
+	// Check if the command is in the guild's disabledCmdModules list
+	if (db.has(`${msg.guild.id}.disabledCmdModules`).value()) {
+		const disabledCmdModules = db.get(`${msg.guild.id}.disabledCmdModules`).value();
+		for (const disabledCmdModule of disabledCmdModules) {
+			if (command === disabledCmdModule) {
+				return msg.reply('That command does not exist!');
+			}
+		}
 	}
 
 	// Check if command needs to be sent in a server
