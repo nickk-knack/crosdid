@@ -25,24 +25,22 @@ module.exports = {
 
 				const embed = new Discord.RichEmbed()
 					.setColor(randomHex.generate())
-					.setTitle(query)
-					.setImage(randomImage.url);
+					.setTitle(query);
 
-				message.channel.send(embed);
-
-				// New way of doing things, attaching image result directly to embed, didn't work tho. need 2 fix
-				// fetch(randomImage.url)
-				// 	.then(res => res.buffer)
-				// 	.then(buffer => {
-				// 		const attachment = new Discord.Attachment(buffer, `${query}.${randomImage.type}`);
-				// 		embed.attachFile(attachment);
-				// 		message.channel.send(embed);
-				// 	})
-				// 	.catch(e => {
-				// 		console.error('Fetching image and reuploading failed! Falling back to url', e);
-				// 		embed.setImage(randomImage.url);
-				// 		message.channel.send(embed);
-				// 	});
+				// New way of doing things, attaching image result directly to embed
+				fetch(randomImage.url)
+					.then(res => res.buffer())
+					.then(buffer => {
+						const attachment = new Discord.Attachment(buffer, `${query}.${randomImage.type.split('/')[1]}`);
+						embed.attachFile(attachment);
+						embed.setImage(`attachment://${query}.${randomImage.type.split('/')[1]}`);
+						message.channel.send(embed);
+					})
+					.catch(e => {
+						console.error('Fetching image and reuploading failed! Falling back to url', e);
+						embed.setImage(randomImage.url);
+						message.channel.send(embed);
+					});
 			})
 			.catch(e => {
 				switch (e.statusCode) {
