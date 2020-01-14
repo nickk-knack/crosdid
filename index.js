@@ -45,7 +45,6 @@ const getRandomFromArray = array => array[Math.floor(Math.random() * array.lengt
 console.log('Starting bot...');
 
 // Load in all command modules
-// Also todo: support a command loading blacklist
 console.log('\tLoading command modules...');
 
 // Todo: put this in a function, add a reload command that calls it
@@ -163,8 +162,9 @@ client.on('message', msg => {
 	}
 
 	// Check if the command is in the guild's disabledCmdModules list
-	if (db.has(`${msg.guild.id}.disabledCmdModules`).value()) {
-		const disabledCmdModules = db.get(`${msg.guild.id}.disabledCmdModules`).value();
+	// TODO: this doesn't work
+	const disabledCmdModules = db.get(`${msg.guild.id}.disabledCmdModules`).value();
+	if (disabledCmdModules) {
 		for (const disabledCmdModule of disabledCmdModules) {
 			if (command === disabledCmdModule) {
 				return msg.reply('That command does not exist!');
