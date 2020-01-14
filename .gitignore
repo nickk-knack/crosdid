@@ -69,3 +69,6 @@ db.json
 
 # temporarily ignoring this module while i continue to develop it
 modules/reddit.js
+
+# ignore backup files
+*.bak
