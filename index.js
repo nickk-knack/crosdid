@@ -31,6 +31,12 @@ const adapter = new FileSync(dbFileName, {
 			'reddit',
 			'cmdAliases',
 		],
+		activitySettings: {
+			enabled: true,
+			type: 'WATCHING',
+			text: 'over my children',
+			url: '',
+		},
 	},
 });
 
@@ -47,7 +53,6 @@ console.log('Starting bot...');
 // Load in all command modules
 console.log('\tLoading command modules...');
 
-// Todo: put this in a function, add a reload command that calls it
 const commandModules = fs.readdirSync('./modules');
 for (const file of commandModules) {
 	// If file is not a .js file or contained in the blacklist, skip it
@@ -76,145 +81,194 @@ client.on('ready', () => {
 				reactionNotify: false,
 				users: [],
 				disabledCmdModules: [],
+				enablePhrases: true,
+				phrases: [],
+				announcements: {
+					channel: '',
+					channel_create: {
+						enabled: false,
+						messages: [],
+					},
+					channel_delete: {
+						enabled: false,
+						messages: [],
+					},
+					emoji_create: {
+						enabled: false,
+						channel_override: '',
+						send_emoji: false,
+						send_message: false,
+						message_prepend: true,
+						messages: [],
+					},
+					emoji_delete: {
+						enabled: false,
+						channel_override: '',
+						send_emoji: false,
+						send_message: false,
+						message_prepend: true,
+						messages: [],
+					},
+					emoji_update: {
+						enabled: false,
+						channel_override: '',
+						send_emoji: false,
+						send_message: false,
+						message_prepend: true,
+						messages: [],
+					},
+				},
 			}).write();
+
+			g.members.forEach(m => {
+				if (!db.get(`${g.id}.users`).find({ id: m.id }).value()) {
+					db.get(`${g.id}.users`).push({ id: m.id, messages: [], reactions: [], operator: false }).write();
+				}
+			});
 		}
 	});
 
 	// Set the bot activity text
-	client.user.setActivity('over my children', { type: 'WATCHING' });
+	const activitySettings = db.get('activitySettings').value();
+	if (activitySettings.enabled) {
+		client.user.setActivity(activitySettings.text, { type: activitySettings.type });
+	}
 
 	console.log('Finished loading!');
 });
 
 // Message event (command processing)
 client.on('message', msg => {
-	// Command needs to start with prefix
-	const prefixRegex = new RegExp(`^(<@!?${client.user.id}> |\\${prefix})\\s*`);
+	try {
+		// Command needs to start with prefix
+		const prefixRegex = new RegExp(`^(<@!?${client.user.id}> |\\${prefix})\\s*`);
 
-	// Test if the message was a command
-	if (!prefixRegex.test(msg.content)) {
-		// This is a regular message, do any other processing on it
+		// Test if the message was a command
+		if (!prefixRegex.test(msg.content)) {
+			// This is a regular message, do any other processing on it
 
-		// Ignore messages from bots (especially yourself), and don't process non-guild messages
-		if (msg.author.bot || typeof msg.guild === 'undefined' || msg.guild === null) return;
+			// Ignore messages from bots (especially yourself), and don't process non-guild messages
+			if (msg.author.bot || typeof msg.guild === 'undefined' || msg.guild === null) return;
 
-		// Check that the guild is configured with secret messages and reacts AND that the user has configured messages/reacts
-		const userSecrets = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id }).value();
-		if (typeof userSecrets !== 'undefined') {
-			// Calculate if we want to send a message and/or react
-			const sendSecretMessage = Math.random() > (1 - process.env.SECRET_MESSAGE_CHANCE);
-			const secretlyReact = Math.random() > (1 - process.env.SECRET_REACT_CHANCE);
+			// Check that the guild is configured with secret messages and reacts AND that the user has configured messages/reacts
+			const userSecrets = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id }).value();
+			if (typeof userSecrets !== 'undefined') {
+				// Calculate if we want to send a message and/or react
+				const sendSecretMessage = Math.random() > (1 - process.env.SECRET_MESSAGE_CHANCE);
+				const secretlyReact = Math.random() > (1 - process.env.SECRET_REACT_CHANCE);
 
-			// Get random message to send, send it
-			if (sendSecretMessage) {
-				const message = getRandomFromArray(userSecrets.messages);
-				msg.reply(message);
+				// Get random message to send, send it
+				if (sendSecretMessage) {
+					const message = getRandomFromArray(userSecrets.messages);
+					msg.reply(message);
+				}
+
+				// Get random reaction, react with it
+				if (secretlyReact) {
+					const reaction = getRandomFromArray(userSecrets.reactions);
+					msg.react(reaction.custom ? msg.guild.emojis.get(reaction.emoji) : reaction.emoji);
+				}
 			}
 
-			// Get random reaction, react with it
-			if (secretlyReact) {
-				const reaction = getRandomFromArray(userSecrets.reactions);
-				msg.react(reaction.custom ? msg.guild.emojis.get(reaction.emoji) : reaction.emoji);
-			}
-		}
-
-		// Guild-based, phrase-activated messages
-		const enablePhrases = db.get(`${msg.guild.id}.enablePhrases`).value();
-		if (enablePhrases) {
-			const guildPhrases = db.get(`${msg.guild.id}.phrases`).value();
-			if (typeof guildPhrases !== 'undefined') {
-				for (const guildPhrase of guildPhrases) {
-					if (msg.content.includes(guildPhrase.trigger) && guildPhrase.responses) {
-						msg.channel.send(getRandomFromArray(guildPhrase.responses));
+			// Guild-based, phrase-activated messages
+			const enablePhrases = db.get(`${msg.guild.id}.enablePhrases`).value();
+			if (enablePhrases) {
+				const guildPhrases = db.get(`${msg.guild.id}.phrases`).value();
+				if (typeof guildPhrases !== 'undefined') {
+					for (const guildPhrase of guildPhrases) {
+						if (msg.content.includes(guildPhrase.trigger) && guildPhrase.responses) {
+							msg.channel.send(getRandomFromArray(guildPhrase.responses));
+						}
 					}
 				}
 			}
+
+			// Ass-fixer
+			// TODO: tried to fix a message that didn't need fixing I think
+			// Should just retest this tbh
+			const assMessages = [];
+			const assTokens = msg.content.toLowerCase().match(/(\w*[\s-])ass(\s\w*)/g);
+
+			if (assTokens && assTokens !== null) {
+				for (const assToken of assTokens) {
+					const fixedAss = assToken.match(/ass(\s\w*)/g)[0].replace(/\s/, '-');
+					assMessages.push(fixedAss);
+				}
+			}
+
+			if (assMessages.length > 0) msg.reply(assMessages.join(', '));
+
+			// At the end, return.
+			return;
 		}
 
-		// Ass-fixer
-		// TODO: tried to fix a message that didn't need fixing I think
-		// Should just retest this tbh
-		const assMessages = [];
-		const assTokens = msg.content.toLowerCase().match(/(\w*[\s-])ass(\s\w*)/g);
+		// Get command args and command name
+		const [, matchedPrefix] = msg.content.match(prefixRegex);
+		const args = msg.content.slice(matchedPrefix.length).split(/ +/);
+		const commandName = args.shift().toLowerCase();
 
-		if (assTokens && assTokens !== null) {
-			for (const assToken of assTokens) {
-				const fixedAss = assToken.match(/ass(\s\w*)/g)[0].replace(/\s/, '-');
-				assMessages.push(fixedAss);
+		// Get the actual command object, check if it exists
+		const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+		if (!command) {
+			return msg.reply('That command does not exist!');
+		}
+
+		// Check if the command is in the guild's disabledCmdModules list
+		const disabledCmdModules = db.get(`${msg.guild.id}.disabledCmdModules`).value();
+		if (disabledCmdModules && disabledCmdModules.includes(command.name)) {
+			return msg.reply('That command does not exist!');
+		}
+
+		// Check if the user can execute the command (opOnly)
+		if (command.opOnly) {
+			const isOp = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id }).get('operator').value();
+			if (!isOp) {
+				return msg.reply('you do not have permission to execute that command!');
 			}
 		}
 
-		if (assMessages.length > 0) msg.reply(assMessages.join(', '));
+		// Check if command needs to be sent in a server
+		if (command.guildOnly && msg.channel.type !== 'text') {
+			return msg.reply('I can\'t execute that command in a DM.');
+		}
 
-		// At the end, return.
-		return;
-	}
+		// Check if args are required
+		if (command.args && !args.length) {
+			let reply = `You didn't provide any arguments, ${msg.author}.`;
 
-	// Get command args and command name
-	const [, matchedPrefix] = msg.content.match(prefixRegex);
-	const args = msg.content.slice(matchedPrefix.length).split(/ +/);
-	const commandName = args.shift().toLowerCase();
-
-	// Get the actual command object, check if it exists
-	const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-	if (!command) {
-		return msg.reply('That command does not exist!');
-	}
-
-	// Check if the command is in the guild's disabledCmdModules list
-	// TODO: this doesn't work
-	const disabledCmdModules = db.get(`${msg.guild.id}.disabledCmdModules`).value();
-	if (disabledCmdModules) {
-		for (const disabledCmdModule of disabledCmdModules) {
-			if (command === disabledCmdModule) {
-				return msg.reply('That command does not exist!');
+			if (command.usage) {
+				reply += `\nProper usage: "${prefix}${command.name} ${command.usage}"`;
 			}
-		}
-	}
 
-	// Check if command needs to be sent in a server
-	if (command.guildOnly && msg.channel.type !== 'text') {
-		return msg.reply('I can\'t execute that command in a DM.');
-	}
-
-	// Check if args are required
-	if (command.args && !args.length) {
-		let reply = `You didn't provide any arguments, ${msg.author}.`;
-
-		if (command.usage) {
-			reply += `\nProper usage: "${prefix}${command.name} ${command.usage}"`;
+			return msg.channel.send(reply);
 		}
 
-		return msg.channel.send(reply);
-	}
-
-	// Set cooldown
-	if (!cooldowns.has(command.name)) {
-		cooldowns.set(command.name, new Discord.Collection());
-	}
-
-	const now = Date.now();
-	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown) * 1000;
-
-	if (!timestamps.has(msg.author.id)) {
-		timestamps.set(msg.author.id, now);
-		setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
-	}
-	else {
-		const expirationTime = timestamps.get(msg.author.id) + cooldownAmount;
-
-		if (now < expirationTime) {
-			const timeLeft = (expirationTime - now) / 1000;
-			return msg.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before using the ${command.name} command.`);
+		// Set cooldown
+		if (!cooldowns.has(command.name)) {
+			cooldowns.set(command.name, new Discord.Collection());
 		}
 
-		timestamps.set(msg.author.id, now);
-		setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
-	}
+		const now = Date.now();
+		const timestamps = cooldowns.get(command.name);
+		const cooldownAmount = (command.cooldown) * 1000;
 
-	// Execute command
-	try {
+		if (!timestamps.has(msg.author.id)) {
+			timestamps.set(msg.author.id, now);
+			setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
+		}
+		else {
+			const expirationTime = timestamps.get(msg.author.id) + cooldownAmount;
+
+			if (now < expirationTime) {
+				const timeLeft = (expirationTime - now) / 1000;
+				return msg.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before using the ${command.name} command.`);
+			}
+
+			timestamps.set(msg.author.id, now);
+			setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
+		}
+
+		// Execute command
 		command.execute(msg, args);
 	}
 	catch (error) {
