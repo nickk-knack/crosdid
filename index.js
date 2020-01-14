@@ -35,6 +35,7 @@ const adapter = new FileSync(dbFileName, {
 });
 
 const db = low(adapter);
+client.db = db;
 console.log(`Loaded local database file from ${dbFileName}`);
 
 // Extra functions
