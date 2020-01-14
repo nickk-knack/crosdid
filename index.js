@@ -131,20 +131,20 @@ client.on('message', msg => {
 			}
 		}
 
-		// Ass-fixer (does not work, sends bot into infinite message loop)
-		// TODO: I likely fixed the infinite looping, but it tried to fix a message that didn't need fixing I think
-		// Look further into this
-		// const assMessages = [];
-		// const assTokens = msg.content.toLowerCase().match(/(\w*[\s-])ass(\s\w*)/g);
+		// Ass-fixer
+		// TODO: tried to fix a message that didn't need fixing I think
+		// Should just retest this tbh
+		const assMessages = [];
+		const assTokens = msg.content.toLowerCase().match(/(\w*[\s-])ass(\s\w*)/g);
 
-		// if (assTokens) {
-		// 	for (let assToken of assTokens) {
-		// 		const fixedAss = assToken.match(/ass(\s\w*)/g)[0].replace(/\s/, '-');
-		// 		assMessages.push(fixedAss);
-		// 	}
-		// }
+		if (assTokens && assTokens !== null) {
+			for (const assToken of assTokens) {
+				const fixedAss = assToken.match(/ass(\s\w*)/g)[0].replace(/\s/, '-');
+				assMessages.push(fixedAss);
+			}
+		}
 
-		// msg.reply(assMessages.join(', '));
+		msg.reply(assMessages.join(', '));
 
 		// At the end, return.
 		return;
@@ -281,8 +281,7 @@ client.on('emojiUpdate', (oldEmoji, newEmoji) => {
 	}
 });
 
-// Message reaction add event (temporarily disabled, causes crashing)
-// Enable on a per-guild basis!
+// Message reaction add event
 client.on('messageReactionAdd', (reaction, user) => {
 	// Any other reaction processing goes here:
 	// (i.e., giving a user a role on a react; add some stuff to events.js plugin to support this)
