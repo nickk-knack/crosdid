@@ -15,3 +15,9 @@
    2. commands
 6. Additional reaction procesing (role on react type of thing?)
 7. idk, to be safe just ctrl-f "todo" in the index and command module files
+
+## Links
+
+- https://discordjs.guide/popular-topics/canvas.html#setting-up-canvas
+- https://discordjs.guide/popular-topics/embeds.html#embed-preview
+- 
