@@ -28,7 +28,7 @@ module.exports = {
 				if (db.get('globalDisabledCmdModules').includes(file.split('.')[0]).value()) continue;
 
 				// Require the command module and set it in the client
-				const command = require(`./modules/${file}`);
+				const command = require(`./${file}`);
 				commands.set(command.name, command);
 			}
 		}
