@@ -222,6 +222,7 @@ client.on('message', msg => {
 		// Check if the user can execute the command (opOnly)
 		if (command.opOnly) {
 			const isOp = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id }).get('operator').value();
+
 			if (!isOp) {
 				return msg.reply('you do not have permission to execute that command!');
 			}
@@ -381,11 +382,11 @@ client.on('rateLimit', info => {
 
 // Channel creation event (for announcement)
 client.on('channelCreate', channel => {
-	// Get settings for this event from the db
-	const settings = db.get(`${channel.guild.id}.announcements.channel_create`).value();
-
 	// Only notify the creation of text and voice channels (when enabled)
 	if (channel.type !== 'text' && channel.type !== 'voice' || !settings.enabled) return;
+
+	// Get settings for this event from the db
+	const settings = db.get(`${channel.guild.id}.announcements.channel_create`).value();
 
 	// Get a reference to the defined announcements channel
 	const announcementsChannel = channel.guild.channels.find(c => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
@@ -399,11 +400,11 @@ client.on('channelCreate', channel => {
 
 // Channel deletion event (for announcement)
 client.on('channelDelete', channel => {
-	// Get settings for this event from the db
-	const settings = db.get(`${channel.guild.id}.announcements.channel_delete`).value();
-
 	// Only notify the deletion of text and voice channels (when enabled)
 	if (channel.type !== 'text' && channel.type !== 'voice' || !settings.enabled) return;
+
+	// Get settings for this event from the db
+	const settings = db.get(`${channel.guild.id}.announcements.channel_delete`).value();
 
 	// Get a reference to the defined announcements channel
 	const announcementsChannel = channel.guild.channels.find(c => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
