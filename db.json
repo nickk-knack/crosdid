@@ -1,0 +1,427 @@
+{
+  "globalDisabledCmdModules": [
+    "reddit",
+    "cmdAliases"
+  ],
+  "activitySettings": {
+    "enabled": true,
+    "type": "WATCHING",
+    "text": "over my children",
+    "url": ""
+  },
+  "625766841779879967": {
+    "reactionNotify": false,
+    "users": [
+      {
+        "id": "250815455315492864",
+        "messages": [
+          "fuck off, andrew",
+          "are you done puking yet, andrew?",
+          "alexa, add small black anal beads to my shopping list",
+          "\"casually conservative\"",
+          "ah yes, thats because algebra",
+          "my cat has aids 😂",
+          "ayyy john arbuckle whats crackalackin binglebanger"
+        ],
+        "reactions": [
+          {
+            "custom": true,
+            "emoji": "649669223844544512"
+          },
+          {
+            "custom": true,
+            "emoji": "652195997916594186"
+          },
+          {
+            "custom": true,
+            "emoji": "660988667057143808"
+          },
+          {
+            "custom": false,
+            "emoji": "😂"
+          }
+        ],
+        "operator": false
+      },
+      {
+        "id": "140225600966098944",
+        "messages": [
+          "nick is a bitch",
+          "high nick",
+          "danny rick lookin' fucker"
+        ],
+        "reactions": [
+          {
+            "custom": true,
+            "emoji": "652593020373303336"
+          },
+          {
+            "custom": true,
+            "emoji": "653691299953639427"
+          }
+        ],
+        "operator": true
+      },
+      {
+        "id": "206037113433620480",
+        "messages": [
+          "go photoshop a bigger dick on yourself, jake",
+          ".bad jake",
+          "jake go back to no lifing wow classic",
+          "shut up anprim",
+          "stay in nam"
+        ],
+        "reactions": [
+          {
+            "custom": true,
+            "emoji": "649815621210603531"
+          },
+          {
+            "custom": true,
+            "emoji": "650367361458896936"
+          },
+          {
+            "custom": true,
+            "emoji": "663079480255840287"
+          }
+        ],
+        "operator": false
+      },
+      {
+        "id": "621804005865029632",
+        "messages": [
+          "max, you MUST contact me",
+          "want a sprite cranberry?",
+          "max, are you a believer?",
+          "smart ass grad school lookin motherfucker",
+          "QUICK MAC WHAT DOES IT MEAN????? MMMAC!!!!!!!!",
+          "mac",
+          "hot teen big breats porn hub"
+        ],
+        "reactions": [
+          {
+            "custom": true,
+            "emoji": "650081690429161533"
+          },
+          {
+            "custom": true,
+            "emoji": "649996187780251658"
+          },
+          {
+            "custom": true,
+            "emoji": "649815673966559263"
+          },
+          {
+            "custom": true,
+            "emoji": "659504191214977034"
+          }
+        ],
+        "operator": false
+      },
+      {
+        "id": "438132534555967509",
+        "messages": [
+          "matt, what's the derivative of e^x? bitch",
+          "who is this dude?",
+          "dumb question",
+          "oh my god you're alive"
+        ],
+        "reactions": [
+          {
+            "custom": true,
+            "emoji": "653328280660738048"
+          }
+        ],
+        "operator": false
+      },
+      {
+        "id": "518290855757348888",
+        "messages": [
+          "the epic memer has spoken",
+          "guys i lost my mom",
+          "this guy needs more random messages"
+        ],
+        "reactions": [
+          {
+            "custom": true,
+            "emoji": "649996307175571458"
+          },
+          {
+            "custom": true,
+            "emoji": "653993827106816030"
+          }
+        ],
+        "operator": false
+      },
+      {
+        "id": "189821621626732554",
+        "messages": [
+          "faewfwexxdb",
+          "babdnerionpko",
+          "zxvcxnkvrnoiniogarwniogsre",
+          "ajfewanoifjewanfewajifewjaoifewaioj",
+          "zxcvzxc",
+          "badabadbabdbadba",
+          "badabingbadaboom",
+          "O-oooooooooo AAAAE-A-A-I-A-U- JO-oooooooooooo AAE-O-A-A-U-U-A- E-eee-ee-eee AAAAE-A-E-I-E-A-JO-ooo-oo-oo-oo EEEEO-A-AAA-AAAA",
+          "you wanna hear a random signAAAaAALALAANFESNOVNSIUVBUOSEHUO#Y*R$HY*t8934try8943ry89438943wy89t43wh84e8",
+          "sSSSSS AAaAAA  R EWwE e eeE xDDDDDDDD"
+        ],
+        "reactions": [
+          {
+            "custom": true,
+            "emoji": "650846853470093322"
+          },
+          {
+            "custom": true,
+            "emoji": "654752279517331457"
+          },
+          {
+            "custom": true,
+            "emoji": "654752346534051855"
+          }
+        ],
+        "operator": false
+      },
+      {
+        "id": "180151466789437440",
+        "messages": [
+          "the machine"
+        ],
+        "reactions": [
+          {
+            "custom": true,
+            "emoji": "652261387518869506"
+          },
+          {
+            "custom": true,
+            "emoji": "653691936468762626"
+          },
+          {
+            "custom": true,
+            "emoji": "643917245516480533"
+          }
+        ],
+        "operator": false
+      }
+    ],
+    "disabledCmdModules": [],
+    "enablePhrases": true,
+    "phrases": [
+      {
+        "trigger": "epic",
+        "responses": [
+          "ok now THIS is epic",
+          "OK now this is EPIC",
+          "ok now THIS is EPIC",
+          "OK now THIS is EPIC",
+          "OK now THIS... is EPIC",
+          "ok now THIS... is EPIC",
+          "ok now THIS... is epic",
+          "ok now THIS... this is epic."
+        ]
+      },
+      {
+        "trigger": "never have i ever",
+        "responses": [
+          "*puts finger down*"
+        ]
+      },
+      {
+        "trigger": "peepee poopoo",
+        "responses": [
+          "ring ding ding ding ding duh ding duh ding"
+        ]
+      },
+      {
+        "trigger": "o i am laffin",
+        "responses": [
+          "oial"
+        ]
+      },
+      {
+        "trigger": "shit asshole",
+        "responses": [
+          "wilbert fan shit asshole"
+        ]
+      }
+    ],
+    "announcements": {
+      "channel": "announcement-town",
+      "channel_create": {
+        "enabled": true,
+        "messages": [
+          "new channel alert:",
+          "check out the new channel:"
+        ]
+      },
+      "channel_delete": {
+        "enabled": true,
+        "messages": [
+          "rip to the following channel:",
+          "i deleted the shit out of a channel:"
+        ]
+      },
+      "emoji_create": {
+        "enabled": true,
+        "channel_override": "emoji-town",
+        "send_emoji": true,
+        "send_message": true,
+        "message_prepend": true,
+        "messages": [
+          "hot off the presses:",
+          "brand new epic emoji:"
+        ]
+      },
+      "emoji_delete": {
+        "enabled": true,
+        "channel_override": "emoji-town",
+        "send_emoji": true,
+        "send_message": true,
+        "message_prepend": true,
+        "messages": [
+          "this emoji sucked, it's gone now:",
+          "rip emoji:"
+        ]
+      },
+      "emoji_update": {
+        "enabled": true,
+        "channel_override": "emoji-town",
+        "send_old_emoji": true,
+        "send_new_emoji": true,
+        "send_message": true,
+        "message_prepend": true,
+        "messages": [
+          "an emoji has been updated:",
+          "new old emoji:"
+        ]
+      }
+    }
+  },
+  "140225766720798721": {
+    "reactionNotify": false,
+    "users": [],
+    "disabledCmdModules": [],
+    "enablePhrases": true,
+    "phrases": [],
+    "announcements": {
+      "channel": "",
+      "channel_create": {
+        "enabled": false,
+        "messages": []
+      },
+      "channel_delete": {
+        "enabled": false,
+        "messages": []
+      },
+      "emoji_create": {
+        "enabled": false,
+        "channel_override": "",
+        "send_emoji": false,
+        "send_message": false,
+        "message_prepend": true,
+        "messages": []
+      },
+      "emoji_delete": {
+        "enabled": false,
+        "channel_override": "",
+        "send_emoji": false,
+        "send_message": false,
+        "message_prepend": true,
+        "messages": []
+      },
+      "emoji_update": {
+        "enabled": false,
+        "channel_override": "",
+        "send_emoji": false,
+        "send_message": false,
+        "message_prepend": true,
+        "messages": []
+      }
+    }
+  },
+  "400513116376662017": {
+    "reactionNotify": false,
+    "users": [],
+    "disabledCmdModules": [],
+    "enablePhrases": true,
+    "phrases": [],
+    "announcements": {
+      "channel": "",
+      "channel_create": {
+        "enabled": false,
+        "messages": []
+      },
+      "channel_delete": {
+        "enabled": false,
+        "messages": []
+      },
+      "emoji_create": {
+        "enabled": false,
+        "channel_override": "",
+        "send_emoji": false,
+        "send_message": false,
+        "message_prepend": true,
+        "messages": []
+      },
+      "emoji_delete": {
+        "enabled": false,
+        "channel_override": "",
+        "send_emoji": false,
+        "send_message": false,
+        "message_prepend": true,
+        "messages": []
+      },
+      "emoji_update": {
+        "enabled": false,
+        "channel_override": "",
+        "send_emoji": false,
+        "send_message": false,
+        "message_prepend": true,
+        "messages": []
+      }
+    }
+  },
+  "459534426246873090": {
+    "reactionNotify": false,
+    "users": [],
+    "disabledCmdModules": [],
+    "enablePhrases": true,
+    "phrases": [],
+    "announcements": {
+      "channel": "",
+      "channel_create": {
+        "enabled": false,
+        "messages": []
+      },
+      "channel_delete": {
+        "enabled": false,
+        "messages": []
+      },
+      "emoji_create": {
+        "enabled": false,
+        "channel_override": "",
+        "send_emoji": false,
+        "send_message": false,
+        "message_prepend": true,
+        "messages": []
+      },
+      "emoji_delete": {
+        "enabled": false,
+        "channel_override": "",
+        "send_emoji": false,
+        "send_message": false,
+        "message_prepend": true,
+        "messages": []
+      },
+      "emoji_update": {
+        "enabled": false,
+        "channel_override": "",
+        "send_emoji": false,
+        "send_message": false,
+        "message_prepend": true,
+        "messages": []
+      }
+    }
+  }
+}
