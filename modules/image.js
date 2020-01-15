@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 const GoogleImages = require('google-images');
-const fetch = require('node-fetch');
 const randomHex = require('random-hex');
 const GoogleAPIKey = process.env.GOOGLE_API_KEY;
 const GoogleCSEID = process.env.GOOGLE_CSE_ID;
@@ -25,22 +24,10 @@ module.exports = {
 
 				const embed = new Discord.RichEmbed()
 					.setColor(randomHex.generate())
-					.setTitle(query);
+					.setTitle(query)
+					.setImage(randomImage.url);
 
-				// New way of doing things, attaching image result directly to embed
-				fetch(randomImage.url)
-					.then(res => res.buffer())
-					.then(buffer => {
-						const attachment = new Discord.Attachment(buffer, `${query}.${randomImage.type.split('/')[1]}`);
-						embed.attachFile(attachment);
-						embed.setImage(`attachment://${query}.${randomImage.type.split('/')[1]}`);
-						message.channel.send(embed);
-					})
-					.catch(e => {
-						console.error('Fetching image and reuploading failed! Falling back to url', e);
-						embed.setImage(randomImage.url);
-						message.channel.send(embed);
-					});
+				message.channel.send(embed);
 			})
 			.catch(e => {
 				switch (e.statusCode) {
