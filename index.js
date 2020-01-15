@@ -336,11 +336,11 @@ client.on('emojiUpdate', (oldEmoji, newEmoji) => {
 	if (settings.send_old_emoji || settings.send_new_emoji) {
 		if (settings.send_message) {
 			message = settings.message_prepend ?
-				`${getRandomFromArray(settings.messages)} ${settings.send_old_emoji ? oldEmoji.url : ''}${settings.send_old_emoji && settings.send_new_emoji ? ' -> ' : ''}${settings.send_new_emoji ? newEmoji.url : ''}` :
-				`${settings.send_old_emoji ? oldEmoji.url : ''}${settings.send_old_emoji && settings.send_new_emoji ? ' -> ' : ''}${settings.send_new_emoji ? newEmoji.url : ''} ${getRandomFromArray(settings.messages)}`;
+				`${getRandomFromArray(settings.messages)} ${settings.send_old_emoji ? oldEmoji.name : ''}${settings.send_old_emoji && settings.send_new_emoji ? ' -> ' : ''}${settings.send_new_emoji ? newEmoji.name : ''}` :
+				`${settings.send_old_emoji ? oldEmoji.name : ''}${settings.send_old_emoji && settings.send_new_emoji ? ' -> ' : ''}${settings.send_new_emoji ? newEmoji.name : ''} ${getRandomFromArray(settings.messages)}`;
 		}
 		else {
-			message = `${settings.send_old_emoji ? oldEmoji.url : ''}${settings.send_old_emoji && settings.send_new_emoji ? ' -> ' : ''}${settings.send_new_emoji ? newEmoji.url : ''}`;
+			message = `${settings.send_old_emoji ? oldEmoji.name : ''}${settings.send_old_emoji && settings.send_new_emoji ? ' -> ' : ''}${settings.send_new_emoji ? newEmoji.name : ''}`;
 		}
 
 		emojiChannel.send(message);
