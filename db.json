@@ -11,6 +11,14 @@
   },
   "625766841779879967": {
     "reactionNotify": false,
+    "secret_messages": {
+      "enabled": true,
+      "chance": 0.05
+    },
+    "secret_reacts": {
+      "enabled": true,
+      "chance": 0.05
+    },
     "users": [
       {
         "id": "250815455315492864",

@@ -85,6 +85,14 @@ client.on('ready', () => {
 		if (!db.has(g.id).value()) {
 			db.set(g.id, {
 				reactionNotify: false,
+				secret_messages: {
+					enabled: false,
+					chance: 0.05,
+				},
+				secret_reacts: {
+					enabled: false,
+					chance: 0.05,
+				},
 				users: [],
 				disabledCmdModules: [],
 				enablePhrases: true,
@@ -154,6 +162,8 @@ client.on('message', msg => {
 
 		// Ignore messages from bots (especially yourself), and don't process non-guild messages
 		if (msg.author.bot || typeof msg.guild === 'undefined' || msg.guild === null) return;
+
+		// TODO: Change secret messages/reacts chances and enable checking to be done from db
 
 		// Check that the guild is configured with secret messages and reacts AND that the user has configured messages/reacts
 		const userSecrets = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id }).value();
