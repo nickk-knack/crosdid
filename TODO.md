@@ -2,9 +2,8 @@
 
 1. Add command modules for...
    1. Changing bot settings like avatar, current activity
-   2. Adding/removing/changing command aliases
-   3. Adding secret messages
-   4. ... more?
+   2. Adding secret messages
+   3. ... more?
 2. Update the rest of the command modules from previous bots
 3. Finish updating image module
 4. Fix reddit module
