@@ -278,11 +278,6 @@ client.on('message', msg => {
 	}
 });
 
-// Disconnect event
-client.on('disconnect', event => {
-	console.log('bye bitch', event);
-});
-
 // Emoji creation event
 client.on('emojiCreate', emoji => {
 	// Maybe create a rich embed instead, send a full size version of the emoji?
