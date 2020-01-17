@@ -169,6 +169,7 @@ client.on('message', msg => {
 		const userSecrets = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id }).value();
 		if (typeof userSecrets !== 'undefined') {
 			// Calculate if we want to send a message and/or react
+			const secretMessageChance = db.get(`${msg.guild.id}.secret_messages`).value();
 			const sendSecretMessage = Math.random() > (1 - process.env.SECRET_MESSAGE_CHANCE);
 			const secretlyReact = Math.random() > (1 - process.env.SECRET_REACT_CHANCE);
 
@@ -187,11 +188,12 @@ client.on('message', msg => {
 
 		// Guild-based, phrase-activated messages
 		const enablePhrases = db.get(`${msg.guild.id}.enablePhrases`).value();
+		const lowerCaseContent = msg.content.toLowerCase();
 		if (enablePhrases) {
 			const guildPhrases = db.get(`${msg.guild.id}.phrases`).value();
 			if (typeof guildPhrases !== 'undefined') {
 				for (const guildPhrase of guildPhrases) {
-					if (msg.content.includes(guildPhrase.trigger) && guildPhrase.responses) {
+					if (lowerCaseContent.includes(guildPhrase.trigger) && guildPhrase.responses) {
 						msg.channel.send(getRandomFromArray(guildPhrase.responses));
 					}
 				}
@@ -200,7 +202,7 @@ client.on('message', msg => {
 
 		// Ass-fixer
 		const assMessages = [];
-		const assTokens = msg.content.toLowerCase().match(/(\w*[\s-])ass(\s\w*)/g);
+		const assTokens = lowerCaseContent.match(/(\w*[\s-])ass(\s\w*)/g);
 		if (assTokens && assTokens !== null) {
 			for (const assToken of assTokens) {
 				const fixedAss = assToken.match(/ass(\s\w*)/g)[0].replace(/\s/, '-');
