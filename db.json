@@ -1,7 +1,7 @@
 {
   "globalDisabledCmdModules": [
     "reddit",
-    "cmdAliases"
+    "user"
   ],
   "activitySettings": {
     "enabled": true,
