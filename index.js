@@ -245,8 +245,8 @@ client.on('message', msg => {
 	}
 
 	// Check if args are required, or if not enough args are passed
-	if (command.args && (!args.length || command.argsLength > args.length)) {
-		let reply = `You didn't provide ${command.argsLength > args.length ? 'enough' : 'any'} arguments, ${msg.author}.`;
+	if (command.args && (!args.length || command.minArgsLength > args.length)) {
+		let reply = `You didn't provide ${command.minArgsLength > args.length ? 'enough' : 'any'} arguments, ${msg.author}.`;
 
 		if (command.usage) {
 			reply += `\nProper usage: "${prefix}${command.name} ${command.usage}"`;
