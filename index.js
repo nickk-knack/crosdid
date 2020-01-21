@@ -244,9 +244,9 @@ client.on('message', msg => {
 		return msg.reply('I can\'t execute that command in a DM.');
 	}
 
-	// Check if args are required
-	if (command.args && !args.length) {
-		let reply = `You didn't provide any arguments, ${msg.author}.`;
+	// Check if args are required, or if not enough args are passed
+	if (command.args && (!args.length || command.argsLength > args.length)) {
+		let reply = `You didn't provide ${command.argsLength > args.length ? 'enough' : 'any'} arguments, ${msg.author}.`;
 
 		if (command.usage) {
 			reply += `\nProper usage: "${prefix}${command.name} ${command.usage}"`;
