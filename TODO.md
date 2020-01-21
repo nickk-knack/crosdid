@@ -21,4 +21,5 @@
 
 - https://discordjs.guide/popular-topics/canvas.html#setting-up-canvas
 - https://discordjs.guide/popular-topics/embeds.html#embed-preview
+- https://github.com/AnIdiotsGuide/discordjs-bot-guide/blob/master/coding-guides/using-emojis.md
 - 
