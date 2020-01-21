@@ -31,14 +31,14 @@ module.exports = {
 			})
 			.catch(e => {
 				switch (e.statusCode) {
-				case 403:
-					message.reply('I literally can\'t search anymore');
-					break;
-				case 404:
-					message.reply(`No results found for \`${query}\``);
-					break;
-				default:
-					console.error(e);
+					case 403:
+						message.reply('I literally can\'t search anymore');
+						break;
+					case 404:
+						message.reply(`No results found for \`${query}\``);
+						break;
+					default:
+						console.error(e);
 				}
 			});
 	},
