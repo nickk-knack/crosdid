@@ -36,7 +36,7 @@ module.exports = {
 				// Coerce subcommandArg into a boolean, write it to db
 				dbUser.set('operator', !!subcommandArg).write();
 
-				return message.reply(`Successfully made <@${user.id}> an operator for this bot.`);
+				return message.reply(`Successfully made ${user} an operator for this bot.`);
 			default:
 				return message.reply(`\`${subcommand}\` is not a valid subcommand!`);
 		}
