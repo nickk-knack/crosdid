@@ -3,7 +3,7 @@ const fs = require('fs');
 module.exports = {
 	name: 'reload',
 	description: 'Reloads the database and/or command modules',
-	usage: '[all] [-c [command] | -d]',
+	usage: '<all> | <-c [command] | -d>',
 	args: true,
 	guildOnly: false,
 	opOnly: true,
