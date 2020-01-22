@@ -3,7 +3,7 @@ module.exports = {
 	description: 'Modify various bot settings on the fly',
 	usage: '<activity <enabled <true | false> | type <playing | streaming | listening | watching> | text <activity text>>> |\n\
 <phrases <list | addtrigger <trigger phrase> | addresponse <trigger phrase index> <response phrase> | remove <index>>> |\n\
-<avatar <image url>',
+<avatar <get | set <image url>>',
 	args: true,
 	minArgsLength: 3,
 	guildOnly: true,
@@ -70,13 +70,23 @@ module.exports = {
 			}
 		}
 		else if (subcommand === 'avatar') {
-			const avatarUrl = args.join(' ').trim();
-			message.client.user.setAvatar(avatarUrl)
-				.then(() => message.reply(`successfully set avatar to ${avatarUrl}`))
-				.catch(e => {
-					console.error(e);
-					message.reply('there was an error setting the avatar. Check the console for debugging information.');
-				});
+			const avatarArg = args.shift().toLowerCase();
+
+			switch (avatarArg) {
+				case 'set':
+					const avatarUrl = args.join(' ').trim();
+					message.client.user.setAvatar(avatarUrl)
+						.then(() => message.reply(`successfully set avatar to ${avatarUrl}`))
+						.catch(e => {
+							console.error(e);
+							message.reply('there was an error setting the avatar. Check the console for debugging information.');
+						});
+					break;
+				case 'get':
+					return message.reply(message.client.user.avatarURL);
+				default:
+					return message.reply(`invalid argument for 'avatar' command: ${avatarArg}. (expected: get, set)`);
+			}
 		}
 		else {
 			return message.reply(`\`${subcommand}\` is not a valid subcommand!`);
