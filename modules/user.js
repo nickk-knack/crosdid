@@ -58,7 +58,7 @@ module.exports = {
 				if (!args.length) return message.reply(`you must provide the ${subcommand.substring(0, subcommand.length - 1)} you wish to add!`);
 
 				if (subcommand === 'messages') {
-					const secretMessage = args.join(' ');
+					const secretMessage = args.join(' ').trim();
 
 					// Check if its a duplicate
 					if (arr.includes(secretMessage)) {
@@ -95,7 +95,7 @@ module.exports = {
 
 				// Get and parse index, check that its within bounds
 				const index = parseInt(args.shift(), 10);
-				if (index > arr.length) return message.reply(`${index} is out of bounds!`);
+				if (isNaN(index) || index > arr.length) return message.reply(`${index} is out of bounds!`);
 
 				const removed = dbUser.splice(index, 1);
 				dbUser.write();
