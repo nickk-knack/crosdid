@@ -130,6 +130,10 @@
           {
             "custom": true,
             "emoji": "659504191214977034"
+          },
+          {
+            "custom": false,
+            "emoji": "👀"
           }
         ],
         "operator": false
@@ -165,6 +169,10 @@
           {
             "custom": true,
             "emoji": "653993827106816030"
+          },
+          {
+            "custom": false,
+            "emoji": "🤠"
           }
         ],
         "operator": false
