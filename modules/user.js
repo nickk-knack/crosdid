@@ -10,23 +10,27 @@ module.exports = {
 	execute(message, args) {
 		// I moved this check into the command processing code, but I'm leaving it commented just in case that fails
 		// if (args.length < 2) return message.reply('Not enough arguments supplied!');
+
+		// Ensure that the mention target isn't @everyone or @here
 		if (message.mentions.everyone) return message.reply('You cannot target @everyone/@here!');
 
 		// Don't need to get the user from the first argument, since it should be a mention
-		// const user = args[0];
+		// Shift off the unneeded argument
+		args.shift();
+
 		const { db } = message.client;
-		const subcommand = args[1].toLowerCase();
-		const subcommandArg = args[2];
+		const subcommand = args.shift().toLowerCase();
+		const subcommandArg = args.shift();
 		const user = message.mentions.members.first();
 
 		let dbUser = db.get(`${message.guild.id}.users`).find({ id: user.id });
 
 		switch (subcommand) {
 			case 'messages':
-				dbUser = db.get('messages');
+				dbUser = dbUser.get('messages');
 				break;
 			case 'reacts':
-				dbUser = db.get('reactions');
+				dbUser = dbUser.get('reactions');
 				break;
 			case 'op':
 				// Coerce subcommandArg into a boolean, write it to db
@@ -34,33 +38,74 @@ module.exports = {
 
 				return message.reply(`Successfully made <@${user.id}> an operator for this bot.`);
 			default:
-				return message.reply(`${subcommand} is not a valid subcommand!`);
+				return message.reply(`\`${subcommand}\` is not a valid subcommand!`);
 		}
+
+		const arr = dbUser.value();
 
 		switch (subcommandArg) {
 			case 'list':
 			case 'l':
-				
-				break;
-			case 'add':
-			case '+':
-			case 'a':
-				if (args[3] === undefined) return message.reply(`You must provide the ${subcommand.substring(0, subcommand.length - 1)} you wish to add!`);
+				let i = -1;
 
 				if (subcommand === 'messages') {
-
+					return message.reply(arr.map(x => `[${++i}.] "${x}"`).join('\n'));
 				}
+				else {
+					return message.reply(arr.map(x => `[${++i}.] ${x.custom ? message.guild.emojis.get(x.emoji) : x.emoji}`).join('\n'));
+				}
+			case 'add':
+			case 'a':
+			case '+':
+				// Ensure there are arguments left for the addition
+				if (!args.length) return message.reply(`you must provide the ${subcommand.substring(0, subcommand.length - 1)} you wish to add!`);
 
-				break;
+				if (subcommand === 'messages') {
+					const secretMessage = args.join(' ');
+
+					// Check if its a duplicate
+					if (arr.includes(secretMessage)) {
+						return message.reply(`${user} already has "${secretMessage}" as a secret message.`);
+					}
+
+					dbUser.push(secretMessage).write();
+					return message.reply(`successfully added "${secretMessage}" as a secret message for ${user}`);
+				}
+				else {
+					const emoji = args.shift();
+					const emojiObj = { custom: false, emoji: emoji };
+
+					if (emoji.includes(':')) {
+						emojiObj.custom = true;
+						emojiObj.emoji = emoji.substring(1, emoji.length - 1).split(':')[2];
+					}
+
+					// Check if its a duplicate (this might not be actually work)
+					if (arr.includes(emojiObj)) {
+						return message.reply(`${user} already has ${emojiObj.emoji} as a secret react.`);
+					}
+
+					dbUser.push(emojiObj).write();
+					return message.reply(`successfully added ${emoji} as a secret react for ${user}`);
+				}
 			case 'remove':
 			case 'rem':
+			case 'delete':
 			case 'del':
 			case '-':
-				if (args[3] === undefined) return message.reply('You must provide the message/reaction you wish to add!');
+				// Ensure there is an argument for deletion
+				if (!args.length) return message.reply('you must provide the message/reaction you wish to add!');
 
-				break;
+				// Get and parse index, check that its within bounds
+				const index = parseInt(args.shift(), 10);
+				if (index > arr.length) return message.reply(`${index} is out of bounds!`);
+
+				const removed = dbUser.splice(index, 1);
+				dbUser.write();
+
+				return message.reply(`successfully removed ${removed} from ${user}'s secrets.`);
 			default:
-				return message.reply(`${subcommandArg} is not a valid subcommand argument! (Expected: list, add, remove)`);
+				return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: list, add, remove)`);
 		}
 	},
 };
