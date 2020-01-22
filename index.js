@@ -81,6 +81,9 @@ client.on('ready', () => {
 
 	// Go through joined guilds, make sure there is a per-guild config in db
 	client.guilds.forEach(g => {
+		// Check that the guild is available first
+		if (!g.available) return;
+
 		// Create guild config if non-existent
 		if (!db.has(g.id).value()) {
 			db.set(g.id, {
@@ -160,8 +163,8 @@ client.on('message', msg => {
 	if (!prefixRegex.test(msg.content)) {
 		// This is a regular message, do any other processing on it
 
-		// Ignore messages from bots (especially yourself), and don't process non-guild messages
-		if (msg.author.bot || typeof msg.guild === 'undefined' || msg.guild === null) return;
+		// Ignore messages from discord/bots (especially yourself), and don't process non-guild messages
+		if (msg.system || msg.author.bot || typeof msg.guild === 'undefined' || msg.guild === null) return;
 
 		// TODO: Change secret messages/reacts chances and enable checking to be done from db
 
