@@ -51,6 +51,7 @@
             }
         ],
         "no-console": "off",
+        "no-case-declarations": "off",
         "no-empty-function": "error",
         "no-floating-decimal": "error",
         "no-lonely-if": "error",
