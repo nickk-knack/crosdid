@@ -1,7 +1,7 @@
 module.exports = {
 	name: 'bot',
 	description: 'Modify various bot settings on the fly',
-	usage: '<activity <enabled <true | false> | type <playing | streaming | listening | watching> | text <activity text> | url <activity url>>> |\n\
+	usage: '<activity <enabled <true | false> | type <playing | streaming | listening | watching> | text <activity text>>> |\n\
 <phrases <list | addtrigger <trigger phrase> | addresponse <trigger phrase index> <response phrase> | remove <index>>> |\n\
 <avatar <image url>',
 	args: true,
@@ -36,12 +36,6 @@ module.exports = {
 
 					message.reply(`successfully set the bot's activity text to "${text}".`);
 					break;
-				case 'url':
-					const url = args.join(' ').trim();
-					db.set('activitySettings.url', url).write();
-
-					message.reply(`successfully set the bot's activity url to "${url}".`);
-					break;
 				default:
 					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: enabled, type, text, url)`);
 			}
@@ -49,7 +43,7 @@ module.exports = {
 			const activitySettings = db.get('activitySettings').value();
 
 			if (activitySettings.enabled) {
-				message.client.user.setActivity(activitySettings.text, { type: activitySettings.type, url: activitySettings.url })
+				message.client.user.setActivity(activitySettings.text, { type: activitySettings.type })
 					.catch(e => {
 						console.error(e);
 						message.reply('there was an error setting the activity. Check the console for debugging information.');

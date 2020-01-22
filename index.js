@@ -148,7 +148,7 @@ client.on('ready', () => {
 	// Set the bot activity text
 	const activitySettings = db.get('activitySettings').value();
 	if (activitySettings.enabled) {
-		client.user.setActivity(activitySettings.text, { type: activitySettings.type, url: activitySettings.url })
+		client.user.setActivity(activitySettings.text, { type: activitySettings.type })
 			.catch(console.error);
 	}
 
