@@ -10,7 +10,7 @@ module.exports = {
 	cooldown: 3,
 	execute(message, args) {
 		const mode = args.shift().toLowerCase();
-		const { db } = message.client;
+		const { db, commands } = message.client;
 
 		if (mode === '-d' || mode === 'all') {
 			console.log('Reading database...');
@@ -21,7 +21,7 @@ module.exports = {
 			if (args.length > 1) {
 				console.log('Reloading single command...');
 				const commandName = args.shift().toLowerCase();
-				const command = message.client.commands.get(commandName) || message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+				const command = commands.get(commandName) || commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 				if (!command) {
 					return message.reply(`there is no command with name/alias \`${commandName}\`.`);
@@ -31,7 +31,7 @@ module.exports = {
 
 				try {
 					const newCommand = require(`./${commandName}.js`);
-					message.client.commands.set(newCommand.name, newCommand);
+					commands.set(newCommand.name, newCommand);
 				}
 				catch (e) {
 					console.error(e);
@@ -50,7 +50,7 @@ module.exports = {
 
 					try {
 						const command = require(`./${file}`);
-						message.client.commands.set(command.name, command);
+						commands.set(command.name, command);
 					}
 					catch (e) {
 						console.error(e);
