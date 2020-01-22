@@ -8,9 +8,6 @@ module.exports = {
 	opOnly: true,
 	cooldown: 1,
 	execute(message, args) {
-		// I moved this check into the command processing code, but I'm leaving it commented just in case that fails
-		// if (args.length < 2) return message.reply('Not enough arguments supplied!');
-
 		// Ensure that the mention target isn't @everyone or @here
 		if (message.mentions.everyone) return message.reply('You cannot target @everyone/@here!');
 
@@ -20,7 +17,7 @@ module.exports = {
 
 		const { db } = message.client;
 		const subcommand = args.shift().toLowerCase();
-		const subcommandArg = args.shift();
+		const subcommandArg = args.shift().toLowerCase();
 		const user = message.mentions.members.first();
 
 		let dbUser = db.get(`${message.guild.id}.users`).find({ id: user.id });
