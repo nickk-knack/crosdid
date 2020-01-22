@@ -41,6 +41,7 @@ module.exports = {
 			else {
 				console.log('Reloading all commands');
 				const commandModules = fs.readdirSync('./modules');
+				commands.clear();
 
 				for (const file of commandModules) {
 					if (!file.endsWith('.js')) continue;
