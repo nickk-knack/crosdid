@@ -9,7 +9,7 @@ module.exports = {
 	opOnly: true,
 	cooldown: 3,
 	execute(message, args) {
-		const mode = args[0].toLowerCase();
+		const mode = args.shift().toLowerCase();
 		const { db } = message.client;
 
 		if (mode === '-d' || mode === 'all') {
@@ -20,7 +20,7 @@ module.exports = {
 		if (mode === '-c' || mode === 'all') {
 			if (args.length > 1) {
 				console.log('Reloading single command...');
-				const commandName = args[1].toLowerCase();
+				const commandName = args.shift().toLowerCase();
 				const command = message.client.commands.get(commandName) || message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 				if (!command) {
