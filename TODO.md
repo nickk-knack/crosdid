@@ -14,6 +14,7 @@
 7. any other bot settings you want to add commands for?
 8. idk, to be safe just ctrl-f "todo" in the index and command module files
 9. Fix reddit module
+10. Think about everything in the bot that is user controlled, check for exploits (bot.js might have one)
 
 ## Links
 
