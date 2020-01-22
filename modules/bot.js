@@ -5,7 +5,7 @@ module.exports = {
 <phrases <list | addtrigger <trigger phrase> | addresponse <trigger phrase index> <response phrase> | remove <index>>> |\n\
 <avatar <get | set <image url>>',
 	args: true,
-	minArgsLength: 3,
+	minArgsLength: 2,
 	guildOnly: true,
 	opOnly: true,
 	cooldown: 1,
@@ -15,6 +15,8 @@ module.exports = {
 		const subcommandArg = args.shift().toLowerCase();
 
 		if (subcommand === 'activity') {
+			if (!args.length) return message.reply('you did not provide enough arguments to execute that command!');
+
 			switch (subcommandArg) {
 				case 'enabled':
 					const enabled = !!args.shift().toLowerCase();
@@ -37,7 +39,7 @@ module.exports = {
 					message.reply(`successfully set the bot's activity text to "${text}".`);
 					break;
 				default:
-					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: enabled, type, text, url)`);
+					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: enabled, type, text)`);
 			}
 
 			const activitySettings = db.get('activitySettings').value();
@@ -58,6 +60,8 @@ module.exports = {
 			}
 		}
 		else if (subcommand === 'phrases') {
+			if (!args.length) return message.reply('you did not provide enough arguments to execute that command!');
+
 			switch (subcommandArg) {
 				case 'list':
 					break;
@@ -70,11 +74,14 @@ module.exports = {
 			}
 		}
 		else if (subcommand === 'avatar') {
-			const avatarArg = args.shift().toLowerCase();
-
-			switch (avatarArg) {
+			switch (subcommandArg) {
 				case 'set':
+					if (!args.length) return message.reply('you did not provide enough arguments to execute that command!');
 					const avatarUrl = args.join(' ').trim();
+
+					// This actually might be incredibly unsafe, since I'm not sanity checking the url.
+					// It's possible that the url can be a path to a local file,
+					// and that would be perfectly valid in this case.
 					message.client.user.setAvatar(avatarUrl)
 						.then(() => message.reply(`successfully set avatar to ${avatarUrl}`))
 						.catch(e => {
@@ -85,7 +92,7 @@ module.exports = {
 				case 'get':
 					return message.reply(message.client.user.avatarURL);
 				default:
-					return message.reply(`invalid argument for 'avatar' command: ${avatarArg}. (expected: get, set)`);
+					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: get, set)`);
 			}
 		}
 		else {
