@@ -40,7 +40,7 @@ module.exports = {
 
 		switch (subcommandArg) {
 			case 'list':
-			case 'l':
+			case 'l': {
 				let i = -1;
 
 				if (subcommand === 'messages') {
@@ -49,9 +49,10 @@ module.exports = {
 				else {
 					return message.reply(dbUser.map(x => `[${++i}.] ${x.custom ? message.guild.emojis.get(x.emoji) : x.emoji}`).join('\n').value());
 				}
+			}
 			case 'add':
 			case 'a':
-			case '+':
+			case '+': {
 				// Ensure there are arguments left for the addition
 				if (!args.length) return message.reply(`you must provide the ${subcommand.substring(0, subcommand.length - 1)} you wish to add!`);
 
@@ -83,11 +84,12 @@ module.exports = {
 					dbUser.push(emojiObj).write();
 					return message.reply(`successfully added ${emoji} as a secret react for ${user}`);
 				}
+			}
 			case 'remove':
 			case 'rem':
 			case 'delete':
 			case 'del':
-			case '-':
+			case '-': {
 				// Ensure there is an argument for deletion
 				if (!args.length) return message.reply('you must provide the message/reaction you wish to add!');
 
@@ -98,6 +100,7 @@ module.exports = {
 				// Remove the secret at the given index, save it and output it
 				const removed = dbUser.pullAt(index).write();
 				return message.reply(`successfully removed ${removed} from ${user}'s secrets.`);
+			}
 			default:
 				return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: list, add, remove)`);
 		}
