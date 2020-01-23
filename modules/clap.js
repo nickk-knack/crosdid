@@ -5,7 +5,7 @@ module.exports = {
 	guildOnly: false,
 	args: true,
 	cooldown: 3,
-	execute(message, args, bot) {
-		message.reply(args.join('👏').toUpperCase());
+	execute(message, args) {
+		message.channel.send(args.join('👏').toUpperCase());
 	},
 };
