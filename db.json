@@ -15,7 +15,7 @@
     },
     "secret_reacts": {
       "enabled": true,
-      "chance": 0.05
+      "chance": 0.07
     },
     "users": [
       {
