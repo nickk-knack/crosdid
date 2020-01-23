@@ -15,7 +15,7 @@
     },
     "secret_reacts": {
       "enabled": true,
-      "chance": 0.05
+      "chance": 0.07
     },
     "users": [
       {
@@ -54,8 +54,7 @@
         "messages": [
           "nick is a bitch",
           "high nick",
-          "danny rick lookin' fucker",
-          "this is a brand new message"
+          "danny rick lookin' fucker"
         ],
         "reactions": [
           {
@@ -82,7 +81,6 @@
         "messages": [
           "go photoshop a bigger dick on yourself, jake",
           ".bad jake",
-          "jake go back to no lifing wow classic",
           "shut up anprim",
           "stay in nam"
         ],
@@ -254,19 +252,36 @@
         "trigger": "peepee poopoo",
         "responses": [
           "ring ding ding ding ding duh ding duh ding",
+<<<<<<< HEAD
           "i shidded and farded and cummed in my pANTSSSSSSS"
+=======
+          "i shidded and farded camed in my pantssss"
+>>>>>>> d2ee6f129a4d2e178e610ff038a51f5730b2a7b2
         ]
       },
       {
         "trigger": "o i am laffin",
         "responses": [
-          "oial"
+          "oial",
+          "i am laffin 4 real rn"
         ]
       },
       {
         "trigger": "shit asshole",
         "responses": [
           "wilbert fan shit asshole"
+        ]
+      },
+      {
+        "trigger": "i dont want it",
+        "responses": [
+          "I DONT WAAAANTTT IIIIITTTTTTTT!!!!!"
+        ]
+      },
+      {
+        "trigger": "hell yeah",
+        "responses": [
+          "https://imgur.com/63wf95x"
         ]
       }
     ],
