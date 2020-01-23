@@ -77,7 +77,7 @@ module.exports = {
 						embed.addField(`[Trigger ${++i}]: **${phrase.trigger}**`, `Responses: [\n${phrase.responses.map(r => `\t"${r}"`).join(',\n')}\n]`, true);
 					}
 
-					return message.reply(`Secret phrases for ${message.guild.name}:`, embed);
+					return message.reply(`secret phrases for ${message.guild.name}:`, embed);
 				}
 				case 'addtrigger':
 				case 'at': {
@@ -86,7 +86,7 @@ module.exports = {
 
 					dbPhrases.push({ trigger: triggerPhrase, responses: [] }).write();
 
-					return message.reply(`Successfully added trigger phrase: "${triggerPhrase}".`);
+					return message.reply(`successfully added trigger phrase: "${triggerPhrase}".`);
 				}
 				case 'addresponse':
 				case 'ar': {
@@ -100,7 +100,7 @@ module.exports = {
 
 					dbPhraseResponses.push(responsePhrase).write();
 
-					return message.reply(`Successfully added response phrase "${responsePhrase}" for trigger "${dbPhraseObject.get('trigger').value()}".`);
+					return message.reply(`successfully added response phrase "${responsePhrase}" for trigger "${dbPhraseObject.get('trigger').value()}".`);
 				}
 				case 'removetrigger':
 				case 'rt': {
