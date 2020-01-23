@@ -1,8 +1,11 @@
+const Discord = require('discord.js');
+const randomHex = require('random-hex');
+
 module.exports = {
 	name: 'bot',
 	description: 'Modify various bot settings on the fly',
 	usage: '<activity <enabled <true | false> | type <playing | streaming | listening | watching> | text <activity text>>> |\n\
-<phrases <list | addtrigger <trigger phrase> | addresponse <trigger phrase index> <response phrase> | remove <index>>> |\n\
+<phrases <list | addtrigger <trigger> | addresponse <trigger index> <response> | removetrigger <trigger index> | removeresponse <trigger index> <response index>>> |\n\
 <avatar <get | set <image url>>',
 	args: true,
 	minArgsLength: 2,
@@ -60,15 +63,66 @@ module.exports = {
 			}
 		}
 		else if (subcommand === 'phrases') {
-			if (!args.length) return message.reply('you did not provide enough arguments to execute that command!');
+			if (!args.length && subcommandArg !== 'list') return message.reply('you did not provide enough arguments to execute that command!');
+
+			const dbPhrases = db.get(`${message.guild.id}.phrases`);
 
 			switch (subcommandArg) {
 				case 'list':
-					break;
-				case 'add':
-					break;
-				case 'remove':
-					break;
+				case 'l': {
+					const embed = new Discord.RichEmbed().setColor(randomHex.generate());
+					let i = -1;
+
+					for (const phrase of dbPhrases.value()) {
+						embed.addField(`[Trigger ${++i}]: **${phrase.trigger}**`, `Responses: [\n${phrase.responses.map(r => `\t"${r}"`).join(',\n')}\n]`, true);
+					}
+
+					return message.reply(`Secret phrases for ${message.guild.name}:`, embed);
+				}
+				case 'addtrigger':
+				case 'at': {
+					const triggerPhrase = args.join(' ');
+					if (dbPhrases.find({ trigger: triggerPhrase }).value()) return message.reply(`"${triggerPhrase}" already exists!`);
+
+					dbPhrases.push({ trigger: triggerPhrase, responses: [] }).write();
+
+					return message.reply(`Successfully added trigger phrase: "${triggerPhrase}".`);
+				}
+				case 'addresponse':
+				case 'ar': {
+					const triggerIndex = parseInt(args.shift(), 10);
+					if (isNaN(triggerIndex) || triggerIndex >= dbPhrases.size().value()) return message.reply(`${triggerIndex} is out of bounds! [must be 0 - ${dbPhrases.size().value() - 1}]`);
+
+					const dbPhraseObject = dbPhrases.get(triggerIndex);
+					const dbPhraseResponses = dbPhraseObject.get('responses');
+					const responsePhrase = args.join(' ');
+					if (dbPhraseResponses.includes(responsePhrase).value()) return message.reply(`${responsePhrase} already exists for the given trigger index!`);
+
+					dbPhraseResponses.push(responsePhrase).write();
+
+					return message.reply(`Successfully added response phrase "${responsePhrase}" for trigger "${dbPhraseObject.get('trigger').value()}".`);
+				}
+				case 'removetrigger':
+				case 'rt': {
+					const triggerIndex = parseInt(args.shift(), 10);
+					if (isNaN(triggerIndex) || triggerIndex >= dbPhrases.size().value()) return message.reply(`${triggerIndex} is out of bounds! [must be 0 - ${dbPhrases.size().value() - 1}]`);
+
+					const removed = dbPhrases.pullAt(triggerIndex).write();
+					return message.reply(`successfully removed "${removed[0].trigger}" as a trigger.`);
+				}
+				case 'removeresponse':
+				case 'rr': {
+					const triggerIndex = parseInt(args.shift(), 10);
+					if (isNaN(triggerIndex) || triggerIndex >= dbPhrases.size().value()) return message.reply(`${triggerIndex} is out of bounds! [must be 0 - ${dbPhrases.size().value() - 1}]`);
+
+					const dbPhraseObject = dbPhrases.get(triggerIndex);
+					const dbPhraseResponses = dbPhraseObject.get('responses');
+					const responseIndex = parseInt(args.shift(), 10);
+					if (isNaN(responseIndex) || responseIndex >= dbPhraseResponses.size().value()) return message.reply(`${responseIndex} is out of bounds! [must be 0 - ${dbPhraseResponses.size().value() - 1}]`);
+
+					const removed = dbPhraseResponses.pullAt(responseIndex).write();
+					return message.reply(`successfully removed "${removed}" from the responses for "${dbPhraseObject.get('trigger').value()}".`);
+				}
 				default:
 					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: list, add, remove)`);
 			}
