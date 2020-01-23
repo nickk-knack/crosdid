@@ -167,34 +167,42 @@ client.on('message', msg => {
 		// Ignore messages from discord/bots (especially yourself), and don't process non-guild messages
 		if (msg.system || msg.author.bot || typeof msg.guild === 'undefined' || msg.guild === null) return;
 
-		// TODO: Change secret messages/reacts chances and enable checking to be done from db
+		// Secret messages & reactions
+		const dbUser = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id });
 
-		// Check that the guild is configured with secret messages and reacts AND that the user has configured messages/reacts
-		const userSecrets = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id }).value();
-		if (typeof userSecrets !== 'undefined') {
-			// Calculate if we want to send a message and/or react
-			const secretMessageChance = db.get(`${msg.guild.id}.secret_messages`).value();
-			const sendSecretMessage = Math.random() > (1 - process.env.SECRET_MESSAGE_CHANCE);
-			const secretlyReact = Math.random() > (1 - process.env.SECRET_REACT_CHANCE);
+		// Check that messages are enabled, and that the user has some defined
+		const secretMessagesEnabled = db.get(`${msg.guild.id}.secret_messages.enabled`).value();
+		const userSecretMessages = dbUser.get('messages').value();
+		if (secretMessagesEnabled && userSecretMessages) {
+			// Calculate if we want to send a message
+			const secretMessageChance = db.get(`${msg.guild.id}.secret_messages.chance`).value();
+			const sendSecretMessage = Math.random() > (1 - secretMessageChance);
 
-			// Get random message to send, send it
-			if (sendSecretMessage) {
-				const message = getRandomFromArray(userSecrets.messages);
-				msg.reply(message);
-			}
+			// Send a random secret mesage
+			if (sendSecretMessage) msg.reply(getRandomFromArray(userSecretMessages));
+		}
+
+		// Check that reactions are enabled, and that the user has some defined
+		const secretReactsEnabled = db.get(`${msg.guild.id}.secret_reacts.enabled`).value();
+		const userSecretReacts = dbUser.get('reactions').value();
+		if (secretReactsEnabled && userSecretReacts) {
+			// Calculate if we want to react
+			const secretReactChance = db.get(`${msg.guild.id}.secret_reacts.chance`).value();
+			const secretlyReact = Math.random() > (1 - secretReactChance);
 
 			// Get random reaction, react with it
 			if (secretlyReact) {
-				const reaction = getRandomFromArray(userSecrets.reactions);
+				const reaction = getRandomFromArray(userSecretReacts);
 				msg.react(reaction.custom ? msg.guild.emojis.get(reaction.emoji) : reaction.emoji);
 			}
 		}
 
-		// Guild-based, phrase-activated messages
+		// Guild-specific, phrase-activated messages
 		const enablePhrases = db.get(`${msg.guild.id}.enablePhrases`).value();
 		const lowerCaseContent = msg.content.toLowerCase();
 		if (enablePhrases) {
 			const guildPhrases = db.get(`${msg.guild.id}.phrases`).value();
+
 			if (typeof guildPhrases !== 'undefined') {
 				for (const guildPhrase of guildPhrases) {
 					if (lowerCaseContent.includes(guildPhrase.trigger) && guildPhrase.responses) {
