@@ -432,7 +432,7 @@ client.on('error', error => console.error(error));
 client.on('warn', warn => console.warn(warn));
 // if (DEBUG) client.on('debug', info => console.info(info));
 
-console.log('\tEvents loaded.');
+console.log('\t\tEvents loaded.');
 
 // Client login
 console.log('\tLogging in...');
