@@ -95,7 +95,7 @@ module.exports = {
 
 				// Get and parse index, check that its within bounds
 				const index = parseInt(args.shift(), 10);
-				if (isNaN(index) || index > arr.length) return message.reply(`${index} is out of bounds!`);
+				if (isNaN(index) || index >= arr.length) return message.reply(`${index} is out of bounds! [0 - ${arr.length - 1}]`);
 
 				const removed = dbUser.splice(index, 1);
 				dbUser.write();
