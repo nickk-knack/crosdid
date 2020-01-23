@@ -18,7 +18,7 @@ module.exports = {
 		}
 
 		if (mode === '-c' || mode === 'all') {
-			if (args.length > 1) {
+			if (args.length) {
 				console.log('Reloading single command...');
 				const commandName = args.shift().toLowerCase();
 				const command = commands.get(commandName) || commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
