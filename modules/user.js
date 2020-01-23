@@ -38,18 +38,16 @@ module.exports = {
 				return message.reply(`\`${subcommand}\` is not a valid subcommand!`);
 		}
 
-		const arr = dbUser.value();
-
 		switch (subcommandArg) {
 			case 'list':
 			case 'l':
 				let i = -1;
 
 				if (subcommand === 'messages') {
-					return message.reply(arr.map(x => `[${++i}.] "${x}"`).join('\n'));
+					return message.reply(dbUser.map(x => `[${++i}.] "${x}"`).join('\n').value());
 				}
 				else {
-					return message.reply(arr.map(x => `[${++i}.] ${x.custom ? message.guild.emojis.get(x.emoji) : x.emoji}`).join('\n'));
+					return message.reply(dbUser.map(x => `[${++i}.] ${x.custom ? message.guild.emojis.get(x.emoji) : x.emoji}`).join('\n').value());
 				}
 			case 'add':
 			case 'a':
@@ -61,7 +59,7 @@ module.exports = {
 					const secretMessage = args.join(' ').trim();
 
 					// Check if its a duplicate
-					if (arr.includes(secretMessage)) {
+					if (dbUser.includes(secretMessage).value()) {
 						return message.reply(`${user} already has "${secretMessage}" as a secret message.`);
 					}
 
@@ -78,7 +76,7 @@ module.exports = {
 					}
 
 					// Check if its a duplicate (this might not be actually work)
-					if (arr.includes(emojiObj)) {
+					if (dbUser.includes(emojiObj).value()) {
 						return message.reply(`${user} already has ${emojiObj.emoji} as a secret react.`);
 					}
 
@@ -95,11 +93,10 @@ module.exports = {
 
 				// Get and parse index, check that its within bounds
 				const index = parseInt(args.shift(), 10);
-				if (isNaN(index) || index >= arr.length) return message.reply(`${index} is out of bounds! [0 - ${arr.length - 1}]`);
+				if (isNaN(index) || index >= dbUser.size().value()) return message.reply(`${index} is out of bounds! [0 - ${dbUser.size().value() - 1}]`);
 
-				const removed = dbUser.splice(index, 1);
-				dbUser.write();
-
+				// Remove the secret at the given index, save it and output it
+				const removed = dbUser.pullAt(index).write();
 				return message.reply(`successfully removed ${removed} from ${user}'s secrets.`);
 			default:
 				return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: list, add, remove)`);
