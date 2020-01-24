@@ -7,7 +7,8 @@ module.exports = {
 	usage: '<activity <enable | disable | type <playing | streaming | listening | watching> | text <activity text>>> |\n\
 <phrases <enable | disable | list | addtrigger <trigger> | addresponse <trigger index> <response> | removetrigger <trigger index> | removeresponse <trigger index> <response index>>> |\n\
 <avatar <get | set <image url>>> |\n\
-<secret <messages | reacts> <enable | disable | chance <get | 0.0 - 1.0>>>',
+<secret <messages | reacts> <enable | disable | chance <get | 0.0 - 1.0>>> |\n\
+<reactionNotify <enable | disable>>',
 	args: true,
 	minArgsLength: 2,
 	guildOnly: true,
@@ -199,6 +200,18 @@ module.exports = {
 			// Write new setting to db, return and reply to message
 			db.set(`${message.guild.id}.secret_${subcommandArg}.${mode}`, setting).write();
 			return message.reply(msgReply);
+		}
+		else if (subcommand === 'reactionNotify') {
+			switch (subcommandArg) {
+				case 'enable':
+					db.set(`${message.guild.id}.${subcommand}`, true).write();
+					return message.reply('successfully **enabled** reaction notification for the guild.');
+				case 'disable':
+					db.set(`${message.guild.id}.${subcommand}`, false).write();
+					return message.reply('successfully **disabled** reaction notification for the guild.');
+				default:
+					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: enable, disable)`);
+			}
 		}
 		else {
 			return message.reply(`\`${subcommand}\` is not a valid subcommand!`);
