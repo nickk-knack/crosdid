@@ -20,7 +20,8 @@ module.exports = {
 <secret <messages | reacts> <enable |
          					 disable |
 					         chance <get | 0.0 - 1.0>>> |
-<reactionNotify <enable | disable>>`,
+<reactionNotify <enable | disable>> |
+<update <guilds | users>>`,
 	args: true,
 	minArgsLength: 2,
 	guildOnly: true,
@@ -223,6 +224,19 @@ module.exports = {
 					return message.reply('successfully **disabled** reaction notification for the guild.');
 				default:
 					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: enable, disable)`);
+			}
+		}
+		else if (subcommand === 'update') {
+			switch (subcommandArg) {
+				case 'guilds':
+					// go through all guilds in message.client, see if they are in db, add if not
+					// basically the same code from client ready handler
+					return message.reply('successfully updated all guild db information!');
+				case 'users':
+					// go through all users in current guild, add shit to db for them
+					return message.reply('successfully updated user db information for current guild!');
+				default:
+					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: guilds, users)`);
 			}
 		}
 		else {
