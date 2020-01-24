@@ -7,7 +7,7 @@ module.exports = {
 	usage: '<activity <enabled <true | false> | type <playing | streaming | listening | watching> | text <activity text>>> |\n\
 <phrases <list | addtrigger <trigger> | addresponse <trigger index> <response> | removetrigger <trigger index> | removeresponse <trigger index> <response index>>> |\n\
 <avatar <get | set <image url>>> |\n\
-<random <message | react> <enable <true | false> | chance <0.0 - 1.0>>>',
+<secret <message | react> <enable <true | false> | chance <0.0 - 1.0>>>',
 	args: true,
 	minArgsLength: 2,
 	guildOnly: true,
@@ -150,7 +150,7 @@ module.exports = {
 					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: get, set)`);
 			}
 		}
-		else if (subcommand === 'random') {
+		else if (subcommand === 'secret') {
 			let dbSecretSettings = db.get(`${message.guild.id}`);
 
 			switch (subcommandArg) {
