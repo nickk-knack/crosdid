@@ -11,7 +11,7 @@
     "reactionNotify": false,
     "secret_messages": {
       "enabled": true,
-      "chance": 0.05
+      "chance": 0.04
     },
     "secret_reacts": {
       "enabled": true,
