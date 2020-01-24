@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 const Discord = require('discord.js');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
+const randomHex = require('random-hex');
 
 // Environment constants
 const prefix = process.env.PREFIX;
@@ -372,25 +373,28 @@ client.on('messageReactionAdd', (reaction, user) => {
 	// (i.e., giving a user a role on a react; add some stuff to events.js plugin to support this)
 
 	// Auto-alert on react code (enabled on a per-guild basis)
-	// TODO: Maybe change message out to be a rich embed
 	if (db.get(`${reaction.message.guild.id}.reactionNotify`).value()) {
 		// first check that you can send pms to the author! (i.e. that its not a bot)
 		if (reaction.message.author.bot) return;
 
 		// Get message author, and begin message content
 		const author = reaction.message.author;
-		let message = `${user.tag} reacted to your message,\n> ${reaction.message.content}\nwith `;
+		const embed = new Discord.RichEmbed()
+			.setColor(randomHex.generate())
+			.setTitle(`${user.tag} reacted to your message`)
+			.addField('Your message', `> ${reaction.message.content}`);
 
 		// detect if the emoji is a guild emoji (true) or regular emoji (false), append to message
 		if (typeof reaction.emoji.url !== 'undefined') {
-			message += `guild emoji ${reaction.emoji.name} (${reaction.emoji.url})`;
+			embed.setImage(reaction.emoji.url)
+				.addField('Reaction', `"${reaction.emoji.name}" from guild "${reaction.message.guild.name}"`);
 		}
 		else {
-			message += `${reaction.emoji}`;
+			embed.addField('Reaction', reaction.emoji);
 		}
 
 		// Send message to author
-		author.send(message);
+		author.send(embed);
 	}
 });
 
