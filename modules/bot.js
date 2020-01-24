@@ -4,10 +4,10 @@ const randomHex = require('random-hex');
 module.exports = {
 	name: 'bot',
 	description: 'Modify various bot settings on the fly',
-	usage: '<activity <enabled <true | false> | type <playing | streaming | listening | watching> | text <activity text>>> |\n\
-<phrases <list | addtrigger <trigger> | addresponse <trigger index> <response> | removetrigger <trigger index> | removeresponse <trigger index> <response index>>> |\n\
+	usage: '<activity <enable | disable | type <playing | streaming | listening | watching> | text <activity text>>> |\n\
+<phrases <enable | disable | list | addtrigger <trigger> | addresponse <trigger index> <response> | removetrigger <trigger index> | removeresponse <trigger index> <response index>>> |\n\
 <avatar <get | set <image url>>> |\n\
-<secret <messages | reacts> <enabled <true | false> | chance <get | 0.0 - 1.0>>>',
+<secret <messages | reacts> <enable | disable | chance <get | 0.0 - 1.0>>>',
 	args: true,
 	minArgsLength: 2,
 	guildOnly: true,
@@ -22,11 +22,13 @@ module.exports = {
 			if (!args.length) return message.reply('you did not provide enough arguments to execute that command!');
 
 			switch (subcommandArg) {
-				case 'enabled':
-					const enabled = args.shift().toLowerCase() === 'true';
-					db.set('activitySettings.enabled', enabled).write();
-
-					message.reply(`successfully **${enabled ? 'enabled' : 'disabled'}** the bot's activity message.`);
+				case 'enable':
+					db.set('activitySettings.enabled', true).write();
+					message.reply('successfully **enabled** the bot\'s activity message.');
+					break;
+				case 'disable':
+					db.set('activitySettings.enabled', false).write();
+					message.reply('successfully **disabled** the bot\'s activity message.');
 					break;
 				case 'type':
 					const type = args.shift().toUpperCase();
@@ -43,7 +45,7 @@ module.exports = {
 					message.reply(`successfully set the bot's activity text to "${text}".`);
 					break;
 				default:
-					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: enabled, type, text)`);
+					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: enable, disable, type, text)`);
 			}
 
 			const activitySettings = db.get('activitySettings').value();
@@ -69,6 +71,16 @@ module.exports = {
 			const dbPhrases = db.get(`${message.guild.id}.phrases`);
 
 			switch (subcommandArg) {
+				case 'enable':
+				case 'e': {
+					db.set(`${message.guild.id}.enablePhrases`, true);
+					return message.reply('successfully **enabled** trigger phrases for the guild.');
+				}
+				case 'disable':
+				case 'd': {
+					db.set(`${message.guild.id}.enablePhrases`, false);
+					return message.reply('successfully **disabled** trigger phrases for the guild.');
+				}
 				case 'list':
 				case 'l': {
 					const embed = new Discord.RichEmbed().setColor(randomHex.generate());
@@ -164,9 +176,13 @@ module.exports = {
 
 			// Get the setting from the next arg, set the reply message
 			let setting, msgReply;
-			if (mode === 'enabled') {
-				setting = args.shift().toLowerCase() === 'true';
-				msgReply = `successfully ${setting ? 'enabled' : 'disabled'} ${subcommandArg}.`;
+			if (mode === 'enable') {
+				setting = true;
+				msgReply = `successfully **enabled** secret ${subcommandArg}.`;
+			}
+			else if (mode === 'disable') {
+				setting = false;
+				msgReply = `successfully **disabled** secret ${subcommandArg}.`;
 			}
 			else if (mode === 'chance') {
 				setting = args.shift();
@@ -177,7 +193,7 @@ module.exports = {
 				setting = parseFloat(setting);
 				if (isNaN(setting)) return message.reply(`${setting} is invalid! Expected a float between 0.0 and 1.0`);
 
-				msgReply = `successfully set chance for ${subcommandArg} to ${setting}.`;
+				msgReply = `successfully set chance for secret ${subcommandArg} to ${setting}.`;
 			}
 
 			// Write new setting to db, return and reply to message
