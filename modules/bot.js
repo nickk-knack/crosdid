@@ -7,7 +7,7 @@ module.exports = {
 	usage: '<activity <enabled <true | false> | type <playing | streaming | listening | watching> | text <activity text>>> |\n\
 <phrases <list | addtrigger <trigger> | addresponse <trigger index> <response> | removetrigger <trigger index> | removeresponse <trigger index> <response index>>> |\n\
 <avatar <get | set <image url>>> |\n\
-<secret <messages | reacts> <enabled <true | false> | chance <0.0 - 1.0>>>',
+<secret <messages | reacts> <enabled <true | false> | chance <get | 0.0 - 1.0>>>',
 	args: true,
 	minArgsLength: 2,
 	guildOnly: true,
@@ -169,7 +169,12 @@ module.exports = {
 				msgReply = `successfully ${setting ? 'enabled' : 'disabled'} ${subcommandArg}.`;
 			}
 			else if (mode === 'chance') {
-				setting = parseFloat(args.shift());
+				setting = args.shift();
+				if (setting === 'get') {
+					return message.reply(`chance for secret ${subcommandArg}: ${db.get(`${message.guild.id}.secret_${subcommandArg}.${mode}`).value()}`);
+				}
+
+				setting = parseFloat(setting);
 				if (isNaN(setting)) return message.reply(`${setting} is invalid! Expected a float between 0.0 and 1.0`);
 
 				msgReply = `successfully set chance for ${subcommandArg} to ${setting}.`;
