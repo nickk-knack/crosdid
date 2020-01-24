@@ -1,7 +1,15 @@
+const { stripIndent } = require('common-tags');
+
 module.exports = {
 	name: 'user',
 	description: 'Modify guild user db information for the **mentioned** user',
-	usage: '<@user> <messages <list | add <string> | remove <index>>> | \n<reacts <list | add <string> | remove <index>>> | \n<op <true | false>>',
+	usage: stripIndent`<@user> <messages <list |
+                   add <string> |
+                   remove <index>>> |
+        <reacts <list |
+                 add <string> |
+                 remove <index>>> |
+        <op <true | false>>`,
 	args: true,
 	minArgsLength: 3,
 	guildOnly: true,

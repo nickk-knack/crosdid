@@ -1,14 +1,26 @@
 const Discord = require('discord.js');
 const randomHex = require('random-hex');
+const { stripIndent } = require('common-tags');
 
 module.exports = {
 	name: 'bot',
 	description: 'Modify various bot settings on the fly',
-	usage: '<activity <enable | disable | type <playing | streaming | listening | watching> | text <activity text>>> |\n\
-<phrases <enable | disable | list | addtrigger <trigger> | addresponse <trigger index> <response> | removetrigger <trigger index> | removeresponse <trigger index> <response index>>> |\n\
-<avatar <get | set <image url>>> |\n\
-<secret <messages | reacts> <enable | disable | chance <get | 0.0 - 1.0>>> |\n\
-<reactionNotify <enable | disable>>',
+	usage: stripIndent`<activity <enable |
+           disable |
+           type <playing | streaming | listening | watching> |
+           text <activity text>>> |
+<phrases <enable |
+          disable |
+          list |
+          addtrigger <trigger> |
+          addresponse <trigger index> <response> |
+          removetrigger <trigger index> |
+          removeresponse <trigger index> <response index>>> |
+<avatar <get | set <image url>>> |
+<secret <messages | reacts> <enable |
+         					 disable |
+					         chance <get | 0.0 - 1.0>>> |
+<reactionNotify <enable | disable>>`,
 	args: true,
 	minArgsLength: 2,
 	guildOnly: true,
