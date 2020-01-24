@@ -25,20 +25,71 @@ client.commands = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 
 // lowdb setup
-const adapter = new FileSync(dbFileName, {
-	defaultValue: {
-		// default disabled commands
-		globalDisabledCmdModules: [
-			'reddit',
-			'cmdAliases',
-		],
-		activitySettings: {
-			enabled: true,
-			type: 'WATCHING',
-			text: 'over my children',
-			url: '',
+const dbDefault = {
+	globalDisabledCmdModules: [
+		'reddit',
+	],
+	activitySettings: {
+		enabled: true,
+		type: 'WATCHING',
+		text: 'over my children',
+		url: '',
+	},
+};
+
+const dbDefaultGuildObj = {
+	reactionNotify: false,
+	secret_messages: {
+		enabled: false,
+		chance: 0.05,
+	},
+	secret_reacts: {
+		enabled: false,
+		chance: 0.05,
+	},
+	users: [],
+	disabledCmdModules: [],
+	enablePhrases: true,
+	phrases: [],
+	announcements: {
+		channel: '',
+		channel_create: {
+			enabled: false,
+			messages: [],
+		},
+		channel_delete: {
+			enabled: false,
+			messages: [],
+		},
+		emoji_create: {
+			enabled: false,
+			channel_override: '',
+			send_emoji: false,
+			send_message: false,
+			message_prepend: true,
+			messages: [],
+		},
+		emoji_delete: {
+			enabled: false,
+			channel_override: '',
+			send_emoji: false,
+			send_message: false,
+			message_prepend: true,
+			messages: [],
+		},
+		emoji_update: {
+			enabled: false,
+			channel_override: '',
+			send_emoji: false,
+			send_message: false,
+			message_prepend: true,
+			messages: [],
 		},
 	},
+};
+
+const adapter = new FileSync(dbFileName, {
+	defaultValue: dbDefault,
 });
 
 const db = low(adapter);
@@ -81,62 +132,13 @@ client.on('ready', () => {
 	console.log(`\tLogged in as ${client.user.tag}!`);
 
 	// Go through joined guilds, make sure there is a per-guild config in db
-	client.guilds.forEach(g => {
+	for (const g of [...client.guilds.values()]) {
 		// Check that the guild is available first
-		if (!g.available) return;
+		if (!g.available) continue;
 
 		// Create guild config if non-existent
 		if (!db.has(g.id).value()) {
-			db.set(g.id, {
-				reactionNotify: false,
-				secret_messages: {
-					enabled: false,
-					chance: 0.05,
-				},
-				secret_reacts: {
-					enabled: false,
-					chance: 0.05,
-				},
-				users: [],
-				disabledCmdModules: [],
-				enablePhrases: true,
-				phrases: [],
-				announcements: {
-					channel: '',
-					channel_create: {
-						enabled: false,
-						messages: [],
-					},
-					channel_delete: {
-						enabled: false,
-						messages: [],
-					},
-					emoji_create: {
-						enabled: false,
-						channel_override: '',
-						send_emoji: false,
-						send_message: false,
-						message_prepend: true,
-						messages: [],
-					},
-					emoji_delete: {
-						enabled: false,
-						channel_override: '',
-						send_emoji: false,
-						send_message: false,
-						message_prepend: true,
-						messages: [],
-					},
-					emoji_update: {
-						enabled: false,
-						channel_override: '',
-						send_emoji: false,
-						send_message: false,
-						message_prepend: true,
-						messages: [],
-					},
-				},
-			}).write();
+			db.set(g.id, dbDefaultGuildObj).write();
 
 			g.members.forEach(m => {
 				if (!db.get(`${g.id}.users`).find({ id: m.id }).value()) {
@@ -144,7 +146,7 @@ client.on('ready', () => {
 				}
 			});
 		}
-	});
+	}
 
 	// Set the bot activity text
 	const activitySettings = db.get('activitySettings').value();
