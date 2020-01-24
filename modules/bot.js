@@ -6,7 +6,8 @@ module.exports = {
 	description: 'Modify various bot settings on the fly',
 	usage: '<activity <enabled <true | false> | type <playing | streaming | listening | watching> | text <activity text>>> |\n\
 <phrases <list | addtrigger <trigger> | addresponse <trigger index> <response> | removetrigger <trigger index> | removeresponse <trigger index> <response index>>> |\n\
-<avatar <get | set <image url>>',
+<avatar <get | set <image url>>> |\n\
+<random <message | react> <enable <true | false> | chance <0.0 - 1.0>>>',
 	args: true,
 	minArgsLength: 2,
 	guildOnly: true,
@@ -147,6 +148,36 @@ module.exports = {
 					return message.reply(message.client.user.avatarURL);
 				default:
 					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: get, set)`);
+			}
+		}
+		else if (subcommand === 'random') {
+			let dbSecretSettings = db.get(`${message.guild.id}`);
+
+			switch (subcommandArg) {
+				case 'message':
+					dbSecretSettings = dbSecretSettings.get('secret_messages');
+					break;
+				case 'react':
+					dbSecretSettings = dbSecretSettings.get('secret_reacts');
+					break;
+				default:
+					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: message, react)`);
+			}
+
+			const mode = args.shift().toLowerCase();
+
+			if (mode === 'enable') {
+				const setting = !!args.shift().toLowerCase();
+
+				dbSecretSettings.set('enable', setting).write();
+				return message.reply(`successfully ${setting ? 'enabled' : 'disabled'} ${subcommandArg}s.`);
+			}
+			else if (mode === 'chance') {
+				const setting = parseFloat(args.shift());
+				if (isNaN(setting)) return message.reply(`${setting} is invalid! Expected a float between 0.0 and 1.0`);
+
+				dbSecretSettings.set('chance', setting).write();
+				return message.reply(`successfully set chance for ${subcommandArg}s to ${setting}.`);
 			}
 		}
 		else {
