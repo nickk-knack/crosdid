@@ -18,6 +18,8 @@
     1. Use `chalk` for coloring output?
 12. `common-tags` cleanup
     1. [Wanna write some custom tags?](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates)
+13. Change eslint indent rule to spaces, convert all files
+    1. 2 spaces? or 4?
 
 ## Links
 
