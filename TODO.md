@@ -20,6 +20,9 @@
     1. [Wanna write some custom tags?](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates)
 13. Change eslint indent rule to spaces, convert all files
     1. 2 spaces? or 4?
+14. Make eslintrc epic
+    1. [eslint rules](https://eslint.org/docs/rules/)
+    2. combine in stuff from new eslintrc on your flash drive
 
 ## Links
 
