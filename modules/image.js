@@ -18,9 +18,13 @@ module.exports = {
 
 		client.search(query)
 			.then(images => {
+				// Check if there were no results
+				if (!images.length) return message.reply(`No results found for \`${query}\``);
+
 				// Get random image
 				const randomImage = images[Math.floor(Math.random() * images.length)];
-				if (typeof randomImage === 'undefined') message.reply(`No results found for \`${query}\``);
+				// This check is technically legacy shit, but I'm going to leave it in "just in case"
+				if (typeof randomImage === 'undefined') return message.reply(`No results found for \`${query}\``);
 
 				const embed = new Discord.RichEmbed()
 					.setColor(randomHex.generate())
