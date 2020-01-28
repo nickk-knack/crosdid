@@ -326,6 +326,7 @@ client.on('emojiCreate', emoji => {
 	}
 });
 
+// Emoji delete event
 client.on('emojiDelete', emoji => {
 	// need to send something other than the emoji bc that wont work lol
 	const settings = db.get(`${emoji.guild.id}.announcements.emoji_delete`).value();
@@ -346,7 +347,7 @@ client.on('emojiDelete', emoji => {
 	}
 });
 
-// Emoji update event (didnt fire for updating emoji name, should figure it out)
+// Emoji update event
 client.on('emojiUpdate', (oldEmoji, newEmoji) => {
 	// Similar to creation, inform about updates to an emoji
 	const settings = db.get(`${newEmoji.guild.id}.announcements.emoji_update`).value();
@@ -405,7 +406,7 @@ client.on('rateLimit', info => {
 	if (DEBUG) console.warn('Rate limiting shit:', info);
 });
 
-// Channel creation event (for announcement)
+// Channel creation event
 client.on('channelCreate', channel => {
 	// Only notify the creation of text and voice channels (when enabled)
 	if (channel.type !== 'text' && channel.type !== 'voice' || !settings.enabled) return;
@@ -423,7 +424,7 @@ client.on('channelCreate', channel => {
 	announcementsChannel.send(message);
 });
 
-// Channel deletion event (for announcement)
+// Channel deletion event
 client.on('channelDelete', channel => {
 	// Only notify the deletion of text and voice channels (when enabled)
 	if (channel.type !== 'text' && channel.type !== 'voice' || !settings.enabled) return;
