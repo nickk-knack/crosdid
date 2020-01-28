@@ -4,6 +4,7 @@
 2. move more stuff from .env to db
    1. namely, prefix
 3. Update the rest of the command modules from previous bots
+   1. fakeperson - add address generation from fakeaddressgenerator?
 4. Rich embeds everywhere
    1. `index.js`
       1. `channelCreate` and `channelDelete` events
@@ -12,7 +13,7 @@
 6. `message.awaitReactions` for a quick poll thing?
 7. any other bot settings you want to add commands for?
 8. ctrl-f "todo" in `index.js` and existing command modules
-9. Fix reddit module
+9.  Fix reddit module
 10. Think about everything in the bot that is user controlled, check for exploits (`bot.js` might have one)
 11. Reimplement logging with `winston`
     1. Use `chalk` for coloring output?
