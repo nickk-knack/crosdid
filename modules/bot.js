@@ -68,13 +68,13 @@ module.exports = {
 
 			if (activitySettings.enabled) {
 				message.client.user.setActivity(activitySettings.text, { type: activitySettings.type })
-					.catch(e => {
+					.catch((e) => {
 						console.error(e);
 						message.reply('there was an error setting the activity. Check the console for debugging information.');
 					});
 			} else {
 				message.client.user.setActivity(null)
-					.catch(e => {
+					.catch((e) => {
 						console.error(e);
 						message.reply('there was an error setting the activity. Check the console for debugging information.');
 					});
@@ -99,7 +99,7 @@ module.exports = {
 					let i = -1;
 
 					for (const phrase of dbPhrases.value()) {
-						embed.addField(`[Trigger ${++i}]: **${phrase.trigger}**`, `Responses: [\n${phrase.responses.map(r => `\t"${r}"`).join(',\n')}\n]`, true);
+						embed.addField(`[Trigger ${++i}]: **${phrase.trigger}**`, `Responses: [\n${phrase.responses.map((r) => `\t"${r}"`).join(',\n')}\n]`, true);
 					}
 
 					return message.reply(`secret phrases for ${message.guild.name}:`, embed);
@@ -109,7 +109,10 @@ module.exports = {
 					const triggerPhrase = args.join(' ');
 					if (dbPhrases.find({ trigger: triggerPhrase }).value()) return message.reply(`"${triggerPhrase}" already exists!`);
 
-					dbPhrases.push({ trigger: triggerPhrase, responses: [] }).write();
+					dbPhrases.push({
+						trigger: triggerPhrase,
+						responses: [],
+					}).write();
 
 					return message.reply(`successfully added trigger phrase: "${triggerPhrase}".`);
 				}
@@ -162,7 +165,7 @@ module.exports = {
 					// and that would be perfectly valid in this case.
 					message.client.user.setAvatar(avatarUrl)
 						.then(() => message.reply(`successfully set avatar to ${avatarUrl}`))
-						.catch(e => {
+						.catch((e) => {
 							console.error(e);
 							message.reply('there was an error setting the avatar. Check the console for debugging information.');
 						});

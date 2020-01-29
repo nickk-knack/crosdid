@@ -6,10 +6,10 @@ module.exports = {
 	guildOnly: false,
 	execute(message, args) {
 		const toss = Math.floor(Math.random() * 2);
+
 		if (toss) {
 			message.reply('it was heads.');
-		}
-		else {
+		} else {
 			message.reply('it was tails.');
 		}
 	},
