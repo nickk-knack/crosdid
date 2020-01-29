@@ -17,13 +17,19 @@
 10. Think about everything in the bot that is user controlled, check for exploits (`bot.js` might have one)
 11. Reimplement logging with `winston`
     1. Use `chalk` for coloring output?
+    2. Point is going to be removing all `console.log` calls, eventually re-enable `no-console` in `.eslintrc.json`
 12. `common-tags` cleanup
     1. [Wanna write some custom tags?](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates)
 13. Change eslint indent rule to spaces, convert all files
     1. 2 spaces? or 4?
+    2. make a separate branch for this later
 14. Make eslintrc epic
     1. [eslint rules](https://eslint.org/docs/rules/)
-    2. combine in stuff from new eslintrc on your flash drive
+       1. ecmascript 6 section is all thats left
+    2. go through and check all modules
+15. Regex fixes:
+    1.  Replace any spaces with \s (ex: index.js:236)
+16. async all command modules?
 
 ## Links
 
