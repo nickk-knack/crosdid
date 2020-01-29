@@ -114,10 +114,9 @@ for (const file of commandModules) {
 
 	// Require the command module and set it in the client
 	try {
-		const command = require(`./modules/${file}`);
+		const command = require(`./modules/${file}`); // eslint-disable-line global-require
 		client.commands.set(command.name, command);
-	}
-	catch (e) {
+	} catch (e) {
 		console.error(`Error loading ${file}: `, e);
 	}
 }
@@ -142,7 +141,12 @@ client.on('ready', () => {
 
 			g.members.forEach(m => {
 				if (!db.get(`${g.id}.users`).find({ id: m.id }).value()) {
-					db.get(`${g.id}.users`).push({ id: m.id, messages: [], reactions: [], operator: false }).write();
+					db.get(`${g.id}.users`).push({
+						id: m.id,
+						messages: [],
+						reactions: [],
+						operator: false,
+					}).write();
 				}
 			});
 		}
@@ -161,7 +165,7 @@ client.on('ready', () => {
 // Message event (command processing)
 client.on('message', msg => {
 	// Command needs to start with prefix
-	const prefixRegex = new RegExp(`^(<@!?${client.user.id}> |\\${prefix})\\s*`);
+	const prefixRegex = new RegExp(`^(<@!?${client.user.id}> |\\${prefix})\\s*`, 'u');
 
 	// Test if the message was a command
 	if (!prefixRegex.test(msg.content)) {
@@ -217,10 +221,10 @@ client.on('message', msg => {
 
 		// Ass-fixer
 		const assMessages = [];
-		const assTokens = lowerCaseContent.match(/(\w*[\s-])ass(\s\w*)/g);
+		const assTokens = lowerCaseContent.match(/(\w*[\s-])ass(\s\w*)/giu);
 		if (assTokens && assTokens !== null) {
 			for (const assToken of assTokens) {
-				const fixedAss = assToken.match(/ass(\s\w*)/g)[0].replace(/\s/, '-');
+				const fixedAss = assToken.match(/ass(\s\w*)/gu)[0].replace(/\s/u, '-');
 				assMessages.push(fixedAss);
 			}
 		}
@@ -233,7 +237,7 @@ client.on('message', msg => {
 
 	// Get command args and command name
 	const [, matchedPrefix] = msg.content.match(prefixRegex);
-	const args = msg.content.slice(matchedPrefix.length).split(/ +/);
+	const args = msg.content.slice(matchedPrefix.length).split(/\s+/u);
 	const commandName = args.shift().toLowerCase();
 
 	// Get the actual command object, check if it exists
@@ -261,13 +265,13 @@ client.on('message', msg => {
 
 	// Check if args are required, or if not enough args are passed
 	if (command.args && (!args.length || command.minArgsLength > args.length)) {
-		let reply = `You didn't provide ${command.minArgsLength > args.length ? 'enough' : 'any'} arguments, ${msg.author}.`;
+		let reply = `you didn't provide ${command.minArgsLength > args.length ? 'enough' : 'any'} arguments.`;
 
 		if (command.usage) {
 			reply += `\nProper usage: "${prefix}${command.name} ${command.usage}"`;
 		}
 
-		return msg.channel.send(reply);
+		return msg.reply(reply);
 	}
 
 	// Set cooldown
@@ -282,8 +286,7 @@ client.on('message', msg => {
 	if (!timestamps.has(msg.author.id)) {
 		timestamps.set(msg.author.id, now);
 		setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
-	}
-	else {
+	} else {
 		const expirationTime = timestamps.get(msg.author.id) + cooldownAmount;
 
 		if (now < expirationTime) {
@@ -298,8 +301,7 @@ client.on('message', msg => {
 	// Execute command
 	try {
 		command.execute(msg, args);
-	}
-	catch (error) {
+	} catch (error) {
 		console.error(error);
 		msg.reply('there was an error executing that command :(');
 	}
@@ -317,8 +319,7 @@ client.on('emojiCreate', emoji => {
 
 		if (settings.send_message) {
 			message = settings.message_prepend ? `${getRandomFromArray(settings.messages)} ${emoji.toString()}` : `${emoji.toString()} ${getRandomFromArray(settings.messages)}`;
-		}
-		else {
+		} else {
 			message = emoji.toString();
 		}
 
@@ -338,8 +339,7 @@ client.on('emojiDelete', emoji => {
 
 		if (settings.send_message) {
 			message = settings.message_prepend ? `${getRandomFromArray(settings.messages)} ${emoji.toString()}` : `${emoji.toString()} ${getRandomFromArray(settings.messages)}`;
-		}
-		else {
+		} else {
 			message = emoji.toString();
 		}
 
@@ -361,8 +361,7 @@ client.on('emojiUpdate', (oldEmoji, newEmoji) => {
 			message = settings.message_prepend ?
 				`${getRandomFromArray(settings.messages)} ${settings.send_old_emoji ? oldEmoji.name : ''}${settings.send_old_emoji && settings.send_new_emoji ? ' -> ' : ''}${settings.send_new_emoji ? newEmoji.name : ''}` :
 				`${settings.send_old_emoji ? oldEmoji.name : ''}${settings.send_old_emoji && settings.send_new_emoji ? ' -> ' : ''}${settings.send_new_emoji ? newEmoji.name : ''} ${getRandomFromArray(settings.messages)}`;
-		}
-		else {
+		} else {
 			message = `${settings.send_old_emoji ? oldEmoji.name : ''}${settings.send_old_emoji && settings.send_new_emoji ? ' -> ' : ''}${settings.send_new_emoji ? newEmoji.name : ''}`;
 		}
 
@@ -391,8 +390,7 @@ client.on('messageReactionAdd', (reaction, user) => {
 		if (typeof reaction.emoji.url !== 'undefined') {
 			embed.setImage(reaction.emoji.url)
 				.addField('Reaction', `"${reaction.emoji.name}" from guild "${reaction.message.guild.name}"`);
-		}
-		else {
+		} else {
 			embed.addField('Reaction', reaction.emoji);
 		}
 
@@ -408,11 +406,11 @@ client.on('rateLimit', info => {
 
 // Channel creation event
 client.on('channelCreate', channel => {
-	// Only notify the creation of text and voice channels (when enabled)
-	if (channel.type !== 'text' && channel.type !== 'voice' || !settings.enabled) return;
-
 	// Get settings for this event from the db
 	const settings = db.get(`${channel.guild.id}.announcements.channel_create`).value();
+
+	// Only notify the creation of text and voice channels (when enabled)
+	if (channel.type !== 'text' && channel.type !== 'voice' || !settings.enabled) return;
 
 	// Get a reference to the defined announcements channel
 	const announcementsChannel = channel.guild.channels.find(c => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
@@ -426,11 +424,11 @@ client.on('channelCreate', channel => {
 
 // Channel deletion event
 client.on('channelDelete', channel => {
-	// Only notify the deletion of text and voice channels (when enabled)
-	if (channel.type !== 'text' && channel.type !== 'voice' || !settings.enabled) return;
-
 	// Get settings for this event from the db
 	const settings = db.get(`${channel.guild.id}.announcements.channel_delete`).value();
+
+	// Only notify the deletion of text and voice channels (when enabled)
+	if (channel.type !== 'text' && channel.type !== 'voice' || !settings.enabled) return;
 
 	// Get a reference to the defined announcements channel
 	const announcementsChannel = channel.guild.channels.find(c => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());

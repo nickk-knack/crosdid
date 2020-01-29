@@ -30,7 +30,7 @@ module.exports = {
 				delete require.cache[require.resolve(`./${commandName}.js`)];
 
 				try {
-					const newCommand = require(`./${commandName}.js`);
+					const newCommand = require(`./${commandName}.js`); // eslint-disable-line global-require
 					commands.set(newCommand.name, newCommand);
 				}
 				catch (e) {
@@ -50,7 +50,7 @@ module.exports = {
 					delete require.cache[require.resolve(`./${file}`)];
 
 					try {
-						const command = require(`./${file}`);
+						const command = require(`./${file}`); // eslint-disable-line global-require
 						commands.set(command.name, command);
 					}
 					catch (e) {

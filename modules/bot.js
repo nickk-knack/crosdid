@@ -72,16 +72,14 @@ module.exports = {
 						console.error(e);
 						message.reply('there was an error setting the activity. Check the console for debugging information.');
 					});
-			}
-			else {
+			} else {
 				message.client.user.setActivity(null)
 					.catch(e => {
 						console.error(e);
 						message.reply('there was an error setting the activity. Check the console for debugging information.');
 					});
 			}
-		}
-		else if (subcommand === 'phrases') {
+		} else if (subcommand === 'phrases') {
 			if (!args.length && subcommandArg !== 'list') return message.reply('you did not provide enough arguments to execute that command!');
 
 			const dbPhrases = db.get(`${message.guild.id}.phrases`);
@@ -153,8 +151,7 @@ module.exports = {
 				default:
 					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: list, add, remove)`);
 			}
-		}
-		else if (subcommand === 'avatar') {
+		} else if (subcommand === 'avatar') {
 			switch (subcommandArg) {
 				case 'set': {
 					if (!args.length) return message.reply('you did not provide enough arguments to execute that command!');
@@ -176,8 +173,7 @@ module.exports = {
 				default:
 					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: get, set)`);
 			}
-		}
-		else if (subcommand === 'secret') {
+		} else if (subcommand === 'secret') {
 			// Check that the subcommandArg is valid
 			if (subcommandArg !== 'messages' && subcommandArg !== 'reacts') {
 				return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: messages, reacts)`);
@@ -185,21 +181,21 @@ module.exports = {
 
 			// Get the mode from the next arg, check that it is valid
 			const mode = args.shift().toLowerCase();
-			if (mode !== 'enabled' && mode !== 'chance') {
-				return message.reply(`\`${mode}\` is not valid! (Expected: enabled, chance)`);
+			if (mode !== 'enable' && mode !== 'disable' && mode !== 'chance') {
+				return message.reply(`\`${mode}\` is not valid! (Expected: enable, disable, chance)`);
 			}
 
 			// Get the setting from the next arg, set the reply message
-			let setting, msgReply;
+			let setting = '';
+			let msgReply = '';
+
 			if (mode === 'enable') {
 				setting = true;
 				msgReply = `successfully **enabled** secret ${subcommandArg}.`;
-			}
-			else if (mode === 'disable') {
+			} else if (mode === 'disable') {
 				setting = false;
 				msgReply = `successfully **disabled** secret ${subcommandArg}.`;
-			}
-			else if (mode === 'chance') {
+			} else if (mode === 'chance') {
 				setting = args.shift();
 				if (setting === 'get') {
 					return message.reply(`chance for secret ${subcommandArg}: ${db.get(`${message.guild.id}.secret_${subcommandArg}.${mode}`).value()}`);
@@ -214,8 +210,7 @@ module.exports = {
 			// Write new setting to db, return and reply to message
 			db.set(`${message.guild.id}.secret_${subcommandArg}.${mode}`, setting).write();
 			return message.reply(msgReply);
-		}
-		else if (subcommand === 'reactionNotify') {
+		} else if (subcommand === 'reactionNotify') {
 			switch (subcommandArg) {
 				case 'enable':
 					db.set(`${message.guild.id}.${subcommand}`, true).write();
@@ -226,8 +221,7 @@ module.exports = {
 				default:
 					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: enable, disable)`);
 			}
-		}
-		else if (subcommand === 'update') {
+		} else if (subcommand === 'update') {
 			switch (subcommandArg) {
 				case 'guilds':
 					// go through all guilds in message.client, see if they are in db, add if not
@@ -239,8 +233,7 @@ module.exports = {
 				default:
 					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: guilds, users)`);
 			}
-		}
-		else {
+		} else {
 			return message.reply(`\`${subcommand}\` is not a valid subcommand!`);
 		}
 	},
