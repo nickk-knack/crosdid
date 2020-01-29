@@ -44,7 +44,7 @@ module.exports = {
 					db.set('activitySettings.enabled', false).write();
 					message.reply('successfully **disabled** the bot\'s activity message.');
 					break;
-				case 'type':
+				case 'type': {
 					const type = args.shift().toUpperCase();
 					if (!['PLAYING', 'STREAMING', 'LISTENING', 'WATCHING'].includes(type)) return message.reply(`invalid activity type: "${type}"`);
 
@@ -52,12 +52,14 @@ module.exports = {
 
 					message.reply(`successfully set the bot's activity type to "${type}".`);
 					break;
-				case 'text':
+				}
+				case 'text': {
 					const text = args.join(' ').trim();
 					db.set('activitySettings.text', text).write();
 
 					message.reply(`successfully set the bot's activity text to "${text}".`);
 					break;
+				}
 				default:
 					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: enable, disable, type, text)`);
 			}
@@ -86,15 +88,13 @@ module.exports = {
 
 			switch (subcommandArg) {
 				case 'enable':
-				case 'e': {
+				case 'e':
 					db.set(`${message.guild.id}.enablePhrases`, true);
 					return message.reply('successfully **enabled** trigger phrases for the guild.');
-				}
 				case 'disable':
-				case 'd': {
+				case 'd':
 					db.set(`${message.guild.id}.enablePhrases`, false);
 					return message.reply('successfully **disabled** trigger phrases for the guild.');
-				}
 				case 'list':
 				case 'l': {
 					const embed = new Discord.RichEmbed().setColor(randomHex.generate());
@@ -156,7 +156,7 @@ module.exports = {
 		}
 		else if (subcommand === 'avatar') {
 			switch (subcommandArg) {
-				case 'set':
+				case 'set': {
 					if (!args.length) return message.reply('you did not provide enough arguments to execute that command!');
 					const avatarUrl = args.join(' ').trim();
 
@@ -170,6 +170,7 @@ module.exports = {
 							message.reply('there was an error setting the avatar. Check the console for debugging information.');
 						});
 					break;
+				}
 				case 'get':
 					return message.reply(message.client.user.avatarURL);
 				default:
