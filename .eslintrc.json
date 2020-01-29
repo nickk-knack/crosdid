@@ -20,6 +20,8 @@
             "warn",
             { "allowImplicit": true }
         ],
+        "arrow-parens": "error",
+        "arrow-spacing": "error",
         "block-scoped-var": "warn",
         "block-spacing": "error",
         "brace-style": [
@@ -143,9 +145,10 @@
             { "args": "none" }
         ],
         "no-use-before-define": "error",
+        "no-useless-computed-key": "error",
         "no-useless-concat": "error",
         "no-useless-return": "error",
-        "no-var": "warn",
+        "no-var": "error",
         "no-whitespace-before-property": "error",
         "object-curly-newline": [
             "error",
@@ -161,8 +164,11 @@
             "error",
             "never"
         ],
-        "prefer-const": "warn",
+        "prefer-arrow-callback": "error",
+        "prefer-const": "error",
+        "prefer-destructuring": "warn", // eventually make an error?
         "prefer-regex-literals": "error",
+        "prefer-template": "error",
         "quotes": [
             "error",
             "single",

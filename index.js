@@ -97,7 +97,7 @@ client.db = db;
 console.log(`Loaded local database file from ${dbFileName}`);
 
 // Extra functions
-const getRandomFromArray = array => array[Math.floor(Math.random() * array.length)];
+const getRandomFromArray = (array) => array[Math.floor(Math.random() * array.length)];
 
 // Start of the main bot code
 console.log('Starting bot...');
@@ -139,7 +139,7 @@ client.on('ready', () => {
 		if (!db.has(g.id).value()) {
 			db.set(g.id, dbDefaultGuildObj).write();
 
-			g.members.forEach(m => {
+			g.members.forEach((m) => {
 				if (!db.get(`${g.id}.users`).find({ id: m.id }).value()) {
 					db.get(`${g.id}.users`).push({
 						id: m.id,
@@ -163,7 +163,7 @@ client.on('ready', () => {
 });
 
 // Message event (command processing)
-client.on('message', msg => {
+client.on('message', (msg) => {
 	// Command needs to start with prefix
 	const prefixRegex = new RegExp(`^(<@!?${client.user.id}> |\\${prefix})\\s*`, 'u');
 
@@ -241,7 +241,7 @@ client.on('message', msg => {
 	const commandName = args.shift().toLowerCase();
 
 	// Get the actual command object, check if it exists
-	const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+	const command = client.commands.get(commandName) || client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
 	if (!command) {
 		return msg.reply('That command does not exist!');
 	}
@@ -308,11 +308,11 @@ client.on('message', msg => {
 });
 
 // Emoji creation event
-client.on('emojiCreate', emoji => {
+client.on('emojiCreate', (emoji) => {
 	// Maybe create a rich embed instead, send a full size version of the emoji?
 	const settings = db.get(`${emoji.guild.id}.announcements.emoji_create`).value();
 	const emojiChannelName = typeof settings.channel_override !== 'undefined' ? settings.channel_override : db.get(`${emoji.guild.id}.announcements.channel`).value();
-	const emojiChannel = emoji.guild.channels.find(c => c.name === emojiChannelName);
+	const emojiChannel = emoji.guild.channels.find((c) => c.name === emojiChannelName);
 
 	if (settings.send_emoji) {
 		let message = '';
@@ -328,11 +328,11 @@ client.on('emojiCreate', emoji => {
 });
 
 // Emoji delete event
-client.on('emojiDelete', emoji => {
+client.on('emojiDelete', (emoji) => {
 	// need to send something other than the emoji bc that wont work lol
 	const settings = db.get(`${emoji.guild.id}.announcements.emoji_delete`).value();
 	const emojiChannelName = typeof settings.channel_override !== 'undefined' ? settings.channel_override : db.get(`${emoji.guild.id}.announcements.channel`).value();
-	const emojiChannel = emoji.guild.channels.find(c => c.name === emojiChannelName);
+	const emojiChannel = emoji.guild.channels.find((c) => c.name === emojiChannelName);
 
 	if (settings.send_emoji) {
 		let message = '';
@@ -352,7 +352,7 @@ client.on('emojiUpdate', (oldEmoji, newEmoji) => {
 	// Similar to creation, inform about updates to an emoji
 	const settings = db.get(`${newEmoji.guild.id}.announcements.emoji_update`).value();
 	const emojiChannelName = typeof settings.channel_override !== 'undefined' ? settings.channel_override : db.get(`${newEmoji.guild.id}.announcements.channel`).value();
-	const emojiChannel = newEmoji.guild.channels.find(c => c.name === emojiChannelName);
+	const emojiChannel = newEmoji.guild.channels.find((c) => c.name === emojiChannelName);
 
 	let message = '';
 
@@ -380,7 +380,7 @@ client.on('messageReactionAdd', (reaction, user) => {
 		if (reaction.message.author.bot) return;
 
 		// Get message author, and begin message content
-		const author = reaction.message.author;
+		const { author } = reaction.message;
 		const embed = new Discord.RichEmbed()
 			.setColor(randomHex.generate())
 			.setTitle(`${user.tag} reacted to your message`)
@@ -400,12 +400,12 @@ client.on('messageReactionAdd', (reaction, user) => {
 });
 
 // Rate limiting event
-client.on('rateLimit', info => {
+client.on('rateLimit', (info) => {
 	if (DEBUG) console.warn('Rate limiting shit:', info);
 });
 
 // Channel creation event
-client.on('channelCreate', channel => {
+client.on('channelCreate', (channel) => {
 	// Get settings for this event from the db
 	const settings = db.get(`${channel.guild.id}.announcements.channel_create`).value();
 
@@ -413,7 +413,7 @@ client.on('channelCreate', channel => {
 	if (channel.type !== 'text' && channel.type !== 'voice' || !settings.enabled) return;
 
 	// Get a reference to the defined announcements channel
-	const announcementsChannel = channel.guild.channels.find(c => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
+	const announcementsChannel = channel.guild.channels.find((c) => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
 	// Bail if the channel doesn't exist
 	if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
 
@@ -423,7 +423,7 @@ client.on('channelCreate', channel => {
 });
 
 // Channel deletion event
-client.on('channelDelete', channel => {
+client.on('channelDelete', (channel) => {
 	// Get settings for this event from the db
 	const settings = db.get(`${channel.guild.id}.announcements.channel_delete`).value();
 
@@ -431,7 +431,7 @@ client.on('channelDelete', channel => {
 	if (channel.type !== 'text' && channel.type !== 'voice' || !settings.enabled) return;
 
 	// Get a reference to the defined announcements channel
-	const announcementsChannel = channel.guild.channels.find(c => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
+	const announcementsChannel = channel.guild.channels.find((c) => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
 	// Bail if the channel doesn't exist
 	if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
 
@@ -441,9 +441,9 @@ client.on('channelDelete', channel => {
 });
 
 // Logging events
-client.on('error', error => console.error(error));
-client.on('warn', warn => console.warn(warn));
-// if (DEBUG) client.on('debug', info => console.info(info));
+client.on('error', (error) => console.error(error));
+client.on('warn', (warn) => console.warn(warn));
+// if (DEBUG) client.on('debug', (info) => console.info(info));
 
 console.log('\t\tEvents loaded.');
 
