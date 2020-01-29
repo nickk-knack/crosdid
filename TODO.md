@@ -24,9 +24,7 @@
     1. 2 spaces? or 4?
     2. make a separate branch for this later
 14. Make eslintrc epic
-    1. [eslint rules](https://eslint.org/docs/rules/)
-       1. ecmascript 6 section is all thats left
-    2. go through and check all modules
+    1. go through and check all modules now that you're done
 15. Regex fixes:
     1.  Replace any spaces with \s (ex: index.js:236)
 16. async all command modules?
