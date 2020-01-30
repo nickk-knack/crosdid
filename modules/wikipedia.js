@@ -31,8 +31,9 @@ module.exports = {
 		const query = args.join(' ');
 
 		// Search query, get top result, print out the full url to that wikipedia page
+		// potential change: let user choose which page (from 1-10 or smth) or default to random
 		wiki.search(query, 1).then((res) => {
-			const result = res.results[0];
+			const [result] = res.results;
 
 			wiki.page(result).then((p) => {
 				// Switch to sending a rich embed
