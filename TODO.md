@@ -6,9 +6,7 @@
 3. Update the rest of the command modules from previous bots
    1. fakeperson - add address generation from fakeaddressgenerator?
 4. Rich embeds everywhere
-   1. `index.js`
-      1. `channelCreate` and `channelDelete` events
-   2. existing command modules
+   1. existing command modules
 5. Additional reaction procesing (role on react type of thing?)
 6. `message.awaitReactions` for a quick poll thing?
 7. any other bot settings you want to add commands for?
