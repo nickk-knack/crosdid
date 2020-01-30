@@ -61,10 +61,13 @@ const dbDefaultGuildObj = {
 			enabled: false,
 			messages: [],
 		},
+		channel_update: {
+			enabled: false,
+			messages: [],
+		},
 		emoji_create: {
 			enabled: false,
 			channel_override: '',
-			send_message: false,
 			message_prepend: true,
 			messages: [],
 		},
@@ -77,8 +80,6 @@ const dbDefaultGuildObj = {
 		emoji_update: {
 			enabled: false,
 			channel_override: '',
-			send_message: false,
-			message_prepend: true,
 			messages: [],
 		},
 	},
@@ -305,74 +306,71 @@ client.on('message', (msg) => {
 
 // Emoji creation event
 client.on('emojiCreate', (emoji) => {
+	// Access db for event settings
 	const settings = db.get(`${emoji.guild.id}.announcements.emoji_create`).value();
 
+	// Return early if this feature is disabled
 	if (!settings.enabled) return;
 
+	// Get config from db
 	const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
-		settings.channel_override :
-		db.get(`${emoji.guild.id}.announcements.channel`).value();
+		settings.channel_override : db.get(`${emoji.guild.id}.announcements.channel`).value();
 	const emojiChannel = emoji.guild.channels.find((c) => c.name === emojiChannelName);
+	const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Created';
 
+	// Create and send embed, then react to the message with the emoji
 	const embed = new Discord.RichEmbed()
 		.setColor(randomHex.generate())
-		.setImage(emoji.url);
-
-	if (settings.send_message && settings.messages.length) {
-		embed.setTitle(settings.message_prepend ?
-			`${getRandomFromArray(settings.messages)} ${emoji.name}` :
-			`${emoji.name} ${getRandomFromArray(settings.messages)}`);
-	}
+		.setImage(emoji.url)
+		.setTitle(settings.message_prepend ? `${title} ${emoji.name}` : `${emoji.name} ${title}`);
 
 	emojiChannel.send(embed).then((message) => message.react(emoji));
 });
 
 // Emoji delete event
 client.on('emojiDelete', (emoji) => {
+	// Access db for event settings
 	const settings = db.get(`${emoji.guild.id}.announcements.emoji_delete`).value();
 
+	// Return early if this feature is disabled
 	if (!settings.enabled) return;
 
+	// Get config from db
 	const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
-		settings.channel_override :
-		db.get(`${emoji.guild.id}.announcements.channel`).value();
+		settings.channel_override : db.get(`${emoji.guild.id}.announcements.channel`).value();
 	const emojiChannel = emoji.guild.channels.find((c) => c.name === emojiChannelName);
+	const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Deleted';
 
+	// Create and send embed
 	const embed = new Discord.RichEmbed()
 		.setColor(randomHex.generate())
-		.setImage(emoji.url);
-
-	const message = settings.messages.length ?
-		getRandomFromArray(settings.messages) :
-		'Emoji deleted';
-	embed.setTitle(settings.message_prepend ?
-		`${message} ${emoji.name}` :
-		`${emoji.name} ${message}`);
+		.setImage(emoji.url)
+		.setTitle(settings.message_prepend ? `${title} ${emoji.name}` : `${emoji.name} ${title}`);
 
 	emojiChannel.send(embed);
 });
 
 // Emoji update event
 client.on('emojiUpdate', (oldEmoji, newEmoji) => {
-	// Similar to creation, inform about updates to an emoji
+	// Access db for event settings
 	const settings = db.get(`${newEmoji.guild.id}.announcements.emoji_update`).value();
 
+	// Return early if this feature is disabled
 	if (!settings.enabled) return;
 
+	// Get config from db
 	const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
-		settings.channel_override :
-		db.get(`${newEmoji.guild.id}.announcements.channel`).value();
+		settings.channel_override : db.get(`${newEmoji.guild.id}.announcements.channel`).value();
 	const emojiChannel = newEmoji.guild.channels.find((c) => c.name === emojiChannelName);
+	const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Updated';
 
+	// Create and send embed, then react to the message with the emoji
 	const embed = new Discord.RichEmbed()
 		.setColor(randomHex.generate())
 		.setImage(newEmoji.url)
 		.addField('Old Emoji', `**[${oldEmoji.name}](${oldEmoji.url})**`, true)
-		.addField('New Emoji', `**[${newEmoji.name}](${newEmoji.url})**`, true);
-
-	if (settings.send_message && settings.messages.length) {
-		embed.setTitle(getRandomFromArray(settings.messages));
-	}
+		.addField('New Emoji', `**[${newEmoji.name}](${newEmoji.url})**`, true)
+		.setTitle(title);
 
 	emojiChannel.send(embed).then((message) => message.react(newEmoji));
 });
@@ -409,7 +407,7 @@ client.on('messageReactionAdd', (reaction, user) => {
 
 // Rate limiting event
 client.on('rateLimit', (info) => {
-	if (DEBUG) console.warn('Rate limiting shit:', info);
+	if (DEBUG) console.warn(`Rate limit: ${info.limit} (td: ${info.timeDifference}ms)`, `${info.method}:${info.path}`);
 });
 
 // Channel creation event
@@ -422,12 +420,19 @@ client.on('channelCreate', (channel) => {
 
 	// Get a reference to the defined announcements channel
 	const announcementsChannel = channel.guild.channels.find((c) => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
+
 	// Bail if the channel doesn't exist
 	if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
 
 	// Send random message from appropriate messages array + the new channel name to announcements channel
-	const message = `${getRandomFromArray(settings.messages)} ${channel.toString()}`;
-	announcementsChannel.send(message);
+	const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Created';
+
+	const embed = new Discord.RichEmbed()
+		.setColor(randomHex.generate())
+		.setTitle(title)
+		.setDescription(channel);
+
+	announcementsChannel.send(embed);
 });
 
 // Channel deletion event
@@ -440,12 +445,46 @@ client.on('channelDelete', (channel) => {
 
 	// Get a reference to the defined announcements channel
 	const announcementsChannel = channel.guild.channels.find((c) => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
+
 	// Bail if the channel doesn't exist
 	if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
 
-	// Send random message from appropriate messages array + the new channel name to announcements channel
-	const message = `${getRandomFromArray(settings.messages)} ${channel.toString()}`;
-	announcementsChannel.send(message);
+	// Send random message from appropriate messages array + the old channel name to announcements channel
+	const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Deleted';
+
+	const embed = new Discord.RichEmbed()
+		.setColor(randomHex.generate())
+		.setTitle(title)
+		.setDescription(channel);
+
+	announcementsChannel.send(embed);
+});
+
+// Channel update event
+client.on('channelUpdate', (oldChannel, newChannel) => {
+	// Get settings for this event from the db
+	const settings = db.get(`${newChannel.guild.id}.announcements.channel_update`).value();
+
+	// Only notify the deletion of text and voice channels (when enabled)
+	if (newChannel.type !== 'text' && newChannel.type !== 'voice' || !settings.enabled) return;
+
+	// Get a reference to the defined announcements channel
+	const announcementsChannel = newChannel.guild.channels.find((c) => c.name === db.get(`${newChannel.guild.id}.announcements.channel`).value());
+
+	// Bail if the channel doesn't exist
+	if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${newChannel.guild.id} is invalid!`);
+
+	// Send random message from appropriate messages array + a bunch of updated info for the old->new channel
+	const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Updated';
+
+	// Future Todo: find specific differences between old and new channel (for both text and voice channels) and add fields for each
+	const embed = new Discord.RichEmbed()
+		.setColor(randomHex.generate())
+		.setTitle(title)
+		.addField('Old Channel', `${oldChannel}${oldChannel.type === 'text' ? `\n"${oldChannel.topic}"` : ''}`, true)
+		.addField('New Channel', `${newChannel}${newChannel.type === 'text' ? `\n"${newChannel.topic}"` : ''}`, true);
+
+	announcementsChannel.send(embed);
 });
 
 // Logging events
