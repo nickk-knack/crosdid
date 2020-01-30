@@ -1,4 +1,7 @@
+const Discord = require('discord.js');
+const randomHex = require('random-hex');
 const translate = require('yandex-translate')(process.env.YANDEX_TRANSLATE_API_KEY);
+const { stripIndents } = require('common-tags');
 
 const langs = {
 	af: 'Afrikaans',
@@ -99,40 +102,57 @@ const langs = {
 module.exports = {
 	name: 'translate',
 	aliases: ['t'],
-	description: `Translate your dumb text into any other language. Use 'rand' for a random language or one of the supported languages.
-Supported languages: [${Object.keys(langs).join(', ')}]
-Use "${process.env.PREFIX}translate <lang>" to see what language a language code refers to.`,
-	usage: '<to language> <text>',
+	description: stripIndents`Translate your dumb text into any other language. Use 'rand' for a random language or one of the supported languages.
+
+							  Supported languages: [${Object.keys(langs).join(', ')}]
+
+							  Use "${process.env.PREFIX}translate <lang>" to see what language a language code refers to.`,
+	usage: '<to_language_code> [text]',
 	args: true,
 	cooldown: 3,
 	guildOnly: false,
 	execute(message, args) {
-		let lang = args[0].toLowerCase();
-		const text = args.slice(1, args.length).join(' ');
+		// Get lang as first argument, join the rest for text to translate
+		let lang = args.shift().toLowerCase();
+		const text = args.join(' ');
+
+		// If the lang doesn't exist in the langs array, check if it was 'rand'
 		if (!langs[lang]) {
 			if (lang == 'rand') {
+				// Set a random language from the array
 				lang = Object.keys(langs)[Math.floor(Math.random() * Object.keys(langs).length)];
 			} else {
+				// Notify user of invalid language choice
 				return message.reply('Invalid language!');
 			}
 		}
 
-		if (!text) {
+		// If the resulting text is empty (no further args),
+		// spit out the long name of the language selected
+		if (text === '') {
 			return message.reply(`${lang}: ${langs[lang]}`);
 		}
 
+		// Actually preform translation
 		translate.translate(text, { to: lang }, (err, res) => {
+			// On error, spit it out
 			if (err || res.code != 200) {
 				console.error(err);
-				message.reply('shits fucked cunt');
+				message.reply('an error occurred while translating your text!');
 			}
 
+			// From response, get the "to" and "from" languages
 			const toFromLang = res.lang.split('-');
 			const toLang = langs[toFromLang[1]];
 			const fromLang = langs[toFromLang[0]];
 
-			// Switch to a nicely formatted rich embed
-			message.channel.send(`Translation from ${fromLang} to ${toLang}: ${res.text}`);
+			// Create and send embed with info
+			const embed = new Discord.RichEmbed()
+				.setColor(randomHex.generate())
+				.setTitle(`Translation from ${fromLang} to ${toLang}`)
+				.setDescription(res.text.join());
+
+			message.channel.send(embed);
 		});
 	},
 };
