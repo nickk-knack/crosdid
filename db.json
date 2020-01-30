@@ -54,7 +54,8 @@
         "messages": [
           "nick is a bitch",
           "high nick",
-          "danny rick lookin' fucker"
+          "danny rick lookin' fucker",
+          "ggggggg gg b ggg g gg g b ! g"
         ],
         "reactions": [
           {
@@ -186,7 +187,8 @@
           "badabingbadaboom",
           "O-oooooooooo AAAAE-A-A-I-A-U- JO-oooooooooooo AAE-O-A-A-U-U-A- E-eee-ee-eee AAAAE-A-E-I-E-A-JO-ooo-oo-oo-oo EEEEO-A-AAA-AAAA",
           "you wanna hear a random signAAAaAALALAANFESNOVNSIUVBUOSEHUO#Y*R$HY*t8934try8943ry89438943wy89t43wh84e8",
-          "sSSSSS AAaAAA  R EWwE e eeE xDDDDDDDD"
+          "sSSSSS AAaAAA  R EWwE e eeE xDDDDDDDD",
+          "you have just violated the nec"
         ],
         "reactions": [
           {
@@ -300,7 +302,6 @@
       "emoji_create": {
         "enabled": true,
         "channel_override": "emoji-town",
-        "send_emoji": true,
         "send_message": true,
         "message_prepend": true,
         "messages": [
@@ -311,8 +312,6 @@
       "emoji_delete": {
         "enabled": true,
         "channel_override": "emoji-town",
-        "send_emoji": true,
-        "send_message": true,
         "message_prepend": true,
         "messages": [
           "this emoji sucked, it's gone now:",
@@ -322,10 +321,7 @@
       "emoji_update": {
         "enabled": true,
         "channel_override": "emoji-town",
-        "send_old_emoji": true,
-        "send_new_emoji": true,
         "send_message": true,
-        "message_prepend": true,
         "messages": [
           "an emoji has been updated:",
           "new old emoji:"

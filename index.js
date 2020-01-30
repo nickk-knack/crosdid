@@ -64,7 +64,6 @@ const dbDefaultGuildObj = {
 		emoji_create: {
 			enabled: false,
 			channel_override: '',
-			send_emoji: false,
 			send_message: false,
 			message_prepend: true,
 			messages: [],
@@ -72,15 +71,12 @@ const dbDefaultGuildObj = {
 		emoji_delete: {
 			enabled: false,
 			channel_override: '',
-			send_emoji: false,
-			send_message: false,
 			message_prepend: true,
 			messages: [],
 		},
 		emoji_update: {
 			enabled: false,
 			channel_override: '',
-			send_emoji: false,
 			send_message: false,
 			message_prepend: true,
 			messages: [],
@@ -309,64 +305,76 @@ client.on('message', (msg) => {
 
 // Emoji creation event
 client.on('emojiCreate', (emoji) => {
-	// Maybe create a rich embed instead, send a full size version of the emoji?
 	const settings = db.get(`${emoji.guild.id}.announcements.emoji_create`).value();
-	const emojiChannelName = typeof settings.channel_override !== 'undefined' ? settings.channel_override : db.get(`${emoji.guild.id}.announcements.channel`).value();
+
+	if (!settings.enabled) return;
+
+	const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
+		settings.channel_override :
+		db.get(`${emoji.guild.id}.announcements.channel`).value();
 	const emojiChannel = emoji.guild.channels.find((c) => c.name === emojiChannelName);
 
-	if (settings.send_emoji) {
-		let message = '';
+	const embed = new Discord.RichEmbed()
+		.setColor(randomHex.generate())
+		.setImage(emoji.url);
 
-		if (settings.send_message) {
-			message = settings.message_prepend ? `${getRandomFromArray(settings.messages)} ${emoji.toString()}` : `${emoji.toString()} ${getRandomFromArray(settings.messages)}`;
-		} else {
-			message = emoji.toString();
-		}
-
-		emojiChannel.send(message);
+	if (settings.send_message && settings.messages.length) {
+		embed.setTitle(settings.message_prepend ?
+			`${getRandomFromArray(settings.messages)} ${emoji.name}` :
+			`${emoji.name} ${getRandomFromArray(settings.messages)}`);
 	}
+
+	emojiChannel.send(embed).then((message) => message.react(emoji));
 });
 
 // Emoji delete event
 client.on('emojiDelete', (emoji) => {
-	// need to send something other than the emoji bc that wont work lol
 	const settings = db.get(`${emoji.guild.id}.announcements.emoji_delete`).value();
-	const emojiChannelName = typeof settings.channel_override !== 'undefined' ? settings.channel_override : db.get(`${emoji.guild.id}.announcements.channel`).value();
+
+	if (!settings.enabled) return;
+
+	const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
+		settings.channel_override :
+		db.get(`${emoji.guild.id}.announcements.channel`).value();
 	const emojiChannel = emoji.guild.channels.find((c) => c.name === emojiChannelName);
 
-	if (settings.send_emoji) {
-		let message = '';
+	const embed = new Discord.RichEmbed()
+		.setColor(randomHex.generate())
+		.setImage(emoji.url);
 
-		if (settings.send_message) {
-			message = settings.message_prepend ? `${getRandomFromArray(settings.messages)} ${emoji.toString()}` : `${emoji.toString()} ${getRandomFromArray(settings.messages)}`;
-		} else {
-			message = emoji.toString();
-		}
+	const message = settings.messages.length ?
+		getRandomFromArray(settings.messages) :
+		'Emoji deleted';
+	embed.setTitle(settings.message_prepend ?
+		`${message} ${emoji.name}` :
+		`${emoji.name} ${message}`);
 
-		emojiChannel.send(message);
-	}
+	emojiChannel.send(embed);
 });
 
 // Emoji update event
 client.on('emojiUpdate', (oldEmoji, newEmoji) => {
 	// Similar to creation, inform about updates to an emoji
 	const settings = db.get(`${newEmoji.guild.id}.announcements.emoji_update`).value();
-	const emojiChannelName = typeof settings.channel_override !== 'undefined' ? settings.channel_override : db.get(`${newEmoji.guild.id}.announcements.channel`).value();
+
+	if (!settings.enabled) return;
+
+	const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
+		settings.channel_override :
+		db.get(`${newEmoji.guild.id}.announcements.channel`).value();
 	const emojiChannel = newEmoji.guild.channels.find((c) => c.name === emojiChannelName);
 
-	let message = '';
+	const embed = new Discord.RichEmbed()
+		.setColor(randomHex.generate())
+		.setImage(newEmoji.url)
+		.addField('Old Emoji', `**[${oldEmoji.name}](${oldEmoji.url})**`, true)
+		.addField('New Emoji', `**[${newEmoji.name}](${newEmoji.url})**`, true);
 
-	if (settings.send_old_emoji || settings.send_new_emoji) {
-		if (settings.send_message) {
-			message = settings.message_prepend ?
-				`${getRandomFromArray(settings.messages)} ${settings.send_old_emoji ? oldEmoji.name : ''}${settings.send_old_emoji && settings.send_new_emoji ? ' -> ' : ''}${settings.send_new_emoji ? newEmoji.name : ''}` :
-				`${settings.send_old_emoji ? oldEmoji.name : ''}${settings.send_old_emoji && settings.send_new_emoji ? ' -> ' : ''}${settings.send_new_emoji ? newEmoji.name : ''} ${getRandomFromArray(settings.messages)}`;
-		} else {
-			message = `${settings.send_old_emoji ? oldEmoji.name : ''}${settings.send_old_emoji && settings.send_new_emoji ? ' -> ' : ''}${settings.send_new_emoji ? newEmoji.name : ''}`;
-		}
-
-		emojiChannel.send(message);
+	if (settings.send_message && settings.messages.length) {
+		embed.setTitle(getRandomFromArray(settings.messages));
 	}
+
+	emojiChannel.send(embed).then((message) => message.react(newEmoji));
 });
 
 // Message reaction add event
