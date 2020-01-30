@@ -23,7 +23,7 @@ module.exports = {
 	execute(message, args) {
 		const name = args.join(' ');
 
-		if (name.toLowerCase() == 'nick chiconas' || name.toLowerCase() == 'nicholas chiconas') {
+		if (name.toLowerCase() === 'nick chiconas' || name.toLowerCase() === 'nicholas chiconas') {
 			return message.reply(`${name} is not gay.`);
 		}
 

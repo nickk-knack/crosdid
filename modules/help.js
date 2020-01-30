@@ -14,10 +14,9 @@ module.exports = {
 		if (!args.length) {
 			embed.setTitle('Help/Commands')
 				.setDescription('List of all my commands:')
-				.addField(commands.map(command => command.name).join(', '), `You can send ${prefix}help [command name] for info on a specific command.`);
-		}
-		else {
-			const command = commands.get(args[0]) || commands.find(cmd => cmd.aliases && cmd.aliases.includes(args[0]));
+				.addField(commands.map((command) => command.name).join(', '), `You can send ${prefix}help [command name] for info on a specific command.`);
+		} else {
+			const command = commands.get(args[0]) || commands.find((cmd) => cmd.aliases && cmd.aliases.includes(args[0]));
 
 			if (!command) {
 				return message.reply(`"${args[0]}" is not a valid command or alias!`);
@@ -35,8 +34,7 @@ module.exports = {
 
 			if (command.description) {
 				embed.setDescription(`**Description:** ${command.description}`);
-			}
-			else {
+			} else {
 				embed.setDescription('No description available');
 			}
 
@@ -64,13 +62,12 @@ module.exports = {
 				if (message.channel.type !== 'dm') {
 					if (!args.length) {
 						message.reply('check your DMs for a list of my commands.');
-					}
-					else {
-						const command = commands.get(args[0]) || commands.find(cmd => cmd.aliases && cmd.aliases.includes(args[0]));
+					} else {
+						const command = commands.get(args[0]) || commands.find((cmd) => cmd.aliases && cmd.aliases.includes(args[0]));
 						message.reply(`check your DMs for help with the ${command.name} command.`);
 					}
 				}
-			}).catch(e => {
+			}).catch((e) => {
 				console.error(e);
 				message.reply('something went wrong while trying to DM you.');
 			});

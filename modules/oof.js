@@ -22,7 +22,7 @@ module.exports = {
 
 		const { voiceChannel } = message.member;
 		if (voiceChannel) {
-			voiceChannel.join().then(connection => {
+			voiceChannel.join().then((connection) => {
 				const stream = ytdl('https://www.youtube.com/watch?v=3kc70k14uDc', { filter: 'audioonly' });
 				const dispatcher = connection.playStream(stream);
 

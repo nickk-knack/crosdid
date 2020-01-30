@@ -34,11 +34,10 @@ module.exports = {
 		}
 
 		// Get db reference
-		let dbRef;
+		let dbRef = null;
 		if (global || typeof message.guild === 'undefined' || message.guild === null) {
 			dbRef = db.get('globalDisabledCmdModules');
-		}
-		else {
+		} else {
 			dbRef = db.get(`${message.guild.id}.disabledCmdModules`);
 		}
 
@@ -63,7 +62,7 @@ module.exports = {
 		}
 
 		// Get reference to command
-		const command = commands.get(commandName) || commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+		const command = commands.get(commandName) || commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
 		if (!command) {
 			return message.reply(`there is no command with name/alias \`${commandName}\`.`);
 		}

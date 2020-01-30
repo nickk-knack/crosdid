@@ -31,10 +31,10 @@ module.exports = {
 	guildOnly: true,
 	cooldown: 1,
 	execute(message, args) {
-		const user = args[0];
-		args.shift();
+		const user = args.shift();
 		let item = items[Math.floor(Math.random() * items.length)];
-		if (args[0]) {
+
+		if (args.length) {
 			// get rest of args, concat into string, make that the thing to slap with
 			item = args.join(' ');
 		}

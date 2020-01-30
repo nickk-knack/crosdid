@@ -10,14 +10,15 @@ module.exports = {
 		const original = args.join(' ').trim();
 
 		// maybe just convert whole thing to lower
+		// or maybe rewrite to preserve case tho?
 
-		let uwu = original.replace(/r/gi, 'w');
-		uwu = uwu.replace(/l/gi, 'w');
+		let uwu = original.replace(/r/giu, 'w');
+		uwu = uwu.replace(/l/giu, 'w');
 
 		// add a case for first instance of a word that starts with Th (ignore case)
-		uwu = uwu.replace(/you/gi, 'yuw');
-		uwu = uwu.replace(/\sth/gi, ' d');
-		uwu = uwu.replace(/th/gi, 'f');
+		uwu = uwu.replace(/you/giu, 'yuw');
+		uwu = uwu.replace(/\sth/giu, ' d');
+		uwu = uwu.replace(/th/giu, 'f');
 		message.channel.send(`${uwu} uwu`);
 	},
 };

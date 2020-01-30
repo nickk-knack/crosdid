@@ -10,17 +10,17 @@ module.exports = {
 	cooldown: 5,
 	execute(message, args) {
 		if (args[0] === '-r') {
-			wiki.random(5).then(res => {
+			wiki.random(5).then((res) => {
 				const item = Math.floor(Math.random() * res.length);
 
-				wiki.page(res[item]).then(p => {
+				wiki.page(res[item]).then((p) => {
 					// Switch to sending a rich embed
 					message.reply(p.raw.fullurl);
-				}).catch(err => {
+				}).catch((err) => {
 					console.error(err);
 					message.reply('Could not get a random page! Something is fucky.');
 				});
-			}).catch(err => {
+			}).catch((err) => {
 				console.error(err);
 				message.reply('An error occurred while processing that request!');
 			});
@@ -31,17 +31,17 @@ module.exports = {
 		const query = args.join(' ');
 
 		// Search query, get top result, print out the full url to that wikipedia page
-		wiki.search(query, 1).then(res => {
+		wiki.search(query, 1).then((res) => {
 			const result = res.results[0];
 
-			wiki.page(result).then(p => {
+			wiki.page(result).then((p) => {
 				// Switch to sending a rich embed
 				message.reply(p.raw.fullurl);
-			}).catch(err => {
+			}).catch((err) => {
 				console.error(err);
 				message.reply(`No results found for '${query}'`);
 			});
-		}).catch(err => {
+		}).catch((err) => {
 			console.error(err);
 			message.reply('An error occurred while processing that request!');
 		});

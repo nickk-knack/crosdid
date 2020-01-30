@@ -112,8 +112,7 @@ Use "${process.env.PREFIX}translate <lang>" to see what language a language code
 		if (!langs[lang]) {
 			if (lang == 'rand') {
 				lang = Object.keys(langs)[Math.floor(Math.random() * Object.keys(langs).length)];
-			}
-			else {
+			} else {
 				return message.reply('Invalid language!');
 			}
 		}

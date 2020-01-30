@@ -39,7 +39,7 @@ module.exports = {
 				break;
 			case 'op':
 				// Coerce subcommandArg into a boolean, write it to db
-				dbUser.set('operator', !!subcommandArg).write();
+				dbUser.set('operator', subcommandArg === 'true').write();
 
 				return message.reply(`Successfully made ${user} an operator for this bot.`);
 			default:
@@ -52,10 +52,9 @@ module.exports = {
 				let i = -1;
 
 				if (subcommand === 'messages') {
-					return message.reply(dbUser.map(x => `[${++i}.] "${x}"`).join('\n').value());
-				}
-				else {
-					return message.reply(dbUser.map(x => `[${++i}.] ${x.custom ? message.guild.emojis.get(x.emoji) : x.emoji}`).join('\n').value());
+					return message.reply(dbUser.map((x) => `[${++i}.] "${x}"`).join('\n').value());
+				} else {
+					return message.reply(dbUser.map((x) => `[${++i}.] ${x.custom ? message.guild.emojis.get(x.emoji) : x.emoji}`).join('\n').value());
 				}
 			}
 			case 'add':
@@ -74,14 +73,17 @@ module.exports = {
 
 					dbUser.push(secretMessage).write();
 					return message.reply(`successfully added "${secretMessage}" as a secret message for ${user}`);
-				}
-				else {
+				} else {
 					const emoji = args.shift();
-					const emojiObj = { custom: false, emoji: emoji };
+					const emojiObj = {
+						custom: false,
+						emoji: emoji,
+					};
 
 					if (emoji.includes(':')) {
 						emojiObj.custom = true;
-						emojiObj.emoji = emoji.substring(1, emoji.length - 1).split(':')[2];
+						const [, , emojiName] = emoji.substring(1, emoji.length - 1).split(':');
+						emojiObj.emoji = emojiName;
 					}
 
 					// Check if its a duplicate (this might not be actually work)

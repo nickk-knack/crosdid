@@ -21,7 +21,7 @@ module.exports = {
 			if (args.length) {
 				console.log('Reloading single command...');
 				const commandName = args.shift().toLowerCase();
-				const command = commands.get(commandName) || commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+				const command = commands.get(commandName) || commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
 
 				if (!command) {
 					return message.reply(`there is no command with name/alias \`${commandName}\`.`);
@@ -32,13 +32,11 @@ module.exports = {
 				try {
 					const newCommand = require(`./${commandName}.js`); // eslint-disable-line global-require
 					commands.set(newCommand.name, newCommand);
-				}
-				catch (e) {
+				} catch (e) {
 					console.error(e);
 					return message.reply('there was an error while reloading that command.');
 				}
-			}
-			else {
+			} else {
 				console.log('Reloading all commands');
 				const commandModules = fs.readdirSync('./modules');
 				commands.clear();
@@ -52,8 +50,7 @@ module.exports = {
 					try {
 						const command = require(`./${file}`); // eslint-disable-line global-require
 						commands.set(command.name, command);
-					}
-					catch (e) {
+					} catch (e) {
 						console.error(e);
 						return message.reply(`there was an error while reloading commands at ${file}`);
 					}

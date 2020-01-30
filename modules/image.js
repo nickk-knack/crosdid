@@ -17,7 +17,7 @@ module.exports = {
 		const client = new GoogleImages(GoogleCSEID, GoogleAPIKey);
 
 		client.search(query)
-			.then(images => {
+			.then((images) => {
 				// Check if there were no results
 				if (!images.length) return message.reply(`No results found for \`${query}\``);
 
@@ -33,7 +33,7 @@ module.exports = {
 
 				message.channel.send(embed);
 			})
-			.catch(e => {
+			.catch((e) => {
 				switch (e.statusCode) {
 					case 403:
 						message.reply('I literally can\'t search anymore');

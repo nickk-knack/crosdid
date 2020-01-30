@@ -3,7 +3,8 @@ module.exports = {
 	description: 'Test command for testing purposes',
 	args: false,
 	guildOnly: false,
-	cooldown: 5,
+	opOnly: true,
+	cooldown: 1,
 	execute(message, args) {
 		message.channel.send('Yeah, that\'s how commands work.');
 	},

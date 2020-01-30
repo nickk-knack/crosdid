@@ -8,7 +8,7 @@ module.exports = {
 	execute(message, args) {
 		let dice = 20;
 		if (args.length) {
-			const tryDice = parseInt(args[0]);
+			const tryDice = parseInt(args[0], 10);
 			if (!isNaN(tryDice)) {
 				dice = tryDice;
 			}
@@ -23,10 +23,10 @@ module.exports = {
 		let replyAppend = '';
 		if (roll == 1) {
 			replyAppend = 'Critical fail!';
-		}
-		else if (roll == dice) {
+		} else if (roll == dice) {
 			replyAppend = 'Critical success!';
 		}
+
 		message.reply(`you rolled a ${roll}. ${replyAppend}`);
 	},
 };
