@@ -281,6 +281,12 @@
         "responses": [
           "https://imgur.com/63wf95x"
         ]
+      },
+      {
+        "trigger": "!",
+        "responses": [
+          "❗"
+        ]
       }
     ],
     "announcements": {
