@@ -114,7 +114,7 @@ module.exports = {
 						responses: [],
 					}).write();
 
-					return message.reply(`successfully added trigger phrase: "${triggerPhrase}".`);
+					return message.reply(`successfully added trigger phrase: "${triggerPhrase}" (index: ${dbPhrases.size().value() - 1}).`);
 				}
 				case 'addresponse':
 				case 'ar': {
@@ -152,7 +152,7 @@ module.exports = {
 					return message.reply(`successfully removed "${removed}" from the responses for "${dbPhraseObject.get('trigger').value()}".`);
 				}
 				default:
-					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: list, add, remove)`);
+					return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: enable, disable, list, addtrigger, addresponse, removetrigger, removeresponse)`);
 			}
 		} else if (subcommand === 'avatar') {
 			switch (subcommandArg) {
