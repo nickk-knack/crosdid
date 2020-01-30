@@ -13,7 +13,7 @@
 6. `message.awaitReactions` for a quick poll thing?
 7. any other bot settings you want to add commands for?
 8. ctrl-f "todo" in `index.js` and existing command modules
-9.  Fix reddit module
+9. Fix reddit module
 10. Think about everything in the bot that is user controlled, check for exploits (`bot.js` might have one)
 11. Reimplement logging with `winston`
     1. Use `chalk` for coloring output?
@@ -26,7 +26,7 @@
 14. Make eslintrc epic
     1. go through and check all modules now that you're done
 15. Regex fixes:
-    1.  Replace any spaces with \s (ex: index.js:236)
+    1. Replace any spaces with \s (ex: index.js:236)
 16. async all command modules?
 
 ## Links
