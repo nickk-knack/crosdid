@@ -33,6 +33,11 @@ const lines = [
 	'gonna FUk those boys!!!',
 	'cowboys LUV big haRd thrOBBing COKS!!!',
 	'gonna fuk me sum cowboys!',
+	'breed and breed and breed',
+	'loads and loads and loads of cum',
+	'loads and loads of cum',
+	'cummin and cummin and cummin',
+	'gonna fuck n fuck n fuck n fuck n fuck n fuck n fuck n those pledge boys',
 ];
 
 module.exports = {
