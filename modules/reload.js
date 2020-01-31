@@ -27,10 +27,10 @@ module.exports = {
 					return message.reply(`there is no command with name/alias \`${commandName}\`.`);
 				}
 
-				delete require.cache[require.resolve(`./${commandName}.js`)];
+				delete require.cache[require.resolve(`./${command.name}.js`)];
 
 				try {
-					const newCommand = require(`./${commandName}.js`); // eslint-disable-line global-require
+					const newCommand = require(`./${command.name}.js`); // eslint-disable-line global-require
 					commands.set(newCommand.name, newCommand);
 				} catch (e) {
 					console.error(e);
