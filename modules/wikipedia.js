@@ -2,9 +2,10 @@ const Discord = require('discord.js');
 const randomHex = require('random-hex');
 const wiki = require('wikijs').default();
 
-// Currently, errors are being thrown during calls to page.mainImage(), summar(), and images()
+// Currently, errors are being thrown during calls to page.mainImage(), summary(), and images()
 // It also fails on references and coordinates when passed the `more` flag
 // What's extra weird is those don't normally fail, and clicking on the links in the error message seems to give valid output
+// Likely rate limiting
 const buildEmbed = (query, page, more) => {
 	const embed = new Discord.RichEmbed()
 		.setColor(randomHex.generate())
@@ -15,11 +16,12 @@ const buildEmbed = (query, page, more) => {
 
 	page.mainImage().then(embed.setThumbnail).catch(console.error);
 	page.summary().then((s) => embed.setDescription(s.length > 2048 ? s.substring(0, 2044).concat('...') : s)).catch(console.error);
-	page.images().then((images) => {
-		const valid = images.filter((i) => /.*\.(svg|jpg|jpeg|png|gif)$/giu.test(i));
 
-		embed.setImage(valid[Math.floor(Math.random() * valid.length)]);
-	}).catch(console.error);
+	// page.images().then((images) => {
+	// 	const valid = images.filter((i) => /.*\.(svg|jpg|jpeg|png|gif)$/giu.test(i));
+
+	// 	embed.setImage(valid[Math.floor(Math.random() * valid.length)]);
+	// }).catch(console.error);
 
 	if (more) {
 		page.references().then((r) => embed.addField('Number of references', r.length)).catch(console.error);
