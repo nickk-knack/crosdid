@@ -169,7 +169,7 @@ client.on('message', (msg) => {
 		// This is a regular message, do any other processing on it
 
 		// Ignore messages from discord/bots (especially yourself), and don't process non-guild messages
-		if (msg.system || msg.author.bot || typeof msg.guild === 'undefined' || msg.guild === null) return;
+		if (msg.system || msg.author.bot || msg.guild === null || !msg.guild.available) return;
 
 		// Secret messages & reactions
 		const dbUser = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id });
