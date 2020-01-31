@@ -26,6 +26,8 @@
 15. Regex fixes:
     1. Replace any spaces with \s (ex: index.js:236)
 16. async all command modules?
+17. anywhere you try to access message.guild.id, check that you are in a guild first... too many crashes
+18. make all messages from the bot consistent across all files!
 
 ## Links
 
