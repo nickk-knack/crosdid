@@ -23,7 +23,7 @@ module.exports = {
 			}
 
 			if (command.opOnly) {
-				const isOp = db.get(`${message.guild.id}.users`).find({ id: message.author.id }).get('operator').value();
+				const isOp = db.get('operators').includes(message.author.id).value();
 
 				if (!isOp) {
 					return message.reply('you do not have permission to view help for that command.');
