@@ -6,9 +6,9 @@ module.exports = {
 	name: 'bot',
 	description: 'Modify various bot settings on the fly',
 	usage: stripIndent`<activity <enable |
-           disable |
-           type <playing | streaming | listening | watching> |
-           text <activity text>>> |
+                disable |
+                type <playing | streaming | listening | watching> |
+                text <activity text>>> |
 <phrases <enable |
           disable |
           list |
@@ -18,8 +18,8 @@ module.exports = {
           removeresponse <trigger index> <response index>>> |
 <avatar <get | set <image url>>> |
 <secret <messages | reacts> <enable |
-         					 disable |
-					         chance <get | 0.0 - 1.0>>> |
+                             disable |
+                             chance <get | 0.0 - 1.0>>> |
 <reactionNotify <enable | disable>> |
 <update <guilds | users>>`,
 	args: true,
