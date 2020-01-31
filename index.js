@@ -218,10 +218,10 @@ client.on('message', (msg) => {
 
 		// Ass-fixer
 		const assMessages = [];
-		const assTokens = lowerCaseContent.match(/(\w*[\s-])ass(\s\w*)/giu);
+		const assTokens = lowerCaseContent.match(/\w*[\s-]ass\s\w*/giu);
 		if (assTokens && assTokens !== null) {
 			for (const assToken of assTokens) {
-				const fixedAss = assToken.match(/ass(\s\w*)/gu)[0].replace(/\s/u, '-');
+				const fixedAss = assToken.match(/ass\s\w*/gu)[0].replace(/\s/u, '-');
 				assMessages.push(fixedAss);
 			}
 		}
