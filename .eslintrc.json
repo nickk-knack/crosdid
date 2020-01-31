@@ -167,6 +167,7 @@
         "prefer-arrow-callback": "error",
         "prefer-const": "error",
         "prefer-destructuring": "warn", // eventually make an error?
+        "prefer-named-capture-group": "warn",
         "prefer-regex-literals": "error",
         "prefer-template": "error",
         "quotes": [
