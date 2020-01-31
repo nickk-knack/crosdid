@@ -5,29 +5,26 @@
    1. namely, prefix
 3. Update the rest of the command modules from previous bots
    1. fakeperson - add address generation from fakeaddressgenerator?
-4. Rich embeds everywhere
-   1. existing command modules
-5. Additional reaction procesing (role on react type of thing?)
-6. `message.awaitReactions` for a quick poll thing?
-7. any other bot settings you want to add commands for?
-8. ctrl-f "todo" in `index.js` and existing command modules
-9. Fix reddit module
-10. Think about everything in the bot that is user controlled, check for exploits (`bot.js` might have one)
-11. Reimplement logging with `winston`
+   2. Update them with rich embeds where applicable, as well
+4. Additional reaction procesing (role on react type of thing?)
+5. `message.awaitReactions` for a quick poll thing?
+6. any other bot settings you want to add commands for?
+7. Fix reddit module
+8. Think about everything in the bot that is user controlled, check for exploits (`bot.js` might have one)
+9. Reimplement logging with `winston`
     1. Use `chalk` for coloring output?
     2. Point is going to be removing all `console.log` calls, eventually re-enable `no-console` in `.eslintrc.json`
-12. `common-tags` cleanup
+10. `common-tags` cleanup
     1. [Wanna write some custom tags?](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates)
-13. Change eslint indent rule to spaces, convert all files
+11. Change eslint indent rule to spaces, convert all files
     1. 2 spaces? or 4?
     2. make a separate branch for this later
-14. Make eslintrc epic
-    1. go through and check all modules now that you're done
-15. Regex fixes:
+12. Regex fixes:
     1. Replace any spaces with \s (ex: index.js:236)
-16. async all command modules?
-17. anywhere you try to access message.guild.id, check that you are in a guild first... too many crashes
-18. make all messages from the bot consistent across all files!
+    2. Remove unused capture groups (you really liked to do this)
+13. async all command modules?
+14. anywhere you try to access message.guild.id, check that you are in a guild first... too many crashes
+15. make all messages from the bot consistent across all files!
 
 ## Links
 
