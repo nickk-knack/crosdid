@@ -37,15 +37,20 @@ module.exports = {
 			case 'reacts':
 				dbUser = dbUser.get('reactions');
 				break;
-			case 'op':
+			case 'op': {
 				// Coerce subcommandArg into a boolean, write it to db
-				if (subcommandArg === 'true') {
-					db.get('operator').push(user.id).write();
-				} else {
-					db.get('operator').pull(user.id).write();
-				}
+				const ops = db.get('operator');
 
-				return message.reply(`Successfully made ${user} an operator for this bot.`);
+				if (subcommandArg === 'true') {
+					ops.push(user.id).write();
+					return message.reply(`successfully made ${user} an operator for this bot.`);
+				} else if (ops.has(user.id).value()) {
+					ops.pull(user.id).write();
+					return message.reply(`successfully removed ${user} as an operator for this bot.`);
+				} else {
+					return message.reply(`${user} is not an operator!`);
+				}
+			}
 			default:
 				return message.reply(`\`${subcommand}\` is not a valid subcommand!`);
 		}
