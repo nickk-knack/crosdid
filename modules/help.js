@@ -43,7 +43,7 @@ module.exports = {
 			}
 
 			if (command.usage) {
-				embed.addField('Usage:', `${prefix}${command.name} ${command.usage}`);
+				embed.addField('Usage:', `\`${prefix}${command.name} ${command.usage}\``);
 			}
 
 			if (command.opOnly || command.guildOnly) {
