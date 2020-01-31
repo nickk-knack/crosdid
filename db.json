@@ -4,8 +4,8 @@
   ],
   "activitySettings": {
     "enabled": true,
-    "type": "WATCHING",
-    "text": "over my children"
+    "type": "LISTENING",
+    "text": "joe biden podcast"
   },
   "625766841779879967": {
     "reactionNotify": false,
@@ -27,7 +27,8 @@
           "\"casually conservative\"",
           "ah yes, thats because algebra",
           "my cat has aids 😂",
-          "ayyy john arbuckle whats crackalackin binglebanger"
+          "ayyy john arbuckle whats crackalackin binglebanger",
+          "this is my song, \"bh\" by \"guah\""
         ],
         "reactions": [
           {
@@ -188,7 +189,8 @@
           "O-oooooooooo AAAAE-A-A-I-A-U- JO-oooooooooooo AAE-O-A-A-U-U-A- E-eee-ee-eee AAAAE-A-E-I-E-A-JO-ooo-oo-oo-oo EEEEO-A-AAA-AAAA",
           "you wanna hear a random signAAAaAALALAANFESNOVNSIUVBUOSEHUO#Y*R$HY*t8934try8943ry89438943wy89t43wh84e8",
           "sSSSSS AAaAAA  R EWwE e eeE xDDDDDDDD",
-          "you have just violated the nec"
+          "you have just violated the nec",
+          "AFdbADBADBaDbFGBbGFbrsTBTRHYhyWyrwyByrNrH^W$5g#Q5ge"
         ],
         "reactions": [
           {
@@ -283,7 +285,7 @@
         ]
       },
       {
-        "trigger": "!",
+        "trigger": "\\s!\\s",
         "responses": [
           "❗"
         ]
