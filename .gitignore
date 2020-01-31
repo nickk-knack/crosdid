@@ -72,3 +72,6 @@ modules/reddit.js
 
 # ignore backup files
 *.bak
+
+# ignore test js files
+*test*.js
