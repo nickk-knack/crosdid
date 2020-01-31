@@ -29,6 +29,7 @@ const dbDefault = {
 	globalDisabledCmdModules: [
 		'reddit',
 	],
+	operators: [],
 	activitySettings: {
 		enabled: true,
 		type: 'WATCHING',
@@ -142,7 +143,6 @@ client.on('ready', () => {
 						id: m.id,
 						messages: [],
 						reactions: [],
-						operator: false,
 					}).write();
 				}
 			});
@@ -244,13 +244,15 @@ client.on('message', (msg) => {
 	}
 
 	// Check if the command is in the guild's disabledCmdModules list
-	const disabledCmdModules = db.get(`${msg.guild.id}.disabledCmdModules`).value();
-	if (disabledCmdModules && disabledCmdModules.includes(command.name)) {
-		return msg.reply('That command does not exist!');
+	if (msg.guild !== null && msg.guild.available) {
+		const disabledCmdModules = db.get(`${msg.guild.id}.disabledCmdModules`).value();
+		if (disabledCmdModules && disabledCmdModules.includes(command.name)) {
+			return msg.reply('That command does not exist!');
+		}
 	}
 
 	// Check if the user can execute the command (opOnly)
-	const isOp = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id }).get('operator').value();
+	const isOp = db.get('operators').includes(msg.author.id).value();
 	if (command.opOnly && !isOp) {
 		return msg.reply('you do not have permission to execute that command!');
 	}
@@ -412,11 +414,14 @@ client.on('rateLimit', (info) => {
 
 // Channel creation event
 client.on('channelCreate', (channel) => {
+	// Only notify the creation of text and voice channels
+	if (channel.type !== 'text' && channel.type !== 'voice') return;
+
 	// Get settings for this event from the db
 	const settings = db.get(`${channel.guild.id}.announcements.channel_create`).value();
 
-	// Only notify the creation of text and voice channels (when enabled)
-	if (channel.type !== 'text' && channel.type !== 'voice' || !settings.enabled) return;
+	// Check if the event is enabled, return otherwise (has to happen after channel type check)
+	if (!settings.enabled) return;
 
 	// Get a reference to the defined announcements channel
 	const announcementsChannel = channel.guild.channels.find((c) => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
@@ -437,11 +442,14 @@ client.on('channelCreate', (channel) => {
 
 // Channel deletion event
 client.on('channelDelete', (channel) => {
+	// Only notify the deletion of text and voice channels
+	if (channel.type !== 'text' && channel.type !== 'voice') return;
+
 	// Get settings for this event from the db
 	const settings = db.get(`${channel.guild.id}.announcements.channel_delete`).value();
 
-	// Only notify the deletion of text and voice channels (when enabled)
-	if (channel.type !== 'text' && channel.type !== 'voice' || !settings.enabled) return;
+	// Check if the event is enabled, return otherwise (has to happen after channel type check)
+	if (!settings.enabled) return;
 
 	// Get a reference to the defined announcements channel
 	const announcementsChannel = channel.guild.channels.find((c) => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
@@ -462,11 +470,14 @@ client.on('channelDelete', (channel) => {
 
 // Channel update event
 client.on('channelUpdate', (oldChannel, newChannel) => {
+	// Only notify the deletion of text and voice channels (when enabled)
+	if (newChannel.type !== 'text' && newChannel.type !== 'voice') return;
+
 	// Get settings for this event from the db
 	const settings = db.get(`${newChannel.guild.id}.announcements.channel_update`).value();
 
-	// Only notify the deletion of text and voice channels (when enabled)
-	if (newChannel.type !== 'text' && newChannel.type !== 'voice' || !settings.enabled) return;
+	// Check if the event is enabled, return otherwise (has to happen after channel type check)
+	if (!settings.enabled) return;
 
 	// Get a reference to the defined announcements channel
 	const announcementsChannel = newChannel.guild.channels.find((c) => c.name === db.get(`${newChannel.guild.id}.announcements.channel`).value());

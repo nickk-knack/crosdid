@@ -2,6 +2,9 @@
   "globalDisabledCmdModules": [
     "reddit"
   ],
+  "operators": [
+    "140225600966098944"
+  ],
   "activitySettings": {
     "enabled": true,
     "type": "LISTENING",
@@ -47,8 +50,7 @@
             "custom": false,
             "emoji": "😂"
           }
-        ],
-        "operator": false
+        ]
       },
       {
         "id": "140225600966098944",
@@ -75,8 +77,7 @@
             "custom": true,
             "emoji": "669332349183590421"
           }
-        ],
-        "operator": true
+        ]
       },
       {
         "id": "206037113433620480",
@@ -99,8 +100,7 @@
             "custom": true,
             "emoji": "663079480255840287"
           }
-        ],
-        "operator": false
+        ]
       },
       {
         "id": "621804005865029632",
@@ -134,8 +134,7 @@
             "custom": false,
             "emoji": "👀"
           }
-        ],
-        "operator": false
+        ]
       },
       {
         "id": "438132534555967509",
@@ -150,8 +149,7 @@
             "custom": true,
             "emoji": "653328280660738048"
           }
-        ],
-        "operator": false
+        ]
       },
       {
         "id": "518290855757348888",
@@ -173,8 +171,7 @@
             "custom": false,
             "emoji": "🤠"
           }
-        ],
-        "operator": false
+        ]
       },
       {
         "id": "189821621626732554",
@@ -205,8 +202,7 @@
             "custom": true,
             "emoji": "654752346534051855"
           }
-        ],
-        "operator": false
+        ]
       },
       {
         "id": "180151466789437440",
@@ -226,8 +222,7 @@
             "custom": true,
             "emoji": "643917245516480533"
           }
-        ],
-        "operator": false
+        ]
       }
     ],
     "disabledCmdModules": [],

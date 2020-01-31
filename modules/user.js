@@ -39,7 +39,11 @@ module.exports = {
 				break;
 			case 'op':
 				// Coerce subcommandArg into a boolean, write it to db
-				dbUser.set('operator', subcommandArg === 'true').write();
+				if (subcommandArg === 'true') {
+					db.get('operator').push(user.id).write();
+				} else {
+					db.get('operator').pull(user.id).write();
+				}
 
 				return message.reply(`Successfully made ${user} an operator for this bot.`);
 			default:
