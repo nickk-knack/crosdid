@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const randomHex = require('random-hex');
 
 module.exports = {
   name: 'help',
@@ -10,7 +11,8 @@ module.exports = {
     const prefix = process.env.PREFIX || message.client.user.toString();
     const { db, commands } = message.client;
 
-    const embed = new Discord.RichEmbed().setColor('#DD11FF');
+    const embed = new Discord.RichEmbed().setColor(randomHex.generate());
+
     if (!args.length) {
       embed.setTitle('Help/Commands')
         .setDescription('List of all my commands:')
