@@ -57,7 +57,7 @@
         "handle-callback-err": "error",
         "indent": [
             "error",
-            "tab",
+            2,
             { 
                 "SwitchCase": 1,
                 "ignoreComments": true

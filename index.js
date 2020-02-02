@@ -26,68 +26,68 @@ const cooldowns = new Discord.Collection();
 
 // lowdb setup
 const dbDefault = {
-	globalDisabledCmdModules: [
-		'reddit',
-	],
-	operators: [],
-	activitySettings: {
-		enabled: true,
-		type: 'WATCHING',
-		text: 'over my children',
-		url: '',
-	},
+  globalDisabledCmdModules: [
+    'reddit',
+  ],
+  operators: [],
+  activitySettings: {
+    enabled: true,
+    type: 'WATCHING',
+    text: 'over my children',
+    url: '',
+  },
 };
 
 const dbDefaultGuildObj = {
-	reactionNotify: false,
-	secret_messages: {
-		enabled: false,
-		chance: 0.05,
-	},
-	secret_reacts: {
-		enabled: false,
-		chance: 0.05,
-	},
-	users: [],
-	disabledCmdModules: [],
-	enablePhrases: true,
-	phrases: [],
-	announcements: {
-		channel: '',
-		channel_create: {
-			enabled: false,
-			messages: [],
-		},
-		channel_delete: {
-			enabled: false,
-			messages: [],
-		},
-		channel_update: {
-			enabled: false,
-			messages: [],
-		},
-		emoji_create: {
-			enabled: false,
-			channel_override: '',
-			message_prepend: true,
-			messages: [],
-		},
-		emoji_delete: {
-			enabled: false,
-			channel_override: '',
-			message_prepend: true,
-			messages: [],
-		},
-		emoji_update: {
-			enabled: false,
-			channel_override: '',
-			messages: [],
-		},
-	},
+  reactionNotify: false,
+  secret_messages: {
+    enabled: false,
+    chance: 0.05,
+  },
+  secret_reacts: {
+    enabled: false,
+    chance: 0.05,
+  },
+  users: [],
+  disabledCmdModules: [],
+  enablePhrases: true,
+  phrases: [],
+  announcements: {
+    channel: '',
+    channel_create: {
+      enabled: false,
+      messages: [],
+    },
+    channel_delete: {
+      enabled: false,
+      messages: [],
+    },
+    channel_update: {
+      enabled: false,
+      messages: [],
+    },
+    emoji_create: {
+      enabled: false,
+      channel_override: '',
+      message_prepend: true,
+      messages: [],
+    },
+    emoji_delete: {
+      enabled: false,
+      channel_override: '',
+      message_prepend: true,
+      messages: [],
+    },
+    emoji_update: {
+      enabled: false,
+      channel_override: '',
+      messages: [],
+    },
+  },
 };
 
 const adapter = new FileSync(dbFileName, {
-	defaultValue: dbDefault,
+  defaultValue: dbDefault,
 });
 
 const db = low(adapter);
@@ -106,17 +106,17 @@ console.log('\tLoading command modules...');
 const commandModules = fs.readdirSync('./modules');
 
 for (const file of commandModules) {
-	// If file is not a .js file or contained in the blacklist, skip it
-	if (!file.endsWith('.js')) continue;
-	if (db.get('globalDisabledCmdModules').includes(file.split('.')[0]).value()) continue;
+  // If file is not a .js file or contained in the blacklist, skip it
+  if (!file.endsWith('.js')) continue;
+  if (db.get('globalDisabledCmdModules').includes(file.split('.')[0]).value()) continue;
 
-	// Require the command module and set it in the client
-	try {
-		const command = require(`./modules/${file}`); // eslint-disable-line global-require
-		client.commands.set(command.name, command);
-	} catch (e) {
-		console.error(`Error loading ${file}: `, e);
-	}
+  // Require the command module and set it in the client
+  try {
+    const command = require(`./modules/${file}`); // eslint-disable-line global-require
+    client.commands.set(command.name, command);
+  } catch (e) {
+    console.error(`Error loading ${file}: `, e);
+  }
 }
 
 console.log(`\t\tCommand modules loaded. Skipped the following: ${db.get('globalDisabledCmdModules').value().join(', ')}.`);
@@ -126,376 +126,377 @@ console.log('\tLoading events...');
 
 // Ready event
 client.on('ready', () => {
-	console.log(`\tLogged in as ${client.user.tag}!`);
+  console.log(`\tLogged in as ${client.user.tag}!`);
 
-	// Go through joined guilds, make sure there is a per-guild config in db
-	for (const g of [...client.guilds.values()]) {
-		// Check that the guild is available first
-		if (!g.available) continue;
+  // Go through joined guilds, make sure there is a per-guild config in db
+  for (const g of [...client.guilds.values()]) {
+    // Check that the guild is available first
+    if (!g.available) continue;
 
-		// Create guild config if non-existent
-		if (!db.has(g.id).value()) {
-			db.set(g.id, dbDefaultGuildObj).write();
+    // Create guild config if non-existent
+    if (!db.has(g.id).value()) {
+      db.set(g.id, dbDefaultGuildObj).write();
 
-			g.members.forEach((m) => {
-				if (!db.get(`${g.id}.users`).find({ id: m.id }).value()) {
-					db.get(`${g.id}.users`).push({
-						id: m.id,
-						messages: [],
-						reactions: [],
-					}).write();
-				}
-			});
-		}
-	}
+      g.members.forEach((m) => {
+        if (!db.get(`${g.id}.users`).find({ id: m.id }).value()) {
+          db.get(`${g.id}.users`).push({
+            id: m.id,
+            messages: [],
+            reactions: [],
+          }).write();
+        }
+      });
+    }
+  }
 
-	// Set the bot activity text
-	const activitySettings = db.get('activitySettings').value();
-	if (activitySettings.enabled) {
-		client.user.setActivity(activitySettings.text, { type: activitySettings.type })
-			.catch(console.error);
-	}
+  // Set the bot activity text
+  const activitySettings = db.get('activitySettings').value();
+  if (activitySettings.enabled) {
+    client.user
+      .setActivity(activitySettings.text, { type: activitySettings.type })
+      .catch(console.error);
+  }
 
-	console.log('Finished loading!');
+  console.log('Finished loading!');
 });
 
 // Message event (command processing)
 client.on('message', (msg) => {
-	// Command needs to start with prefix
-	const prefixRegex = new RegExp(`^(<@!?${client.user.id}> |\\${prefix})\\s*`, 'u');
+  // Command needs to start with prefix
+  const prefixRegex = new RegExp(`^(<@!?${client.user.id}> |\\${prefix})\\s*`, 'u');
 
-	// Test if the message was a command
-	if (!prefixRegex.test(msg.content)) {
-		// This is a regular message, do any other processing on it
+  // Test if the message was a command
+  if (!prefixRegex.test(msg.content)) {
+    // This is a regular message, do any other processing on it
 
-		// Ignore messages from discord/bots (especially yourself), and don't process non-guild messages
-		if (msg.system || msg.author.bot || msg.guild === null || !msg.guild.available) return;
+    // Ignore messages from discord/bots (especially yourself), and don't process non-guild messages
+    if (msg.system || msg.author.bot || msg.guild === null || !msg.guild.available) return;
 
-		// Secret messages & reactions
-		const dbUser = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id });
+    // Secret messages & reactions
+    const dbUser = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id });
 
-		// Check that messages are enabled, and that the user has some defined
-		const secretMessagesEnabled = db.get(`${msg.guild.id}.secret_messages.enabled`).value();
-		const userSecretMessages = dbUser.get('messages').value();
-		if (secretMessagesEnabled && userSecretMessages) {
-			// Calculate if we want to send a message
-			const secretMessageChance = db.get(`${msg.guild.id}.secret_messages.chance`).value();
-			const sendSecretMessage = Math.random() > (1 - secretMessageChance);
+    // Check that messages are enabled, and that the user has some defined
+    const secretMessagesEnabled = db.get(`${msg.guild.id}.secret_messages.enabled`).value();
+    const userSecretMessages = dbUser.get('messages').value();
+    if (secretMessagesEnabled && userSecretMessages) {
+      // Calculate if we want to send a message
+      const secretMessageChance = db.get(`${msg.guild.id}.secret_messages.chance`).value();
+      const sendSecretMessage = Math.random() > (1 - secretMessageChance);
 
-			// Send a random secret mesage
-			if (sendSecretMessage) msg.reply(getRandomFromArray(userSecretMessages));
-		}
+      // Send a random secret mesage
+      if (sendSecretMessage) msg.reply(getRandomFromArray(userSecretMessages));
+    }
 
-		// Check that reactions are enabled, and that the user has some defined
-		const secretReactsEnabled = db.get(`${msg.guild.id}.secret_reacts.enabled`).value();
-		const userSecretReacts = dbUser.get('reactions').value();
-		if (secretReactsEnabled && userSecretReacts) {
-			// Calculate if we want to react
-			const secretReactChance = db.get(`${msg.guild.id}.secret_reacts.chance`).value();
-			const secretlyReact = Math.random() > (1 - secretReactChance);
+    // Check that reactions are enabled, and that the user has some defined
+    const secretReactsEnabled = db.get(`${msg.guild.id}.secret_reacts.enabled`).value();
+    const userSecretReacts = dbUser.get('reactions').value();
+    if (secretReactsEnabled && userSecretReacts) {
+      // Calculate if we want to react
+      const secretReactChance = db.get(`${msg.guild.id}.secret_reacts.chance`).value();
+      const secretlyReact = Math.random() > (1 - secretReactChance);
 
-			// Get random reaction, react with it
-			if (secretlyReact) {
-				const reaction = getRandomFromArray(userSecretReacts);
-				msg.react(reaction.custom ? msg.guild.emojis.get(reaction.emoji) : reaction.emoji);
-			}
-		}
+      // Get random reaction, react with it
+      if (secretlyReact) {
+        const reaction = getRandomFromArray(userSecretReacts);
+        msg.react(reaction.custom ? msg.guild.emojis.get(reaction.emoji) : reaction.emoji);
+      }
+    }
 
-		// Guild-specific, phrase-activated messages
-		const enablePhrases = db.get(`${msg.guild.id}.enablePhrases`).value();
-		const lowerCaseContent = msg.content.toLowerCase();
-		if (enablePhrases) {
-			const guildPhrases = db.get(`${msg.guild.id}.phrases`).value();
+    // Guild-specific, phrase-activated messages
+    const enablePhrases = db.get(`${msg.guild.id}.enablePhrases`).value();
+    const lowerCaseContent = msg.content.toLowerCase();
+    if (enablePhrases) {
+      const guildPhrases = db.get(`${msg.guild.id}.phrases`).value();
 
-			if (typeof guildPhrases !== 'undefined') {
-				for (const guildPhrase of guildPhrases) {
-					if (lowerCaseContent.includes(guildPhrase.trigger) && guildPhrase.responses) {
-						msg.channel.send(getRandomFromArray(guildPhrase.responses));
-					}
-				}
-			}
-		}
+      if (typeof guildPhrases !== 'undefined') {
+        for (const guildPhrase of guildPhrases) {
+          if (lowerCaseContent.includes(guildPhrase.trigger) && guildPhrase.responses) {
+            msg.channel.send(getRandomFromArray(guildPhrase.responses));
+          }
+        }
+      }
+    }
 
-		// Ass-fixer
-		const assMessages = [];
-		const assTokens = lowerCaseContent.match(/\w*[\s-]ass\s\w*/giu);
-		if (assTokens && assTokens !== null) {
-			for (const assToken of assTokens) {
-				const fixedAss = assToken.match(/ass\s\w*/gu)[0].replace(/\s/u, '-');
-				assMessages.push(fixedAss);
-			}
-		}
+    // Ass-fixer
+    const assMessages = [];
+    const assTokens = lowerCaseContent.match(/\w*[\s-]ass\s\w*/giu);
+    if (assTokens && assTokens !== null) {
+      for (const assToken of assTokens) {
+        const fixedAss = assToken.match(/ass\s\w*/gu)[0].replace(/\s/u, '-');
+        assMessages.push(fixedAss);
+      }
+    }
 
-		if (assMessages.length > 0) msg.reply(assMessages.join(', '));
+    if (assMessages.length > 0) msg.reply(assMessages.join(', '));
 
-		// At the end, return.
-		return;
-	}
+    // At the end, return.
+    return;
+  }
 
-	// Get command args and command name
-	const [, matchedPrefix] = msg.content.match(prefixRegex);
-	const args = msg.content.slice(matchedPrefix.length).split(/\s+/u);
-	const commandName = args.shift().toLowerCase();
+  // Get command args and command name
+  const [, matchedPrefix] = msg.content.match(prefixRegex);
+  const args = msg.content.slice(matchedPrefix.length).split(/\s+/u);
+  const commandName = args.shift().toLowerCase();
 
-	// Get the actual command object, check if it exists
-	const command = client.commands.get(commandName) || client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
-	if (!command) {
-		return msg.reply('That command does not exist!');
-	}
+  // Get the actual command object, check if it exists
+  const command = client.commands.get(commandName) || client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
+  if (!command) {
+    return msg.reply('That command does not exist!');
+  }
 
-	// Check if the command is in the guild's disabledCmdModules list
-	if (msg.guild !== null && msg.guild.available) {
-		const disabledCmdModules = db.get(`${msg.guild.id}.disabledCmdModules`).value();
-		if (disabledCmdModules && disabledCmdModules.includes(command.name)) {
-			return msg.reply('That command does not exist!');
-		}
-	}
+  // Check if the command is in the guild's disabledCmdModules list
+  if (msg.guild !== null && msg.guild.available) {
+    const disabledCmdModules = db.get(`${msg.guild.id}.disabledCmdModules`).value();
+    if (disabledCmdModules && disabledCmdModules.includes(command.name)) {
+      return msg.reply('That command does not exist!');
+    }
+  }
 
-	// Check if the user can execute the command (opOnly)
-	const isOp = db.get('operators').includes(msg.author.id).value();
-	if (command.opOnly && !isOp) {
-		return msg.reply('you do not have permission to execute that command!');
-	}
+  // Check if the user can execute the command (opOnly)
+  const isOp = db.get('operators').includes(msg.author.id).value();
+  if (command.opOnly && !isOp) {
+    return msg.reply('you do not have permission to execute that command!');
+  }
 
-	// Check if command needs to be sent in a server
-	if (command.guildOnly && msg.channel.type !== 'text') {
-		return msg.reply('I can\'t execute that command in a DM.');
-	}
+  // Check if command needs to be sent in a server
+  if (command.guildOnly && msg.channel.type !== 'text') {
+    return msg.reply('I can\'t execute that command in a DM.');
+  }
 
-	// Check if args are required, or if not enough args are passed
-	if (command.args && (!args.length || command.minArgsLength > args.length)) {
-		let reply = `you didn't provide ${command.minArgsLength > args.length ? 'enough' : 'any'} arguments.`;
+  // Check if args are required, or if not enough args are passed
+  if (command.args && (!args.length || command.minArgsLength > args.length)) {
+    let reply = `you didn't provide ${command.minArgsLength > args.length ? 'enough' : 'any'} arguments.`;
 
-		if (command.usage) {
-			reply += `\nProper usage: "${prefix}${command.name} ${command.usage}"`;
-		}
+    if (command.usage) {
+      reply += `\nProper usage: "${prefix}${command.name} ${command.usage}"`;
+    }
 
-		return msg.reply(reply);
-	}
+    return msg.reply(reply);
+  }
 
-	// Set cooldown
-	if (!cooldowns.has(command.name)) {
-		cooldowns.set(command.name, new Discord.Collection());
-	}
+  // Set cooldown
+  if (!cooldowns.has(command.name)) {
+    cooldowns.set(command.name, new Discord.Collection());
+  }
 
-	const now = Date.now();
-	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown) * 1000;
+  const now = Date.now();
+  const timestamps = cooldowns.get(command.name);
+  const cooldownAmount = (command.cooldown) * 1000;
 
-	if (!timestamps.has(msg.author.id)) {
-		timestamps.set(msg.author.id, now);
-		setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
-	} else {
-		const expirationTime = timestamps.get(msg.author.id) + cooldownAmount;
+  if (!timestamps.has(msg.author.id)) {
+    timestamps.set(msg.author.id, now);
+    setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
+  } else {
+    const expirationTime = timestamps.get(msg.author.id) + cooldownAmount;
 
-		if (now < expirationTime) {
-			const timeLeft = (expirationTime - now) / 1000;
-			return msg.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before using the ${command.name} command.`);
-		}
+    if (now < expirationTime) {
+      const timeLeft = (expirationTime - now) / 1000;
+      return msg.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before using the ${command.name} command.`);
+    }
 
-		timestamps.set(msg.author.id, now);
-		setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
-	}
+    timestamps.set(msg.author.id, now);
+    setTimeout(() => timestamps.delete(msg.author.id), cooldownAmount);
+  }
 
-	// Execute command
-	try {
-		command.execute(msg, args);
-	} catch (error) {
-		console.error(error);
-		msg.reply('there was an error executing that command :(');
-	}
+  // Execute command
+  try {
+    command.execute(msg, args);
+  } catch (error) {
+    console.error(error);
+    msg.reply('there was an error executing that command :(');
+  }
 });
 
 // Emoji creation event
 client.on('emojiCreate', (emoji) => {
-	// Access db for event settings
-	const settings = db.get(`${emoji.guild.id}.announcements.emoji_create`).value();
+  // Access db for event settings
+  const settings = db.get(`${emoji.guild.id}.announcements.emoji_create`).value();
 
-	// Return early if this feature is disabled
-	if (!settings.enabled) return;
+  // Return early if this feature is disabled
+  if (!settings.enabled) return;
 
-	// Get config from db
-	const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
-		settings.channel_override : db.get(`${emoji.guild.id}.announcements.channel`).value();
-	const emojiChannel = emoji.guild.channels.find((c) => c.name === emojiChannelName);
-	const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Created';
+  // Get config from db
+  const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
+    settings.channel_override : db.get(`${emoji.guild.id}.announcements.channel`).value();
+  const emojiChannel = emoji.guild.channels.find((c) => c.name === emojiChannelName);
+  const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Created';
 
-	// Create and send embed, then react to the message with the emoji
-	const embed = new Discord.RichEmbed()
-		.setColor(randomHex.generate())
-		.setImage(emoji.url)
-		.setTitle(settings.message_prepend ? `${title} ${emoji.name}` : `${emoji.name} ${title}`);
+  // Create and send embed, then react to the message with the emoji
+  const embed = new Discord.RichEmbed()
+    .setColor(randomHex.generate())
+    .setImage(emoji.url)
+    .setTitle(settings.message_prepend ? `${title} ${emoji.name}` : `${emoji.name} ${title}`);
 
-	emojiChannel.send(embed).then((message) => message.react(emoji));
+  emojiChannel.send(embed).then((message) => message.react(emoji));
 });
 
 // Emoji delete event
 client.on('emojiDelete', (emoji) => {
-	// Access db for event settings
-	const settings = db.get(`${emoji.guild.id}.announcements.emoji_delete`).value();
+  // Access db for event settings
+  const settings = db.get(`${emoji.guild.id}.announcements.emoji_delete`).value();
 
-	// Return early if this feature is disabled
-	if (!settings.enabled) return;
+  // Return early if this feature is disabled
+  if (!settings.enabled) return;
 
-	// Get config from db
-	const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
-		settings.channel_override : db.get(`${emoji.guild.id}.announcements.channel`).value();
-	const emojiChannel = emoji.guild.channels.find((c) => c.name === emojiChannelName);
-	const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Deleted';
+  // Get config from db
+  const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
+    settings.channel_override : db.get(`${emoji.guild.id}.announcements.channel`).value();
+  const emojiChannel = emoji.guild.channels.find((c) => c.name === emojiChannelName);
+  const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Deleted';
 
-	// Create and send embed
-	const embed = new Discord.RichEmbed()
-		.setColor(randomHex.generate())
-		.setImage(emoji.url)
-		.setTitle(settings.message_prepend ? `${title} ${emoji.name}` : `${emoji.name} ${title}`);
+  // Create and send embed
+  const embed = new Discord.RichEmbed()
+    .setColor(randomHex.generate())
+    .setImage(emoji.url)
+    .setTitle(settings.message_prepend ? `${title} ${emoji.name}` : `${emoji.name} ${title}`);
 
-	emojiChannel.send(embed);
+  emojiChannel.send(embed);
 });
 
 // Emoji update event
 client.on('emojiUpdate', (oldEmoji, newEmoji) => {
-	// Access db for event settings
-	const settings = db.get(`${newEmoji.guild.id}.announcements.emoji_update`).value();
+  // Access db for event settings
+  const settings = db.get(`${newEmoji.guild.id}.announcements.emoji_update`).value();
 
-	// Return early if this feature is disabled
-	if (!settings.enabled) return;
+  // Return early if this feature is disabled
+  if (!settings.enabled) return;
 
-	// Get config from db
-	const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
-		settings.channel_override : db.get(`${newEmoji.guild.id}.announcements.channel`).value();
-	const emojiChannel = newEmoji.guild.channels.find((c) => c.name === emojiChannelName);
-	const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Updated';
+  // Get config from db
+  const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
+    settings.channel_override : db.get(`${newEmoji.guild.id}.announcements.channel`).value();
+  const emojiChannel = newEmoji.guild.channels.find((c) => c.name === emojiChannelName);
+  const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Updated';
 
-	// Create and send embed, then react to the message with the emoji
-	const embed = new Discord.RichEmbed()
-		.setColor(randomHex.generate())
-		.setImage(newEmoji.url)
-		.addField('Old Emoji', `**[${oldEmoji.name}](${oldEmoji.url})**`, true)
-		.addField('New Emoji', `**[${newEmoji.name}](${newEmoji.url})**`, true)
-		.setTitle(title);
+  // Create and send embed, then react to the message with the emoji
+  const embed = new Discord.RichEmbed()
+    .setColor(randomHex.generate())
+    .setImage(newEmoji.url)
+    .addField('Old Emoji', `**[${oldEmoji.name}](${oldEmoji.url})**`, true)
+    .addField('New Emoji', `**[${newEmoji.name}](${newEmoji.url})**`, true)
+    .setTitle(title);
 
-	emojiChannel.send(embed).then((message) => message.react(newEmoji));
+  emojiChannel.send(embed).then((message) => message.react(newEmoji));
 });
 
 // Message reaction add event
 client.on('messageReactionAdd', (reaction, user) => {
-	// Any other reaction processing goes here:
-	// (i.e., giving a user a role on a react; add some stuff to events.js plugin to support this)
+  // Any other reaction processing goes here:
+  // (i.e., giving a user a role on a react; add some stuff to events.js plugin to support this)
 
-	// Auto-alert on react code (enabled on a per-guild basis)
-	if (db.get(`${reaction.message.guild.id}.reactionNotify`).value()) {
-		// first check that you can send pms to the author! (i.e. that its not a bot)
-		if (reaction.message.author.bot) return;
+  // Auto-alert on react code (enabled on a per-guild basis)
+  if (db.get(`${reaction.message.guild.id}.reactionNotify`).value()) {
+    // first check that you can send pms to the author! (i.e. that its not a bot)
+    if (reaction.message.author.bot) return;
 
-		// Get message author, and begin message content
-		const { author } = reaction.message;
-		const embed = new Discord.RichEmbed()
-			.setColor(randomHex.generate())
-			.setTitle(`${user.tag} reacted to your message`)
-			.addField('Your message', `> ${reaction.message.content}`);
+    // Get message author, and begin message content
+    const { author } = reaction.message;
+    const embed = new Discord.RichEmbed()
+      .setColor(randomHex.generate())
+      .setTitle(`${user.tag} reacted to your message`)
+      .addField('Your message', `> ${reaction.message.content}`);
 
-		// detect if the emoji is a guild emoji (true) or regular emoji (false), append to message
-		if (typeof reaction.emoji.url !== 'undefined') {
-			embed.setImage(reaction.emoji.url)
-				.addField('Reaction', `"${reaction.emoji.name}" from guild "${reaction.message.guild.name}"`);
-		} else {
-			embed.addField('Reaction', reaction.emoji);
-		}
+    // detect if the emoji is a guild emoji (true) or regular emoji (false), append to message
+    if (typeof reaction.emoji.url !== 'undefined') {
+      embed.setImage(reaction.emoji.url)
+        .addField('Reaction', `"${reaction.emoji.name}" from guild "${reaction.message.guild.name}"`);
+    } else {
+      embed.addField('Reaction', reaction.emoji);
+    }
 
-		// Send message to author
-		author.send(embed);
-	}
+    // Send message to author
+    author.send(embed);
+  }
 });
 
 // Rate limiting event
 client.on('rateLimit', (info) => {
-	if (DEBUG) console.warn(`Rate limit: ${info.limit} (td: ${info.timeDifference}ms)`, `${info.method}:${info.path}`);
+  if (DEBUG) console.warn(`Rate limit: ${info.limit} (td: ${info.timeDifference}ms)`, `${info.method}:${info.path}`);
 });
 
 // Channel creation event
 client.on('channelCreate', (channel) => {
-	// Only notify the creation of text and voice channels
-	if (channel.type !== 'text' && channel.type !== 'voice') return;
+  // Only notify the creation of text and voice channels
+  if (channel.type !== 'text' && channel.type !== 'voice') return;
 
-	// Get settings for this event from the db
-	const settings = db.get(`${channel.guild.id}.announcements.channel_create`).value();
+  // Get settings for this event from the db
+  const settings = db.get(`${channel.guild.id}.announcements.channel_create`).value();
 
-	// Check if the event is enabled, return otherwise (has to happen after channel type check)
-	if (!settings.enabled) return;
+  // Check if the event is enabled, return otherwise (has to happen after channel type check)
+  if (!settings.enabled) return;
 
-	// Get a reference to the defined announcements channel
-	const announcementsChannel = channel.guild.channels.find((c) => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
+  // Get a reference to the defined announcements channel
+  const announcementsChannel = channel.guild.channels.find((c) => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
 
-	// Bail if the channel doesn't exist
-	if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
+  // Bail if the channel doesn't exist
+  if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
 
-	// Send random message from appropriate messages array + the new channel name to announcements channel
-	const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Created';
+  // Send random message from appropriate messages array + the new channel name to announcements channel
+  const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Created';
 
-	const embed = new Discord.RichEmbed()
-		.setColor(randomHex.generate())
-		.setTitle(title)
-		.setDescription(channel);
+  const embed = new Discord.RichEmbed()
+    .setColor(randomHex.generate())
+    .setTitle(title)
+    .setDescription(channel);
 
-	announcementsChannel.send(embed);
+  announcementsChannel.send(embed);
 });
 
 // Channel deletion event
 client.on('channelDelete', (channel) => {
-	// Only notify the deletion of text and voice channels
-	if (channel.type !== 'text' && channel.type !== 'voice') return;
+  // Only notify the deletion of text and voice channels
+  if (channel.type !== 'text' && channel.type !== 'voice') return;
 
-	// Get settings for this event from the db
-	const settings = db.get(`${channel.guild.id}.announcements.channel_delete`).value();
+  // Get settings for this event from the db
+  const settings = db.get(`${channel.guild.id}.announcements.channel_delete`).value();
 
-	// Check if the event is enabled, return otherwise (has to happen after channel type check)
-	if (!settings.enabled) return;
+  // Check if the event is enabled, return otherwise (has to happen after channel type check)
+  if (!settings.enabled) return;
 
-	// Get a reference to the defined announcements channel
-	const announcementsChannel = channel.guild.channels.find((c) => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
+  // Get a reference to the defined announcements channel
+  const announcementsChannel = channel.guild.channels.find((c) => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
 
-	// Bail if the channel doesn't exist
-	if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
+  // Bail if the channel doesn't exist
+  if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
 
-	// Send random message from appropriate messages array + the old channel name to announcements channel
-	const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Deleted';
+  // Send random message from appropriate messages array + the old channel name to announcements channel
+  const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Deleted';
 
-	const embed = new Discord.RichEmbed()
-		.setColor(randomHex.generate())
-		.setTitle(title)
-		.setDescription(channel);
+  const embed = new Discord.RichEmbed()
+    .setColor(randomHex.generate())
+    .setTitle(title)
+    .setDescription(channel);
 
-	announcementsChannel.send(embed);
+  announcementsChannel.send(embed);
 });
 
 // Channel update event
 client.on('channelUpdate', (oldChannel, newChannel) => {
-	// Only notify the deletion of text and voice channels (when enabled)
-	if (newChannel.type !== 'text' && newChannel.type !== 'voice') return;
+  // Only notify the deletion of text and voice channels (when enabled)
+  if (newChannel.type !== 'text' && newChannel.type !== 'voice') return;
 
-	// Get settings for this event from the db
-	const settings = db.get(`${newChannel.guild.id}.announcements.channel_update`).value();
+  // Get settings for this event from the db
+  const settings = db.get(`${newChannel.guild.id}.announcements.channel_update`).value();
 
-	// Check if the event is enabled, return otherwise (has to happen after channel type check)
-	if (!settings.enabled) return;
+  // Check if the event is enabled, return otherwise (has to happen after channel type check)
+  if (!settings.enabled) return;
 
-	// Get a reference to the defined announcements channel
-	const announcementsChannel = newChannel.guild.channels.find((c) => c.name === db.get(`${newChannel.guild.id}.announcements.channel`).value());
+  // Get a reference to the defined announcements channel
+  const announcementsChannel = newChannel.guild.channels.find((c) => c.name === db.get(`${newChannel.guild.id}.announcements.channel`).value());
 
-	// Bail if the channel doesn't exist
-	if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${newChannel.guild.id} is invalid!`);
+  // Bail if the channel doesn't exist
+  if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${newChannel.guild.id} is invalid!`);
 
-	// Send random message from appropriate messages array + a bunch of updated info for the old->new channel
-	const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Updated';
+  // Send random message from appropriate messages array + a bunch of updated info for the old->new channel
+  const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Updated';
 
-	// Future Todo: find specific differences between old and new channel (for both text and voice channels) and add fields for each
-	const embed = new Discord.RichEmbed()
-		.setColor(randomHex.generate())
-		.setTitle(title)
-		.addField('Old Channel', `${oldChannel}${oldChannel.type === 'text' ? `\n"${oldChannel.topic}"` : ''}`, true)
-		.addField('New Channel', `${newChannel}${newChannel.type === 'text' ? `\n"${newChannel.topic}"` : ''}`, true);
+  // Future Todo: find specific differences between old and new channel (for both text and voice channels) and add fields for each
+  const embed = new Discord.RichEmbed()
+    .setColor(randomHex.generate())
+    .setTitle(title)
+    .addField('Old Channel', `${oldChannel}${oldChannel.type === 'text' ? `\n"${oldChannel.topic}"` : ''}`, true)
+    .addField('New Channel', `${newChannel}${newChannel.type === 'text' ? `\n"${newChannel.topic}"` : ''}`, true);
 
-	announcementsChannel.send(embed);
+  announcementsChannel.send(embed);
 });
 
 // Logging events
@@ -513,9 +514,9 @@ client.login(token);
 app.use(bodyParser.json());
 
 app.listen(port, () => {
-	console.log(`Server listening on port ${port}`);
+  console.log(`Server listening on port ${port}`);
 });
 
 app.get('/', (req, res) => {
-	res.end('hello crosdid');
+  res.end('hello crosdid');
 });
