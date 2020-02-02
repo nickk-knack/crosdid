@@ -3,9 +3,7 @@
 1. `bot.js` update guilds & users
 2. move more stuff from .env to db
    1. namely, prefix
-3. Update the rest of the command modules from previous bots
-   1. fakeperson - add address generation from fakeaddressgenerator?
-   2. Update them with rich embeds where applicable, as well
+3. fakeperson - add address generation from fakeaddressgenerator?
 4. Additional reaction procesing (role on react type of thing?)
 5. `message.awaitReactions` for a quick poll thing?
 6. any other bot settings you want to add commands for?
@@ -16,10 +14,14 @@
 9. async all command modules?
 10. anywhere you try to access message.guild.id, check that you are in a guild first... too many crashes
 11. make all messages from the bot consistent across all files!
-12. change all findIndex/indexOf result checks from `!== -1` to `> -1`
-13. Regex fixes:
-    1. Replace any spaces with \s (ex: index.js:236)
-    2. Remove unused capture groups (you really liked to do this)
+12. Modify `good`/`bad`/`thank` command modules
+    1. increment a `good`/`bad`/`thank` counter in guild db
+13. Add `about` command module
+    1. display bot's ratio of good:bad for the guild (add check to only let this happen in guild)
+    2. display number of times bot has been thanked
+    3. display prefix (from db)
+    4. display some other various bot settings
+    5. all in some rich embed
 
 ## Links
 

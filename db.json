@@ -1,5 +1,8 @@
 {
-  "globalDisabledCmdModules": [],
+  "globalDisabledCmdModules": [
+    "pornhub",
+    "r34"
+  ],
   "operators": [
     "140225600966098944"
   ],
