@@ -1,6 +1,6 @@
 module.exports = {
   name: 'rate',
-  aliases: ['r'],
+  aliases: [],
   description: 'Rates something out of 10.',
   usage: '<thing>',
   guildOnly: false,

@@ -1,7 +1,5 @@
 {
-  "globalDisabledCmdModules": [
-    "reddit"
-  ],
+  "globalDisabledCmdModules": [],
   "operators": [
     "140225600966098944"
   ],
