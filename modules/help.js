@@ -14,9 +14,10 @@ module.exports = {
     const embed = new Discord.RichEmbed().setColor(randomHex.generate());
 
     if (!args.length) {
-      embed.setTitle('Help/Commands')
-        .setDescription('List of all my commands:')
-        .addField(commands.map((command) => command.name).join(', '), `You can send ${prefix}help [command name] for info on a specific command.`);
+      embed
+        .setTitle('Help/Commands')
+        .setDescription(`You can send ${prefix}help [command name] for info on a specific command.`)
+        .addField('**Command List**', commands.map((command) => command.name).join(', '));
     } else {
       const command = commands.get(args[0]) || commands.find((cmd) => cmd.aliases && cmd.aliases.includes(args[0]));
 
