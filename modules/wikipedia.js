@@ -64,13 +64,13 @@ module.exports = {
 
     // Get "more info" flag
     const moreInfoFlagIndex = args.findIndex((val) => val === '-m' || val === '--more');
-    const moreInfo = moreInfoFlagIndex !== -1;
+    const moreInfo = moreInfoFlagIndex > -1;
     if (moreInfo) args.splice(moreInfoFlagIndex, 1);
 
     // Get "limit" flag and new "limit"
     let limit = 1;
     const limitFlagIndex = args.findIndex((val) => val === '-l' || val === '--limit');
-    const limitEnabled = limitFlagIndex !== -1;
+    const limitEnabled = limitFlagIndex > -1;
     if (limitEnabled) {
       // Remove the flag from the args
       args.splice(limitFlagIndex, 1);

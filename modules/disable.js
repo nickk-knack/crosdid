@@ -28,7 +28,7 @@ module.exports = {
     // Set global flag
     let global = false;
     const globalFlagIndex = args.indexOf('-g');
-    if (globalFlagIndex !== -1) {
+    if (globalFlagIndex > -1) {
       args.splice(globalFlagIndex, 1);
       global = true;
     }
@@ -44,7 +44,7 @@ module.exports = {
     // Set enable flag
     let enable = false;
     const enableFlagIndex = args.indexOf('-e');
-    if (enableFlagIndex !== -1) {
+    if (enableFlagIndex > -1) {
       args.splice(enableFlagIndex, 1);
       enable = true;
     }
