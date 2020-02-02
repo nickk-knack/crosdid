@@ -6,6 +6,6 @@ module.exports = {
   opOnly: true,
   cooldown: 1,
   execute(message, args) {
-    message.channel.send(`Yeah, that's how commands work. Ping time: ${Date.now() - message.createdTimestamp}ms`);
+    message.channel.send(`Yeah, that's how commands work. Ping time: ${message.createdTimestamp - Date.now()}ms`);
   },
 };
