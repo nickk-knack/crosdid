@@ -4,19 +4,18 @@
 2. move more stuff from .env to db
    1. namely, prefix
 3. fakeperson - add address generation from fakeaddressgenerator?
-4. Additional reaction procesing (role on react type of thing?)
-5. `message.awaitReactions` for a quick poll thing?
-6. any other bot settings you want to add commands for?
-7. Think about everything in the bot that is user controlled, check for exploits (`bot.js` might have one)
-8. Reimplement logging with `winston`
+4. `quickpoll` - finish, fix the awaitReactions portion
+5. any other bot settings you want to add commands for?
+6. Think about everything in the bot that is user controlled, check for exploits (`bot.js` might have one)
+7. Reimplement logging with `winston`
     1. Use `chalk` for coloring output?
     2. Point is going to be removing all `console.log` calls, eventually re-enable `no-console` in `.eslintrc.json`
-9. async all command modules?
-10. anywhere you try to access message.guild.id, check that you are in a guild first... too many crashes
-11. make all messages from the bot consistent across all files!
-12. Modify `good`/`bad`/`thank` command modules
+8. async all command modules?
+9.  anywhere you try to access message.guild.id, check that you are in a guild first... too many crashes
+10. make all messages from the bot consistent across all files!
+11. Modify `good`/`bad`/`thank` command modules
     1. increment a `good`/`bad`/`thank` counter in guild db
-13. Add `about` command module
+12. Add `about` command module
     1. display bot's ratio of good:bad for the guild (add check to only let this happen in guild)
     2. display number of times bot has been thanked
     3. display prefix (from db)
