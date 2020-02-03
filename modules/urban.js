@@ -3,8 +3,6 @@ const randomHex = require('random-hex');
 const fetch = require('node-fetch');
 const trim = (str, max) => (str.length > max) ? `${str.slice(0, max - 3)}...` : str;
 
-// Todo: Rewrite to use node-fetch (I want to purge snekfetch)
-
 module.exports = {
   name: 'urban',
   aliases: ['ud', 'urband'],
@@ -14,7 +12,7 @@ module.exports = {
   guildOnly: false,
   cooldown: 5,
   async execute(message, args) {
-    fetch(`https://api.urbandictionary.com/v0/define?term=${args.join('%20')}`)
+    fetch(`http://api.urbandictionary.com/v0/define?term=${args.join('%20')}`)
       .then((res) => res.json())
       .then((json) => {
         if (!json.list.length) {
