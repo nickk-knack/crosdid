@@ -235,7 +235,7 @@ client.on('message', (msg) => {
 
   // Get command args and command name
   const [, matchedPrefix] = msg.content.match(prefixRegex);
-  const args = msg.content.slice(matchedPrefix.length).split(/\s+/u);
+  const args = msg.content.slice(matchedPrefix.length).split(/\s+/gu);
   const commandName = args.shift().toLowerCase();
 
   // Get the actual command object, check if it exists
@@ -381,10 +381,12 @@ client.on('emojiUpdate', (oldEmoji, newEmoji) => {
 // Message reaction add event
 client.on('messageReactionAdd', (reaction, user) => {
   // Any other reaction processing goes here:
-  // (i.e., giving a user a role on a react; add some stuff to events.js plugin to support this)
+  // (i.e., giving a user a role on a react)
 
   // Auto-alert on react code (enabled on a per-guild basis)
-  if (db.get(`${reaction.message.guild.id}.reactionNotify`).value()) {
+  if (typeof reaction.message.guild !== 'undefined' &&
+      reaction.message.guild.available &&
+      db.get(`${reaction.message.guild.id}.reactionNotify`).value()) {
     // first check that you can send pms to the author! (i.e. that its not a bot)
     if (reaction.message.author.bot) return;
 
