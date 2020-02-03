@@ -8,7 +8,7 @@ module.exports = {
   description: 'Sends an AI generated person directly to chat.',
   args: false,
   cooldown: 3,
-  execute(message, args, bot) {
+  execute(message, args) {
     const personUrl = 'https://thispersondoesnotexist.com/image';
 
     fetch(personUrl)
