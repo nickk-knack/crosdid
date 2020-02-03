@@ -6,7 +6,7 @@ module.exports = {
   guildOnly: false,
   cooldown: 1,
   execute(message, args) {
-    const items = args.join(' ').split(/\s\|\s/gu);
+    const items = args.join(' ').split(/\s*\|\s*/gu);
     const randChoice = Math.floor(Math.random() * items.length);
     message.reply(`I choose ${items[randChoice]}!`);
   },
