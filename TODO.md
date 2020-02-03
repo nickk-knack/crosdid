@@ -6,16 +6,20 @@
 3. fakeperson - add address generation from fakeaddressgenerator?
 4. `quickpoll` - finish, fix the awaitReactions portion
 5. any other bot settings you want to add commands for?
-6. Think about everything in the bot that is user controlled, check for exploits (`bot.js` might have one)
-7. Reimplement logging with `winston`
+6. weather command, use owm/darksky stuff if you still have it
+   1. take zip as argument
+   2. default to user location? idk if thats possible
+   3. maybe default to bot location then
+7. Think about everything in the bot that is user controlled, check for exploits (`bot.js` might have one)
+8. Reimplement logging with `winston`
     1. Use `chalk` for coloring output?
     2. Point is going to be removing all `console.log` calls, eventually re-enable `no-console` in `.eslintrc.json`
-8. async all command modules?
-9.  anywhere you try to access message.guild.id, check that you are in a guild first... too many crashes
-10. make all messages from the bot consistent across all files!
-11. Modify `good`/`bad`/`thank` command modules
+9. async all command modules?
+10. anywhere you try to access message.guild.id, check that you are in a guild first... too many crashes
+11. make all messages from the bot consistent across all files!
+12. Modify `good`/`bad`/`thank` command modules
     1. increment a `good`/`bad`/`thank` counter in guild db
-12. Add `about` command module
+13. Add `about` command module
     1. display bot's ratio of good:bad for the guild (add check to only let this happen in guild)
     2. display number of times bot has been thanked
     3. display prefix (from db)
