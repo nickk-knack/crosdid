@@ -38,53 +38,9 @@ const dbDefault = {
   },
 };
 
-const dbDefaultGuildObj = {
-  reactionNotify: false,
-  secret_messages: {
-    enabled: false,
-    chance: 0.05,
-  },
-  secret_reacts: {
-    enabled: false,
-    chance: 0.05,
-  },
-  users: [],
-  disabledCmdModules: [],
-  enablePhrases: true,
-  phrases: [],
-  announcements: {
-    channel: '',
-    channel_create: {
-      enabled: false,
-      messages: [],
-    },
-    channel_delete: {
-      enabled: false,
-      messages: [],
-    },
-    channel_update: {
-      enabled: false,
-      messages: [],
-    },
-    emoji_create: {
-      enabled: false,
-      channel_override: '',
-      message_prepend: true,
-      messages: [],
-    },
-    emoji_delete: {
-      enabled: false,
-      channel_override: '',
-      message_prepend: true,
-      messages: [],
-    },
-    emoji_update: {
-      enabled: false,
-      channel_override: '',
-      messages: [],
-    },
-  },
-};
+// this is a cheesy change, requires that this plugin always be included...
+// however, it prevents duplicate code so yay -~40 lines from this file
+const { dbDefaultGuildObj } = require('./plugins/bot.js');
 
 const adapter = new FileSync(dbFileName, {
   defaultValue: dbDefault,
@@ -138,7 +94,7 @@ client.on('ready', () => {
       db.set(g.id, dbDefaultGuildObj).write();
 
       g.members.forEach((m) => {
-        if (!db.get(`${g.id}.users`).find({ id: m.id }).value()) {
+        if (!m.user.bot && !db.get(`${g.id}.users`).find({ id: m.id }).value()) {
           db.get(`${g.id}.users`).push({
             id: m.id,
             messages: [],

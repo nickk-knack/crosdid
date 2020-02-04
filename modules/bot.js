@@ -2,6 +2,56 @@ const Discord = require('discord.js');
 const randomHex = require('random-hex');
 const { stripIndent } = require('common-tags');
 
+const dbDefaultGuildObj = {
+  reactionNotify: false,
+  secret_messages: {
+    enabled: false,
+    chance: 0.05,
+  },
+  secret_reacts: {
+    enabled: false,
+    chance: 0.05,
+  },
+  users: [],
+  disabledCmdModules: [],
+  enablePhrases: true,
+  phrases: [],
+  announcements: {
+    channel: '',
+    channel_create: {
+      enabled: false,
+      messages: [],
+    },
+    channel_delete: {
+      enabled: false,
+      messages: [],
+    },
+    channel_update: {
+      enabled: false,
+      messages: [],
+    },
+    emoji_create: {
+      enabled: false,
+      channel_override: '',
+      message_prepend: true,
+      messages: [],
+    },
+    emoji_delete: {
+      enabled: false,
+      channel_override: '',
+      message_prepend: true,
+      messages: [],
+    },
+    emoji_update: {
+      enabled: false,
+      channel_override: '',
+      messages: [],
+    },
+  },
+};
+
+module.exports.dbDefaultGuildObj = dbDefaultGuildObj;
+
 module.exports = {
   name: 'bot',
   description: 'Modify various bot settings on the fly',
@@ -226,13 +276,41 @@ module.exports = {
       }
     } else if (subcommand === 'update') {
       switch (subcommandArg) {
-        case 'guilds':
-          // go through all guilds in message.client, see if they are in db, add if not
-          // basically the same code from client ready handler
-          return message.reply('successfully updated all guild db information!');
-        case 'users':
+        case 'guilds': {
+          const guildsAdded = [];
+
+          // Go through joined guilds, make sure there is a per-guild config in db
+          for (const g of [...message.client.guilds.values()]) {
+            // Check that the guild is available first
+            if (!g.available) continue;
+
+            // Create guild config if non-existent
+            if (!db.has(g.id).value()) {
+              db.set(g.id, dbDefaultGuildObj).write();
+              guildsAdded.push(g.name);
+            }
+          }
+
+          return message.reply(`successfully updated all guild db information!${guildsAdded.length ? ` ${guildsAdded.length} guilds added: ${guildsAdded.join(', ')}` : ''}`);
+        }
+        case 'users': {
+          const usersAdded = [];
+
           // go through all users in current guild, add shit to db for them
-          return message.reply('successfully updated user db information for current guild!');
+          message.guild.members.forEach((m) => {
+            if (!m.user.bot && !db.get(`${message.guild.id}.users`).find({ id: m.id }).value()) {
+              db.get(`${message.guild.id}.users`).push({
+                id: m.id,
+                messages: [],
+                reactions: [],
+              }).write();
+
+              usersAdded.push(m.user.username);
+            }
+          });
+
+          return message.reply(`successfully updated user db information for current guild!${usersAdded.length ? ` ${usersAdded.length} users added: ${usersAdded.join(', ')}` : ''}`);
+        }
         default:
           return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: guilds, users)`);
       }
