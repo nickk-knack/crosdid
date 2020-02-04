@@ -123,7 +123,7 @@ module.exports = {
         lang = Object.keys(langs)[Math.floor(Math.random() * Object.keys(langs).length)];
       } else {
         // Notify user of invalid language choice
-        return message.reply('Invalid language!');
+        return message.reply(`invalid language: ${lang}`);
       }
     }
 

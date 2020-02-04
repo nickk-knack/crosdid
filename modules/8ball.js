@@ -32,7 +32,7 @@ module.exports = {
   usage: '<question>',
   execute(message, args) {
     if (!args.length) {
-      return message.reply('You didn\'t ask a question!');
+      return message.reply('you didn\'t ask a question!');
     }
 
     if (args.join(' ').toLowerCase() == 'am i stupid?') {

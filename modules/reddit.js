@@ -32,7 +32,7 @@ module.exports = {
 
     const search = args.join(' ');
     if (search.length > 512) {
-      return message.reply('Your search query is too long!');
+      return message.reply('your search query is too long!');
     }
 
     // Put together data
@@ -59,7 +59,7 @@ module.exports = {
       })
       .catch((err) => {
         console.error(err);
-        return message.reply('There was an error while querying the reddit API!');
+        return message.reply('there was an error while querying the reddit API!');
       });
   },
 };

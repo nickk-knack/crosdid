@@ -17,7 +17,7 @@ module.exports = {
   cooldown: 1,
   execute(message, args) {
     // Ensure that the mention target isn't @everyone or @here
-    if (message.mentions.everyone) return message.reply('You cannot target @everyone/@here!');
+    if (message.mentions.everyone) return message.reply('you cannot target @everyone/@here!');
 
     // Don't need to get the user from the first argument, since it should be a mention
     // Shift off the unneeded argument

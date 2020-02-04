@@ -241,14 +241,14 @@ client.on('message', (msg) => {
   // Get the actual command object, check if it exists
   const command = client.commands.get(commandName) || client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
   if (!command) {
-    return msg.reply('That command does not exist!');
+    return msg.reply('that command does not exist!');
   }
 
   // Check if the command is in the guild's disabledCmdModules list
   if (msg.guild !== null && msg.guild.available) {
     const disabledCmdModules = db.get(`${msg.guild.id}.disabledCmdModules`).value();
     if (disabledCmdModules && disabledCmdModules.includes(command.name)) {
-      return msg.reply('That command does not exist!');
+      return msg.reply('that command does not exist!');
     }
   }
 
