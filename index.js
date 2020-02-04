@@ -40,7 +40,7 @@ const dbDefault = {
 
 // this is a cheesy change, requires that this plugin always be included...
 // however, it prevents duplicate code so yay -~40 lines from this file
-const { dbDefaultGuildObj } = require('./plugins/bot.js');
+const { dbDefaultGuildObj } = require('./modules/bot.js');
 
 const adapter = new FileSync(dbFileName, {
   defaultValue: dbDefault,
