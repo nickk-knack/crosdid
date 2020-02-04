@@ -13,7 +13,6 @@ const FileSync = require('lowdb/adapters/FileSync');
 const randomHex = require('random-hex');
 
 // Environment constants
-const prefix = process.env.PREFIX;
 const token = process.env.TOKEN;
 const port = process.env.PORT || 3000;
 const DEBUG = process.env.PRINT_DEBUG || false;
@@ -52,6 +51,9 @@ const adapter = new FileSync(dbFileName, {
 const db = low(adapter);
 client.db = db;
 console.log(`Loaded local database file from ${dbFileName}`);
+
+// Get prefix from db
+const prefix = db.get('commandPrefix').value();
 
 // Extra functions
 const getRandomFromArray = (array) => array[Math.floor(Math.random() * array.length)];
@@ -106,6 +108,11 @@ client.on('ready', () => {
         }
       });
     }
+  }
+
+  // Check if there are no operators listed. If so, notify the user
+  if (!db.get('operators').size().value()) {
+    console.log('WARNING: You have no operators listed in db.json, consider adding at least your discord user ID to the operators array.');
   }
 
   // Set the bot activity text
@@ -460,6 +467,19 @@ client.on('channelUpdate', (oldChannel, newChannel) => {
   announcementsChannel.send(embed);
 });
 
+// Disconnect event
+client.on('disconnect', (event) => {
+  console.log(`Bot disconnected ${event.wasClean ? 'cleanly' : 'unexpectedly'} with code ${event.code} for reason: "${event.reason}".`);
+
+  process.exitCode = event.code === 1000 ? 0 : event.code;
+  process.kill(process.pid, 'SIGTERM');
+});
+
+// Reconnecting event
+client.on('reconnecting', () => {
+  console.log('Bot is attemping at reconnecting...');
+});
+
 // Logging events
 client.on('error', (error) => console.error(error));
 client.on('warn', (warn) => console.warn(warn));
@@ -474,10 +494,16 @@ client.login(token);
 // Set up express webserver
 app.use(bodyParser.json());
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 
 app.get('/', (req, res) => {
   res.end('hello crosdid');
+});
+
+process.on('SIGTERM', () => {
+  server.close(() => {
+    console.log('Server shut down.');
+  });
 });
