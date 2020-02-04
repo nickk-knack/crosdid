@@ -12,8 +12,8 @@
     "type": "LISTENING",
     "text": "joe biden podcast"
   },
-  "global_bad_count": 0,
-  "global_good_count": 0,
+  "global_bad_count": 2,
+  "global_good_count": 7,
   "global_thank_count": 0,
   "625766841779879967": {
     "reactionNotify": false,
@@ -349,8 +349,8 @@
         ]
       }
     },
-    "good_count": 0,
-    "bad_count": 0,
+    "good_count": 7,
+    "bad_count": 2,
     "thank_count": 0
   },
   "140225766720798721": {
