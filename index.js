@@ -36,6 +36,9 @@ const dbDefault = {
     text: 'over my children',
     url: '',
   },
+  good_count: 0,
+  bad_count: 0,
+  thank_count: 0,
 };
 
 // this is a cheesy change, requires that this plugin always be included...

@@ -48,6 +48,9 @@ const dbDefaultGuildObj = {
       messages: [],
     },
   },
+  good_count: 0,
+  bad_count: 0,
+  thank_count: 0,
 };
 
 module.exports.dbDefaultGuildObj = dbDefaultGuildObj;

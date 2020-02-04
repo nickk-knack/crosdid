@@ -12,6 +12,9 @@
     "type": "LISTENING",
     "text": "joe biden podcast"
   },
+  "global_bad_count": 0,
+  "global_good_count": 0,
+  "global_thank_count": 0,
   "625766841779879967": {
     "reactionNotify": false,
     "secret_messages": {
@@ -345,7 +348,10 @@
           "new old emoji:"
         ]
       }
-    }
+    },
+    "good_count": 0,
+    "bad_count": 0,
+    "thank_count": 0
   },
   "140225766720798721": {
     "reactionNotify": false,
@@ -387,7 +393,10 @@
         "message_prepend": true,
         "messages": []
       }
-    }
+    },
+    "good_count": 0,
+    "bad_count": 0,
+    "thank_count": 0
   },
   "400513116376662017": {
     "reactionNotify": false,
@@ -429,7 +438,10 @@
         "message_prepend": true,
         "messages": []
       }
-    }
+    },
+    "good_count": 0,
+    "bad_count": 0,
+    "thank_count": 0
   },
   "459534426246873090": {
     "reactionNotify": false,
@@ -471,6 +483,9 @@
         "message_prepend": true,
         "messages": []
       }
-    }
+    },
+    "good_count": 0,
+    "bad_count": 0,
+    "thank_count": 0
   }
 }
