@@ -1,25 +1,21 @@
 # todo
 
-1. `bot.js` update guilds & users
-2. move more stuff from .env to db
+1. move more stuff from .env to db
    1. namely, prefix
-3. fakeperson - add address generation from fakeaddressgenerator?
-4. `quickpoll` - finish, fix the awaitReactions portion
-5. any other bot settings you want to add commands for?
-6. weather command, use owm/darksky stuff if you still have it
+2. fakeperson - add address generation from fakeaddressgenerator?
+3. `quickpoll` - finish, fix the awaitReactions portion
+4. any other bot settings you want to add commands for?
+5. weather command, use owm/darksky stuff if you still have it
    1. take zip as argument
    2. default to user location? idk if thats possible
    3. maybe default to bot location then
-7. Think about everything in the bot that is user controlled, check for exploits (`bot.js` might have one)
-8. Reimplement logging with `winston`
+6. Reimplement logging with `winston`
     1. Use `chalk` for coloring output?
     2. Point is going to be removing all `console.log` calls, eventually re-enable `no-console` in `.eslintrc.json`
-9. async all command modules?
-10. anywhere you try to access message.guild.id, check that you are in a guild first... too many crashes
-11. make all messages from the bot consistent across all files!
-12. Modify `good`/`bad`/`thank` command modules
+7. async all command modules?
+8. Modify `good`/`bad`/`thank` command modules
     1. increment a `good`/`bad`/`thank` counter in guild db
-13. Add `about` command module
+9. Add `about` command module
     1. display bot's ratio of good:bad for the guild (add check to only let this happen in guild)
     2. display number of times bot has been thanked
     3. display prefix (from db)
