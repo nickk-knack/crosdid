@@ -1,7 +1,8 @@
 {
   "globalDisabledCmdModules": [
     "pornhub",
-    "r34"
+    "r34",
+    "quickpoll"
   ],
   "operators": [
     "140225600966098944"
