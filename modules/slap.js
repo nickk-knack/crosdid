@@ -39,6 +39,6 @@ module.exports = {
       item = args.join(' ');
     }
 
-    message.channel.send(`*slaps ${user} with ${item}!*`);
+    message.channel.send(`\\*slaps ${user} with ${item}!\\*`);
   },
 };
