@@ -14,8 +14,8 @@
     "text": "joe biden podcast"
   },
   "global_bad_count": 2,
-  "global_good_count": 7,
-  "global_thank_count": 0,
+  "global_good_count": 8,
+  "global_thank_count": 1,
   "625766841779879967": {
     "reactionNotify": false,
     "secret_messages": {
@@ -350,9 +350,9 @@
         ]
       }
     },
-    "good_count": 7,
+    "good_count": 8,
     "bad_count": 2,
-    "thank_count": 0
+    "thank_count": 1
   },
   "140225766720798721": {
     "reactionNotify": false,
