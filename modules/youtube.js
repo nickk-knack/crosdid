@@ -88,6 +88,8 @@ module.exports = {
         return message.reply(`no results found for \`${query}\``);
       }
 
+      if (!res.length) return message.reply(`no results found for \`${query}\``);
+
       // If Discord ever supports adding videos/video links to embeds, then that would be cool
       const chosen = res[Math.floor(Math.random() * res.length)];
 
