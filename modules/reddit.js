@@ -68,7 +68,7 @@ module.exports = {
 
         const embed = new Discord.RichEmbed()
           .setTitle(`${result.subreddit_name_prefixed} - ${trim(result.title, 253 - result.subreddit_name_prefixed.length)}`)
-          .setDescription(result.is_self ? result.selftext : `[permalink](https://reddit.com${result.permalink})`)
+          .setDescription(result.is_self ? trim(result.selftext, 2048) : `[permalink](https://reddit.com${result.permalink})`)
           .setURL(result.is_self ? `https://reddit.com${result.permalink}` : result.url)
           .setAuthor(result.author, '', `https://reddit.com/u/${result.author}`)
           .setColor(randomHex.generate())
