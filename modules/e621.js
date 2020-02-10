@@ -4,6 +4,7 @@ const randomHex = require('random-hex');
 
 module.exports = {
   name: 'e621',
+  aliases: ['e6'],
   description: 'Search e621',
   args: true,
   usage: '<tags>',

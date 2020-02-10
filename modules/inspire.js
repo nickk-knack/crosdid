@@ -9,21 +9,20 @@ module.exports = {
   usage: '[xmas]',
   args: false,
   guildOnly: false,
-  cooldown: 7,
-  execute(message, args) {
-    let season = '';
-    if (args.length && args[0] == 'xmas') {
-      season = '&season=xmas';
-    }
-
-    fetch(`http://inspirobot.me/api?generate=true${season}`)
+  cooldown: 5,
+  async execute(message, args) {
+    fetch(`http://inspirobot.me/api?generate=true${args.length && args[0] === 'xmas' ? '&season=xmas' : ''}`)
       .then((res) => res.text())
       .then((data) => {
         const embed = new Discord.RichEmbed()
           .setColor(randomHex.generate())
           .setImage(data);
 
-        message.channel.send(embed);
+        message.channel.send(embed).catch(console.error);
+      })
+      .catch((err) => {
+        console.error(err);
+        message.reply(`I had trouble getting inspired... (${err.message})`);
       });
   },
 };

@@ -10,7 +10,7 @@ module.exports = {
   args: true,
   guildOnly: true,
   cooldown: 5,
-  async execute(message, args) {
+  execute(message, args) {
     // Get options and search query from args
     const timeFlagIndex = args.findIndex((val) => /^-t$|^--time$/giu.test(val));
     let pollTime = 60 * 60 * 1000; // 60 minutes, converted to ms
@@ -42,7 +42,7 @@ module.exports = {
       embed.addField(`Option ${emojiRegex.test(emojis[index]) ? emojis[index] : message.guild.emojis.find((e) => e.name === emojis[index])}`, val, true);
     });
 
-    message.channel.send(`This poll will end in ${pollTime / 1000 / 60} minutes, at ${Date.toISOString(Date.now() + pollTime)}`, embed)
+    message.channel.send(`This poll will end in ${pollTime / 1000 / 60} minutes, at ${new Date(Date.now() + pollTime).toString()}`, embed)
       .then((msg) => {
         emojis.forEach((e) => emojiRegex.test(e) ? msg.react(e).catch(console.error) : msg.react(message.guild.emojis.find((el) => el.name === e)).catch(console.error));
 

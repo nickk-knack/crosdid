@@ -2,8 +2,7 @@
   "commandPrefix": ".",
   "globalDisabledCmdModules": [
     "pornhub",
-    "r34",
-    "quickpoll"
+    "r34"
   ],
   "operators": [
     "140225600966098944"
