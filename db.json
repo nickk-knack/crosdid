@@ -2,8 +2,7 @@
   "commandPrefix": ".",
   "globalDisabledCmdModules": [
     "pornhub",
-    "r34",
-    "quickpoll"
+    "r34"
   ],
   "operators": [
     "140225600966098944"
@@ -13,7 +12,7 @@
     "type": "WATCHING",
     "text": "hot lesbian xxx big bitches long leg porn free 2020 .org"
   },
-  "global_bad_count": 7,
+  "global_bad_count": 8,
   "global_good_count": 8,
   "global_thank_count": 1,
   "625766841779879967": {
@@ -352,7 +351,7 @@
       }
     },
     "good_count": 8,
-    "bad_count": 7,
+    "bad_count": 8,
     "thank_count": 1
   },
   "140225766720798721": {
