@@ -266,10 +266,12 @@ client.on('message', (msg) => {
 
   // Execute command
   try {
+    msg.channel.startTyping();
     command.execute(msg, args);
+    msg.channel.stopTyping();
   } catch (error) {
     console.error(error);
-    msg.reply('there was an error executing that command :(');
+    msg.reply(`an error occurred while executing the \`${commandName}\` command: ${error.message}`);
   }
 });
 
