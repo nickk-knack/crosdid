@@ -272,6 +272,7 @@ client.on('message', (msg) => {
   } catch (error) {
     console.error(error);
     msg.reply(`an error occurred while executing the \`${commandName}\` command: ${error.message}`);
+    msg.channel.stopTyping(true);
   }
 });
 
