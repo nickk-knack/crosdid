@@ -13,13 +13,9 @@
 6. Reimplement logging with `winston`
    1. Use `chalk` for coloring output?
    2. Point is going to be removing all `console.log` calls, eventually re-enable `no-console` in `.eslintrc.json`
-7. async all command modules?
-8. replace `timethat` with `moment`?
-   1. check `moment.duration()` of a moment variable for `now` .diff another moment variable
-   2. i.e. in `about` for creation timestamp
-   3. [this is what im referencing](https://stackoverflow.com/questions/18623783/get-the-time-difference-between-two-datetimes/18624295)
-9. `alexa` command - check comments
-10. `e621` - getting 403 forbidden on requests
+7. only async command modules that use await
+8. `alexa` command - check comments
+9. `e621` - getting 403 forbidden on requests
 
 ## Links
 
