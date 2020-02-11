@@ -38,6 +38,8 @@ module.exports = {
       .setThumbnail(message.client.user.avatarURL)
       .setAuthor(message.client.user.tag, message.client.user.displayAvatarURL)
       .setTimestamp(Date.now())
+      .setFooter('created with 💖 by nick')
+      .setURL('https://github.com/nickk-knack/crosdid')
       .addField('How long have I been alive?', durStr, true)
       .addField('Number of guilds I am in', message.client.guilds.size, true)
       .addField('Am I overall good or bad?', `I am ${Math.max(badPercent, goodPercent).toFixed(4) * 100}% ${badPercent > goodPercent ? 'bad...' : 'good!'}`, true)
