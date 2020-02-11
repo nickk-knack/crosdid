@@ -292,7 +292,7 @@
         ]
       },
       {
-        "trigger": "\\s!\\s",
+        "trigger": "^!$",
         "responses": [
           "❗"
         ]
