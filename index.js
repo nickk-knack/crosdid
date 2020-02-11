@@ -86,7 +86,7 @@ console.log(`\t\tCommand modules loaded. Skipped the following: ${db.get('global
 console.log('\tLoading events...');
 
 // Ready event
-client.on('ready', () => {
+client.once('ready', () => {
   console.log(`\tLogged in as ${client.user.tag}!`);
 
   // Go through joined guilds, make sure there is a per-guild config in db
