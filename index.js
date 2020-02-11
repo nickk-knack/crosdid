@@ -170,13 +170,14 @@ client.on('message', (msg) => {
 
     // Guild-specific, phrase-activated messages
     const enablePhrases = db.get(`${msg.guild.id}.enablePhrases`).value();
-    const lowerCaseContent = msg.content.toLowerCase();
     if (enablePhrases) {
       const guildPhrases = db.get(`${msg.guild.id}.phrases`).value();
 
       if (typeof guildPhrases !== 'undefined') {
         for (const guildPhrase of guildPhrases) {
-          if (lowerCaseContent.includes(guildPhrase.trigger) && guildPhrase.responses) {
+          const triggerRegex = new RegExp(guildPhrase.trigger, 'giu');
+
+          if (triggerRegex.test(msg.content) && guildPhrase.responses) {
             msg.channel.send(getRandomFromArray(guildPhrase.responses));
           }
         }
@@ -185,7 +186,7 @@ client.on('message', (msg) => {
 
     // Ass-fixer
     const assMessages = [];
-    const assTokens = lowerCaseContent.match(/\w*[\s-]ass\s\w*/giu);
+    const assTokens = msg.content.match(/\w*[\s-]ass\s\w*/giu);
     if (assTokens && assTokens !== null) {
       for (const assToken of assTokens) {
         const fixedAss = assToken.match(/ass\s\w*/gu)[0].replace(/\s/u, '-');
