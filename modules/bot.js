@@ -2,6 +2,10 @@ const Discord = require('discord.js');
 const randomHex = require('random-hex');
 const { stripIndent } = require('common-tags');
 
+const validActivities = ['PLAYING', 'STREAMING', 'LISTENING', 'WATCHING'];
+const validAnnouncements = ['channel_create', 'channel_delete', 'channel_update', 'emoji_create', 'emoji_delete', 'emoji_update'];
+const overrideableAnnouncements = ['emoji_create', 'emoji_delete', 'emoji_update'];
+
 const dbDefaultGuildObj = {
   reactionNotify: false,
   secret_messages: {
@@ -74,7 +78,23 @@ module.exports = {
                              disable |
                              chance <get | 0.0 - 1.0>>> |
 <reactionNotify <enable | disable>> |
-<update <guilds | users>>`,
+<update <guilds | users>
+<announcements <channel <announcement channel name>>|
+               <enable/disable <channel_create |
+                                channel_delete |
+                                channel_update |
+                                emoji_create |
+                                emoji_delete |
+                                emoji_update>> |
+               <addmessage <channel_create |
+                            channel_delete |
+                            channel_update |
+                            emoji_create |
+                            emoji_delete |
+                            emoji_update> <message>> |
+               <overridechan <emoji_create |
+                              emoji_delete |
+                              emoji_update> <emoji channel name>>>`,
   args: true,
   minArgsLength: 2,
   guildOnly: true,
@@ -86,8 +106,6 @@ module.exports = {
     const subcommandArg = args.shift().toLowerCase();
 
     if (subcommand === 'activity') {
-      if (!args.length) return message.reply('you did not provide enough arguments to execute that command!');
-
       switch (subcommandArg) {
         case 'enable':
           db.set('activitySettings.enabled', true).write();
@@ -98,8 +116,9 @@ module.exports = {
           message.reply('successfully **disabled** the bot\'s activity message.');
           break;
         case 'type': {
+          if (!args.length) return message.reply('you did not provide enough arguments to execute that command!');
           const type = args.shift().toUpperCase();
-          if (!['PLAYING', 'STREAMING', 'LISTENING', 'WATCHING'].includes(type)) return message.reply(`invalid activity type: "${type}"`);
+          if (!validActivities.includes(type)) return message.reply(`invalid activity type: "${type}"`);
 
           db.set('activitySettings.type', type).write();
 
@@ -107,6 +126,7 @@ module.exports = {
           break;
         }
         case 'text': {
+          if (!args.length) return message.reply('you did not provide enough arguments to execute that command!');
           const text = args.join(' ').trim();
           db.set('activitySettings.text', text).write();
 
@@ -316,6 +336,56 @@ module.exports = {
         }
         default:
           return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: guilds, users)`);
+      }
+    } else if (subcommand === 'announcements') {
+      if (!args.length) return message.reply('you did not provide enough arguments to execute that command!');
+
+      switch (subcommandArg) {
+        case 'channel': {
+          const channelName = args.shift();
+          if (message.guild.channels.find((c) => c.name === channelName) === null) return message.reply(`${channelName} does not exist in this guild!`);
+
+          db.set(`${message.guild.id}.announcements.channel`, channelName).write();
+          return message.reply(`successfully set the announcements channel to #${channelName}`);
+        }
+        case 'enable': {
+          const announcement = args.shift().toLowerCase();
+          if (!validAnnouncements.includes(announcement)) return message.reply(`invalid announcement event: ${announcement}`);
+
+          db.set(`${message.guild.id}.announcements.${announcement}.enabled`, true);
+          return message.reply(`successfully enabled the \`${announcement}\` event for this guild.`);
+        }
+        case 'disable': {
+          const announcement = args.shift().toLowerCase();
+          if (!validAnnouncements.includes(announcement)) return message.reply(`invalid announcement event: ${announcement}`);
+
+          db.set(`${message.guild.id}.announcements.${announcement}.enabled`, false);
+          return message.reply(`successfully disabled the \`${announcement}\` event for this guild.`);
+        }
+        case 'addmessage': {
+          const announcement = args.shift().toLowerCase();
+          if (!validAnnouncements.includes(announcement)) return message.reply(`invalid announcement event: ${announcement}`);
+
+          if (!args.length) return message.reply("you didn't provide a message to be added!");
+          const newMessage = args.join(' ');
+          if (/^\s+$/giu.test(newMessage)) return message.reply(`your message can't be empty! ("${newMessage}")`);
+
+          db.get(`${message.guild.id}.announcements.${announcement}.messages`).push(newMessage).write();
+          return message.reply(`successfully added "${newMessage}" as a message for the ${announcement} event`);
+        }
+        case 'overridechan': {
+          const announcement = args.shift().toLowerCase();
+          if (!overrideableAnnouncements.includes(announcement)) return message.reply(`invalid overrideable announcement event: ${announcement}`);
+
+          if (!args.length) return message.reply("you didn't provide a channel name!");
+          const channelName = args.shift();
+          if (message.guild.channels.find((c) => c.name === channelName) === null) return message.reply(`${channelName} does not exist in this guild!`);
+
+          db.set(`${message.guild.id}.announcements.${announcement}.channel_override`, channelName).write();
+          return message.reply(`successfully overrode the announcements channel for ${announcement} to #${channelName}`);
+        }
+        default:
+          return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: channel, enable, disable, addmessage, overridechan)`);
       }
     } else {
       return message.reply(`\`${subcommand}\` is not a valid subcommand!`);
