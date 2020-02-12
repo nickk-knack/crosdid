@@ -26,18 +26,15 @@ module.exports = {
             const json = JSON.parse(JSON.stringify(result));
             const posts = json.posts.post;
 
-            console.log(json);
-            console.log(json.posts.$);
-            if (!posts.length) {
-              return message.channel.send(`No results found for **${query}**`);
-            }
+            if (!posts.length) return message.channel.send(`No results found for **${query}**`);
+
             const randIndex = Math.floor(Math.random() * posts.length);
             const fileUrl = posts[randIndex].$.file_url;
-
             const embed = new Discord.RichEmbed()
               .setColor(randomHex.generate())
               .setTitle(args.join(' '))
               .setImage(fileUrl);
+
             message.channel.send(embed);
           })
           .catch((err) => {
