@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 
 module.exports = {
   name: 'fakeperson',
-  aliases: ['fp', 'porson', 'porsen', 'persen', 'porsin', 'fakedude'],
+  aliases: ['fp', 'porson', 'porsen', 'persen', 'porsin', 'fakedude', 'fakeman', 'fh'],
   description: 'Sends an AI generated person directly to chat.',
   args: false,
   cooldown: 3,
