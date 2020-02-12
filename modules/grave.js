@@ -1,6 +1,5 @@
-// const { RichEmbed } = require('discord.js');
-// const randomHex = require('random-hex');
-// const fetch = require('node-fetch');
+const { Attachment } = require('discord.js');
+const fetch = require('node-fetch');
 
 module.exports = {
   name: 'grave',
@@ -10,26 +9,22 @@ module.exports = {
   guildOnly: false,
   cooldown: 5,
   execute(message, args) {
-    console.log('Args:', args);
     const reparsedArgs = args.join(' ').split('"').filter((val) => !/^\s?$/giu.test(val));
-    console.log('Re-parsed args:', reparsedArgs);
-    let url = `http://www.tombstonebuilder.com/generate.php?top1=${reparsedArgs.shift()}`;
+    let url = `http://www.tombstonebuilder.com/generate.php?top1=${reparsedArgs.shift().replace(/\s+/giu, '+')}`;
 
-    url += `&top2=${'line 2'}&top3=${'line3'}&top4=${'line 4'}&sp=`;
+    let curLine = 1;
+    while (reparsedArgs.length) url += `&top${++curLine}=${reparsedArgs.shift().replace(/\s+/giu, '+')}`;
+    url += '&sp=';
 
-    console.log(url);
-    // fetch(url)
-    //   .then((res) => res.text())
-    //   .then((text) => {
-    //     const embed = new RichEmbed()
-    //       .setColor(randomHex.generate())
-    //       .setImage(text);
-
-    //     message.reply(embed).catch(console.error);
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //     message.reply(`an error occurred while fetching that gravestone: \`${err.message}\``);
-    //   });
+    fetch(url)
+      .then((res) => res.buffer())
+      .then((buf) => {
+        const attachment = new Attachment(buf, 'gravestone.png');
+        message.reply(attachment).catch(console.error);
+      })
+      .catch((err) => {
+        console.error(err);
+        message.reply(`an error occurred while fetching that gravestone: \`${err.message}\``);
+      });
   },
 };
