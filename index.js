@@ -271,7 +271,7 @@ client.on('message', (msg) => {
   try {
     msg.channel.startTyping();
     command.execute(msg, args);
-    msg.channel.stopTyping();
+    msg.channel.stopTyping(true);
   } catch (error) {
     console.error(error);
     msg.reply(`an error occurred while executing the \`${commandName}\` command: ${error.message}`);
