@@ -1,4 +1,5 @@
-const Discord = require('discord.js');
+const { Attachment } = require('discord.js');
+const randomHex = require('random-hex');
 const fetch = require('node-fetch');
 
 module.exports = {
@@ -13,17 +14,17 @@ module.exports = {
     fetch(personUrl)
       .then((res) => res.buffer())
       .then((buffer) => {
-        const attachment = new Discord.Attachment(buffer, 'fakeperson.png');
+        const attachment = new Attachment(buffer, 'fakeperson.png');
 
         message.channel.send({
-          files: [cattachment],
+          files: [attachment],
           embed: {
-            title: randomMessage,
             image: {
               url: 'attachment://fakeperson.png',
             },
             color: parseInt(randomHex.generate(), 16),
           },
+        });
       })
       .catch((err) => {
         console.error(err);
