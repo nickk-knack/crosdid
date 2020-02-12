@@ -24,12 +24,10 @@ module.exports = {
         parser(body.toString('utf8'))
           .then((result) => {
             const json = JSON.parse(JSON.stringify(result));
-            const posts = json.posts.post;
+            if (json.posts.$.count === '0') return message.channel.send(`No results found for **${query}**`);
 
-            if (!posts.length) return message.channel.send(`No results found for **${query}**`);
-
-            const randIndex = Math.floor(Math.random() * posts.length);
-            const fileUrl = posts[randIndex].$.file_url;
+            const { post } = json.posts;
+            const fileUrl = post[Math.floor(Math.random() * post.length)].$.file_url;
             const embed = new Discord.RichEmbed()
               .setColor(randomHex.generate())
               .setTitle(args.join(' '))
