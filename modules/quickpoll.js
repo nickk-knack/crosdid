@@ -1,6 +1,7 @@
 const { RichEmbed } = require('discord.js');
 const randomHex = require('random-hex');
-const emojiRegex = (require('emoji-regex/es2015'))();
+// const emojiRegex = (require('emoji-regex/es2015'))();
+const emojiRegex = /^<:\w+:\d+>$/giu;
 
 module.exports = {
   name: 'quickpoll',
@@ -32,25 +33,28 @@ module.exports = {
     if (typeof emojis === 'undefined') return message.reply('you forgot to add a list of reactions');
     if (responses.length !== emojis.length) return message.reply(`you fool! You only provided ${emojis.length} emoji options for ${responses.length} questions!`);
 
-    console.log(title, responses, emojis);
+    console.log('title:', title, '\nresponses:', responses, '\nemojis:', emojis);
 
     const embed = new RichEmbed()
       .setColor(randomHex.generate())
       .setTitle(title);
 
     responses.forEach((val, index) => {
-      embed.addField(`Option ${emojiRegex.test(emojis[index]) ? emojis[index] : message.guild.emojis.find((e) => e.name === emojis[index])}`, val, true);
+      embed.addField(`Option: ${emojiRegex.test(emojis[index]) ? message.guild.emojis.find((e) => e.name === emojis[index].split(':')[1]) : emojis[index]}`, val, true);
     });
 
     message.channel.send(`This poll will end in ${pollTime / 1000 / 60} minutes, at ${new Date(Date.now() + pollTime).toString()}`, embed)
       .then((msg) => {
-        emojis.forEach((e) => emojiRegex.test(e) ? msg.react(e).catch(console.error) : msg.react(message.guild.emojis.find((el) => el.name === e)).catch(console.error));
+        for (const emoji of emojis) {
+          msg.react(emojiRegex.test(emoji) ? message.guild.emojis.find((e) => e.name === emoji.split(':')[1]) : emoji).catch(console.error);
+        }
 
         msg.awaitReactions((reaction) => emojis.includes(reaction.emoji), { time: pollTime })
           .then((collected) => {
+            console.log('Collected:', collected);
             const winningReacts = collected.sort((a, b) => a.count - b.count).filter((val, index, arr) => val === arr[arr.length - 1]);
             // todo: winning reacts clearly doesnt work correctly
-            console.log(winningReacts);
+            console.log('Winner:', winningReacts);
 
             if (winningReacts.length > 1) {
               // tie between some reacts
