@@ -296,6 +296,24 @@
         "responses": [
           "❗"
         ]
+      },
+      {
+        "trigger": "^!!$",
+        "responses": [
+          "‼️"
+        ]
+      },
+      {
+        "trigger": "^!\\?$",
+        "responses": [
+          "⁉️"
+        ]
+      },
+      {
+        "trigger": "^\\?$",
+        "responses": [
+          "❓"
+        ]
       }
     ],
     "announcements": {
