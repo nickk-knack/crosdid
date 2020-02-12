@@ -15,7 +15,15 @@ module.exports = {
       .then((buffer) => {
         const attachment = new Discord.Attachment(buffer, 'fakeperson.png');
 
-        message.channel.send('', attachment).catch(console.error);
+        message.channel.send({
+          files: [cattachment],
+          embed: {
+            title: randomMessage,
+            image: {
+              url: 'attachment://fakeperson.png',
+            },
+            color: parseInt(randomHex.generate(), 16),
+          },
       })
       .catch((err) => {
         console.error(err);
