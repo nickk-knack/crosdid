@@ -24,6 +24,7 @@ module.exports = {
         parser(body.toString('utf8'))
           .then((result) => {
             const json = JSON.parse(JSON.stringify(result));
+            console.log(json);
             if (json.posts.$.count === '0') return message.channel.send(`No results found for **${query}**`);
 
             const { post } = json.posts;
