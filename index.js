@@ -19,7 +19,9 @@ const DEBUG = process.env.PRINT_DEBUG || false;
 const dbFileName = process.env.DB_FILE_NAME || 'db.json';
 
 // Discord.js globals
-const client = new Discord.Client();
+const client = new Discord.Client({
+  disabledEvents: ['TYPING_START'],
+});
 client.commands = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 
@@ -136,7 +138,7 @@ client.on('message', (msg) => {
     // This is a regular message, do any other processing on it
 
     // Ignore messages from discord/bots (especially yourself), and don't process non-guild messages
-    if (msg.system || msg.author.bot || msg.guild === null || !msg.guild.available) return;
+    if (msg.system || msg.author.bot || msg.guild === null || !msg.guild.available || msg.webhookID) return;
 
     // Secret messages & reactions
     const dbUser = db.get(`${msg.guild.id}.users`).find({ id: msg.author.id });
