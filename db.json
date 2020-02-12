@@ -12,8 +12,8 @@
     "type": "WATCHING",
     "text": "hot lesbian xxx big bitches long leg porn free 2020 .org"
   },
-  "global_bad_count": 11,
   "global_good_count": 9,
+  "global_bad_count": 11,
   "global_thank_count": 1,
   "625766841779879967": {
     "reactionNotify": false,
@@ -324,7 +324,6 @@
       "emoji_create": {
         "enabled": true,
         "channel_override": "emoji-town",
-        "message_prepend": true,
         "messages": [
           "hot off the presses:",
           "brand new epic emoji:",
@@ -334,7 +333,6 @@
       "emoji_delete": {
         "enabled": true,
         "channel_override": "emoji-town",
-        "message_prepend": true,
         "messages": [
           "this emoji sucked, it's gone now:",
           "rip emoji:",

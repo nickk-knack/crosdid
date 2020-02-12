@@ -295,7 +295,8 @@ client.on('emojiCreate', (emoji) => {
   const embed = new Discord.RichEmbed()
     .setColor(randomHex.generate())
     .setImage(emoji.url)
-    .setTitle(settings.message_prepend ? `${title} ${emoji.name}` : `${emoji.name} ${title}`);
+    .setTitle(title)
+    .setFooter(emoji.name);
 
   emojiChannel.send(embed).then((message) => message.react(emoji));
 });
@@ -318,7 +319,8 @@ client.on('emojiDelete', (emoji) => {
   const embed = new Discord.RichEmbed()
     .setColor(randomHex.generate())
     .setImage(emoji.url)
-    .setTitle(settings.message_prepend ? `${title} ${emoji.name}` : `${emoji.name} ${title}`);
+    .setTitle(title)
+    .setFooter(emoji.name);
 
   emojiChannel.send(embed);
 });
