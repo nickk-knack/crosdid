@@ -1,7 +1,6 @@
 const { RichEmbed } = require('discord.js');
 const randomHex = require('random-hex');
-// const emojiRegex = (require('emoji-regex/es2015'))();
-const emojiRegex = /^<:\w+:\d+>$/giu;
+const emojiRegex = /^<:.+:\d+>$/gu;
 
 module.exports = {
   name: 'quickpoll',
@@ -11,7 +10,7 @@ module.exports = {
   args: true,
   guildOnly: true,
   cooldown: 5,
-  execute(message, args) {
+  async execute(message, args) {
     // Get options and search query from args
     const timeFlagIndex = args.findIndex((val) => /^-t$|^--time$/giu.test(val));
     let pollTime = 60 * 60 * 1000; // 60 minutes, converted to ms
@@ -23,7 +22,7 @@ module.exports = {
       pollTime = parsedTime * 60 * 1000;
     }
 
-    const reparsedArgs = args.join(' ').split('"').filter((val) => !/^\s?$/giu.test(val));
+    const reparsedArgs = args.join(' ').split('"').filter((val) => !(/^\s?$/giu.test(val)));
     const title = reparsedArgs.shift();
     const responses = reparsedArgs.shift().split(/\s*\|\s*/giu);
     const emojis = reparsedArgs.shift().split(/\s*\|\s*/giu);
@@ -33,42 +32,44 @@ module.exports = {
     if (typeof emojis === 'undefined') return message.reply('you forgot to add a list of reactions');
     if (responses.length !== emojis.length) return message.reply(`you fool! You only provided ${emojis.length} emoji options for ${responses.length} questions!`);
 
-    console.log('title:', title, '\nresponses:', responses, '\nemojis:', emojis);
+    try {
+      const embed = new RichEmbed()
+        .setColor(randomHex.generate())
+        .setTitle(title);
 
-    const embed = new RichEmbed()
-      .setColor(randomHex.generate())
-      .setTitle(title);
+      responses.forEach((val, index) => {
+        embed.addField(`Option: ${emojis[index]}`, val, true);
+      });
 
-    responses.forEach((val, index) => {
-      embed.addField(`Option: ${emojiRegex.test(emojis[index]) ? message.guild.emojis.find((e) => e.name === emojis[index].split(':')[1]) : emojis[index]}`, val, true);
-    });
+      const sent = await message.channel.send(`This poll will end in ${pollTime / 1000 / 60} minutes, at ${new Date(Date.now() + pollTime).toString()}`, embed);
 
-    message.channel.send(`This poll will end in ${pollTime / 1000 / 60} minutes, at ${new Date(Date.now() + pollTime).toString()}`, embed)
-      .then((msg) => {
-        for (const emoji of emojis) {
-          msg.react(emojiRegex.test(emoji) ? message.guild.emojis.find((e) => e.name === emoji.split(':')[1]) : emoji).catch(console.error);
-        }
+      for (const emoji of emojis) {
+        const guildEmoji = emojiRegex.test(emoji);
+        const react = guildEmoji ? message.guild.emojis.find((e) => e.toString() === emoji) : emoji;
 
-        msg.awaitReactions((reaction) => emojis.includes(reaction.emoji), { time: pollTime })
-          .then((collected) => {
-            console.log('Collected:', collected);
-            const winningReacts = collected.sort((a, b) => a.count - b.count).filter((val, index, arr) => val === arr[arr.length - 1]);
-            // todo: winning reacts clearly doesnt work correctly
-            console.log('Winner:', winningReacts);
+        await sent.react(react).catch((e) => {
+          console.error(react, e);
+        });
+      }
 
-            if (winningReacts.length > 1) {
-              // tie between some reacts
-              msg.edit(`There was a tie between ${winningReacts.map((react) => `"**${responses[emojis.indexOf(react.emoji)]}**"`).join(', ')}, with each of ${winningReacts.map((react) => react.emoji).join(', ')} getting **${winningReacts[0].count} votes**`)
-                .catch(console.error);
-            } else if (winningReacts.length === 1) {
-              const winningReact = winningReacts.shift();
-              msg.edit(`The winning choice is "**${responses[emojis.indexOf(winningReact.emoji)]}**" with **${winningReact.count}** ${winningReact.emoji} **votes**`)
-                .catch(console.error);
-            } else {
-              msg.edit('There were no winners????').catch(console.error);
-            }
-          });
-      })
-      .catch(console.error);
+      const collected = await sent.awaitReactions((reaction) => emojis.includes(reaction.emoji.toString()), { time: pollTime });
+
+      const winningReacts = collected.sort((a, b) => a.count - b.count).filter((val, index, col) => val.count === col.last().count && val.count > 1);
+      console.log('Winners:', winningReacts);
+
+      if (winningReacts.size > 1) {
+        // tie between some reacts
+        sent.edit(`There was a tie between ${winningReacts.map((react) => `"**${responses[emojis.indexOf(react.emoji.toString())]}**"`).join(', ')}, with each getting **${winningReacts[0].count - 1} votes**`)
+          .catch(console.error);
+      } else if (winningReacts.size === 1) {
+        const winningReact = winningReacts.first();
+        sent.edit(`The winning choice is "**${responses[emojis.indexOf(winningReact.emoji.toString())]}**" with **${winningReact.count - 1} votes**`)
+          .catch(console.error);
+      } else {
+        sent.edit('There were no winners????').catch(console.error);
+      }
+    } catch (e) {
+      console.error(e);
+    }
   },
 };
