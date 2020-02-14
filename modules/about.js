@@ -1,6 +1,8 @@
 const { RichEmbed } = require('discord.js');
 const randomHex = require('random-hex');
 const moment = require('moment');
+const momentDurationFormatSetup = require('moment-duration-format');
+momentDurationFormatSetup(moment);
 
 module.exports = {
   name: 'about',
@@ -20,17 +22,8 @@ module.exports = {
 
     const createdMoment = moment(message.client.user.createdTimestamp);
     const nowMoment = moment();
-    const life = moment.duration(createdMoment.diff(nowMoment));
-    let durStr = '';
-    if (life.years()) durStr += `${Math.abs(life.years())} year${Math.abs(life.years()) > 1 ? 's' : ''}, `;
-    if (life.months()) durStr += `${Math.abs(life.months())} month${Math.abs(life.months()) > 1 ? 's' : ''}, `;
-    if (life.weeks()) durStr += `${Math.abs(life.weeks())} week${Math.abs(life.weeks()) > 1 ? 's' : ''}, `;
-    if (life.days()) durStr += `${Math.abs(life.days())} day${Math.abs(life.days()) > 1 ? 's' : ''}, `;
-    if (life.hours()) durStr += `${Math.abs(life.hours())} hour${Math.abs(life.hours()) > 1 ? 's' : ''}, `;
-    if (life.minutes()) durStr += `${Math.abs(life.minutes())} minute${Math.abs(life.minutes()) > 1 ? 's' : ''}, `;
-    if (life.seconds()) durStr += `${Math.abs(life.seconds())} second${Math.abs(life.seconds()) > 1 ? 's' : ''}.`;
-
-    if (createdMoment.month() === nowMoment.month() && createdMoment.day() === nowMoment.day()) durStr += ' It is currently my birthday!';
+    const life = moment.duration(nowMoment.diff(createdMoment));
+    const lifeStr = life.format('Y [years], M [months], W [weeks], D [days], h [hours], m [minutes], s [seconds]');
 
     const embed = new RichEmbed()
       .setColor(randomHex.generate())
@@ -40,10 +33,12 @@ module.exports = {
       .setTimestamp(Date.now())
       .setFooter('created with 💖 by nick')
       .setURL('https://github.com/nickk-knack/crosdid')
-      .addField('How long have I been alive?', durStr, true)
+      .addField('How long have I been alive?', `${lifeStr} ago.`, true)
       .addField('Number of guilds I am in', message.client.guilds.size, true)
       .addField('Am I overall good or bad?', `I am ${Math.max(badPercent, goodPercent).toFixed(4) * 100}% ${badPercent > goodPercent ? 'bad...' : 'good!'}`, true)
       .addField("Total number of times I've been thanked 😇", globalThankCount, true);
+
+    if (createdMoment.month() === nowMoment.month() && createdMoment.day() === nowMoment.day()) embed.addField('🎂 **Happy Birthday to Me!** 🎂', `I just turned **${life.years()}** years old.`, true);
 
     if (typeof message.guild !== 'undefined' && message.guild.available) {
       embed
