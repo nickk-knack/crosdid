@@ -11,9 +11,9 @@
     "type": "WATCHING",
     "text": "the world burn"
   },
-  "global_good_count": 9,
+  "global_good_count": 13,
   "global_bad_count": 12,
-  "global_thank_count": 1,
+  "global_thank_count": 8,
   "625766841779879967": {
     "reactionNotify": false,
     "secret_messages": {
@@ -365,9 +365,9 @@
         ]
       }
     },
-    "good_count": 9,
+    "good_count": 13,
     "bad_count": 12,
-    "thank_count": 1
+    "thank_count": 8
   },
   "140225766720798721": {
     "reactionNotify": false,
