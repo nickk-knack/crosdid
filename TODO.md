@@ -39,6 +39,8 @@
 1. `quickpoll`
    1. winningReacts may or may not be broken still
    2. emojiRegex may be failing, something is causing guild emojis to be passed through as a regular emoji (~line 50)
+      1. can't really find a pattern to it
+   3. look around at other projects using discord.js, see if this (or similar) is implemented
 2. `e621`
    1. getting 403 forbidden on requests
    2. also look into arg parsing
