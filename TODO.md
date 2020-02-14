@@ -6,7 +6,14 @@
    1. Use `chalk` for coloring output?
    2. Point is going to be removing all `console.log` calls, eventually re-enable `no-console` in `.eslintrc.json`
 2. only async command modules that use await
-3. update discord.js to v12
+   1. could update some commands to switch from using promise syntax to using async/await syntax
+   2. should prob do that on a separate branch tho
+   3. keep in mind, you will need to put it all in a try/catch block
+3. use `querystring` (native to node) to create query strings for requests
+   1. especially in `urban`
+4. should probably go through and rethink error handling in command modules
+   1. throw error objects and handle them in client.on('message') instead of console.error + message.reply each time you should just be throwing
+5. update discord.js to v12
    1. going to be an absolute **doozy**
 
 ## New Commands
@@ -24,19 +31,27 @@
 6. unicode text fucker, given input perform replacements on text to get funky text
 7. `ask` - based on question form, give a quasirealistic answer (speech processing???)
 8. `remind` - set a reminder for a user, store info for reminder in db for keeping them when offline
-9. ps name gen
+9. `imageflip` (or similar) - meme making shit
+10. ps name gen
 
 ## Bug fixes
 
-1. `quickpoll` - fix the awaitReactions portion
-2. `e621` - getting 403 forbidden on requests, also look into arg parsing
-3. `b` - might have trouble with double b's, just test the regex shit
+1. `quickpoll`
+   1. winningReacts may or may not be broken still
+   2. emojiRegex may be failing, something is causing guild emojis to be passed through as a regular emoji (~line 50)
+2. `e621`
+   1. getting 403 forbidden on requests
+   2. also look into arg parsing
+3. `b`
+   1. might have trouble with double b's
+   2. just test the regex shit
 
 ## Command Updates
 
 1. `fakeperson` - add address generation from fakeaddressgenerator?
 2. `alexa` - check comments
 3. `bot` - set username
+4. `quickpoll` - use moment, add try/catches where necessary for async/await stuff
 
 ## Links
 
