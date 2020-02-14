@@ -129,7 +129,7 @@ client.once('ready', () => {
 });
 
 // Message event (command processing)
-client.on('message', (msg) => {
+client.on('message', async (msg) => {
   // Command needs to start with prefix
   const prefixRegex = new RegExp(`^(<@!?${client.user.id}> |\\${prefix})\\s*`, 'u');
 
