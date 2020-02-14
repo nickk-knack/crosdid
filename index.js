@@ -492,6 +492,7 @@ client.on('reconnecting', () => {
 client.on('error', (error) => console.error(error));
 client.on('warn', (warn) => console.warn(warn));
 // if (DEBUG) client.on('debug', (info) => console.info(info));
+process.on('uncaughtException', (error) => console.error(error));
 
 console.log('\t\tEvents loaded.');
 
@@ -514,4 +515,6 @@ process.on('SIGTERM', () => {
   server.close(() => {
     console.log('Server shut down.');
   });
+
+  client.destroy().then(() => console.log('Client shut down.'));
 });
