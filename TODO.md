@@ -13,26 +13,29 @@
    1. especially in `urban`
 4. should probably go through and rethink error handling in command modules
    1. throw error objects and handle them in client.on('message') instead of console.error + message.reply each time you should just be throwing
-5. update discord.js to v12
+5. re-enable, test, fix reactionNotify functionality
+6. update discord.js to v12
    1. going to be an absolute **doozy**
 
 ## New Commands
 
 1. Add back `prefix` command from old discord bot, read from db
    1. allow setting prefix from here, because fuck adding that to the already too-big bot command
-2. `weather` - use darksky stuff if you still have it
+2. `reactionNotify` - let users enable/disable reactionNotify on an individual basis
+   1. Will need to add to base user db object
+3. `weather` - use darksky stuff if you still have it
    1. `darkskyjs`
    2. take zip as argument
    3. default to user location? idk if thats possible
    4. maybe default to bot location then
-3. look into KSoft APIs for commands
-4. `amazon` - search amazon for items
-5. `quote` - generate and send a random quote? might be dumb idk
-6. unicode text fucker, given input perform replacements on text to get funky text
-7. `ask` - based on question form, give a quasirealistic answer (speech processing???)
-8. `remind` - set a reminder for a user, store info for reminder in db for keeping them when offline
-9. `imageflip` (or similar) - meme making shit
-10. ps name gen
+4. look into KSoft APIs for commands
+5. `amazon` - search amazon for items
+6. `quote` - generate and send a random quote? might be dumb idk
+7. unicode text fucker, given input perform replacements on text to get funky text
+8. `ask` - based on question form, give a quasirealistic answer (speech processing???)
+9. `remind` - set a reminder for a user, store info for reminder in db for keeping them when offline
+10. `imageflip` (or similar) - meme making shit
+11. ps name gen
 
 ## Bug fixes
 
