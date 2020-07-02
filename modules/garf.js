@@ -35,7 +35,7 @@ module.exports = {
 
       iterations++;
 
-      if (hexString.length === 60) {
+      if (hexString.length === SLIDER_COUNT * 2) {
         // Break loop, it's valid
         validString = true;
       } else {
