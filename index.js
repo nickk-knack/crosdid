@@ -357,6 +357,11 @@ client.on('messageReactionAdd', (reaction, user) => {
   // Any other reaction processing goes here:
   // (i.e., giving a user a role on a react)
 
+  // Auto self-100 react
+  if (!reaction.me && reaction.emoji.name == '100') {
+    reaction.message.react(reaction.emoji);
+  }
+
   // Auto-alert on react code (enabled on a per-guild basis)
   if (typeof reaction.message.guild !== 'undefined' &&
       reaction.message.guild.available &&
