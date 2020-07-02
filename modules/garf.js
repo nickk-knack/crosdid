@@ -13,15 +13,38 @@ module.exports = {
   cooldown: 3,
   execute(message, args) {
     let hexString = '';
+    let validString = false;
+    let iterations = 0;
 
     if (args.length) {
       // TODO: take up to 30 values, convert to hex string
     }
 
     // generate hex string
-    for (let i = 0; i < SLIDER_COUNT; i++) {
-      const rand = Math.floor(Math.random() * 256);
-      hexString += rand.toString(16).slice(-2);
+    while (!validString) {
+      for (let i = 0; i < SLIDER_COUNT; i++) {
+        const rand = Math.floor(Math.random() * 256);
+        let randStr = rand.toString(16).slice(-2);
+
+        if (randStr.length === 1) {
+          randStr = `0${randStr}`;
+        }
+
+        hexString += randStr;
+      }
+
+      iterations++;
+
+      if (hexString.length === 60) {
+        // Break loop, it's valid
+        validString = true;
+      } else {
+        // If this has taken more than 50 tries, abort
+        if (iterations > 50) throw 'Could not generate a valid hex string';
+
+        // Reset string and try again, wrong length
+        hexString = '';
+      }
     }
 
     const garfUrl = `http://codeparade.net/garfield/gen_${hexString}.jpg`;
