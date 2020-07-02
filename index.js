@@ -358,8 +358,8 @@ client.on('messageReactionAdd', (reaction, user) => {
   // (i.e., giving a user a role on a react)
 
   // Auto self-100 react
-  if (!reaction.me && reaction.emoji.name == '100') {
-    reaction.message.react(reaction.emoji);
+  if (!reaction.me && reaction.emoji == '💯') {
+    reaction.message.react('💯');
   }
 
   // Auto-alert on react code (enabled on a per-guild basis)
