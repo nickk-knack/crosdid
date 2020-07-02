@@ -26,6 +26,8 @@ module.exports = {
 
     const garfUrl = `http://codeparade.net/garfield/gen_${hexString}.jpg`;
 
+    console.log(garfUrl);
+
     fetch(garfUrl)
       .then((res) => res.buffer())
       .then((buffer) => {
