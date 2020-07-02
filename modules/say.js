@@ -9,6 +9,6 @@ module.exports = {
   execute(message, args) {
     const channel = message.mentions.channels.first();
     args.shift();
-    channel.send(args.join(''));
+    channel.send(args.join(' '));
   },
 };
