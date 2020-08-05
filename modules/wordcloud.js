@@ -27,7 +27,7 @@ module.exports = {
     const wordsArr = [];
     rawMsgs.forEach((msg) => {
       const { content } = msg;
-      const wordRegex = /w+/gu;
+      const wordRegex = /\w+/gu;
       const words = content.match(wordRegex);
 
       if (!words) console.log(`no words found in message: "${content}"`);
@@ -74,7 +74,7 @@ module.exports = {
     fetch(reqUrl, opts)
       .then((res) => res.text())
       .then((text) => {
-        const buffer = new Buffer(text, 'base64');
+        const buffer = Buffer.from(text, 'base64');
         const attachment = new Attachment(buffer, 'wordcloud.png');
 
         message.channel.send({
