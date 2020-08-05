@@ -28,6 +28,7 @@ module.exports = {
       const words = msg.content.match(/\w+/gu);
       wordsArr.concat(words);
     });
+    console.log(`got ${wordsArr.length()} words`);
 
     // create color array (based on length of words array)
     const colorArray = [];
