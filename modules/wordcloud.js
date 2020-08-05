@@ -20,10 +20,14 @@ module.exports = {
       const wordRegex = /\w+/gu;
       const words = content.match(wordRegex);
 
-      if (!words) console.log(`no words found in message: "${content}"`);
+      if (!words) {
+        console.log(`no words found in message: "${content}"`);
+      } else {
+        console.log(words);
 
-      for (const word of words) {
-        wordsArr.push(word);
+        for (const word of words) {
+          wordsArr.push(word);
+        }
       }
     });
     console.log(`got ${wordsArr.length} words`);
