@@ -58,8 +58,6 @@ module.exports = {
       uppercase: false,
     };
 
-    console.log(data.text, data.colors);
-
     const opts = {
       method: 'POST',
       headers: headers,
@@ -70,6 +68,7 @@ module.exports = {
     fetch(reqUrl, opts)
       .then((res) => res.text())
       .then((text) => {
+        console.log(text); // will regret this
         const buffer = Buffer.from(text, 'base64');
         const attachment = new Attachment(buffer, 'wordcloud.png');
 
