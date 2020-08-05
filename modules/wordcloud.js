@@ -22,7 +22,7 @@ module.exports = {
     }
 
     // get message data (words array)
-    const rawMsgs = await message.channel.messages.fetchMessages({ limit: limit });
+    const rawMsgs = await message.channel.fetchMessages({ limit: limit });
     console.log(`fetched ${rawMsgs.size} messages`);
     const wordsArr = [];
     rawMsgs.each((msg) => {
