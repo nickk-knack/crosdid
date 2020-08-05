@@ -1,28 +1,18 @@
 const { Attachment } = require('discord.js');
 const randomHex = require('random-hex');
 const fetch = require('node-fetch');
+const MIN_COLORS = 4;
 
 module.exports = {
   name: 'wordcloud',
   aliases: ['wc', 'wcloud', 'cloud'],
-  usage: '[limit]',
-  description: 'Generates a word cloud from the last 100 messages in the current channel. This 100 message limit can be changed by passing a new limit as the first argument.',
+  description: 'Generates a word cloud from the last 100 messages in the current channel.',
   args: false,
   guildOnly: true,
   cooldown: 10,
   async execute(message, args) {
-    // set limit var
-    let limit = 100;
-
-    if (args.length) {
-      const parsedLimit = parseInt(args.shift(), 10);
-      if (isNaN(parsedLimit)) return message.reply('you entered an invalid limit!');
-
-      limit = parsedLimit;
-    }
-
     // get message data (words array)
-    const rawMsgs = await message.channel.fetchMessages({ limit: limit });
+    const rawMsgs = await message.channel.fetchMessages({ limit: 100 });
     console.log(`fetched ${rawMsgs.size} messages`);
     const wordsArr = [];
     rawMsgs.forEach((msg) => {
@@ -32,13 +22,15 @@ module.exports = {
 
       if (!words) console.log(`no words found in message: "${content}"`);
 
-      wordsArr.concat(words);
+      for (const word of words) {
+        wordsArr.push(word);
+      }
     });
     console.log(`got ${wordsArr.length} words`);
 
     // create color array (based on length of words array)
     const colorArray = [];
-    const numColors = wordsArr.length % 10;
+    const numColors = (wordsArr.length / 10) + MIN_COLORS; // add a color for each 10 words
     for (let i = 0; i < numColors; i++) {
       colorArray.push(randomHex.generate());
     }
