@@ -22,7 +22,8 @@ module.exports = {
     }
 
     // get message data (words array)
-    const rawMsgs = await message.channel.messages.fetch({ limit: limit });
+    const rawMsgs = await message.channel.messages.fetchMessages({ limit: limit });
+    console.log(`fetched ${rawMsgs.size} messages`);
     const wordsArr = [];
     rawMsgs.each((msg) => {
       const words = msg.content.match(/\w+/gu);
