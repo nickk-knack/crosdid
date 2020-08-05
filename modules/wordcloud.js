@@ -23,8 +23,6 @@ module.exports = {
       if (!words) {
         console.log(`no words found in message: "${content}"`);
       } else {
-        console.log(words);
-
         for (const word of words) {
           wordsArr.push(word);
         }
@@ -55,10 +53,12 @@ module.exports = {
       width: 1200,
       height: 1000,
       colors: colorArray,
-      font: 'Comic Sans MS',
+      font: 'Tahoma',
       language: 'en',
       uppercase: false,
     };
+
+    console.log(data.text, data.colors);
 
     const opts = {
       method: 'POST',
