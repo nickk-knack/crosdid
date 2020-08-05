@@ -26,7 +26,12 @@ module.exports = {
     console.log(`fetched ${rawMsgs.size} messages`);
     const wordsArr = [];
     rawMsgs.forEach((msg) => {
-      const words = msg.content.match(/\w+/gu);
+      const { content } = msg;
+      const wordRegex = /w+/gu;
+      const words = content.match(wordRegex);
+
+      if (!words) console.log(`no words found in message: "${content}"`);
+
       wordsArr.concat(words);
     });
     console.log(`got ${wordsArr.length} words`);
@@ -67,8 +72,9 @@ module.exports = {
 
     // freakin send it
     fetch(reqUrl, opts)
-      .then((res) => res.buffer())
-      .then((buffer) => {
+      .then((res) => res.text())
+      .then((text) => {
+        const buffer = new Buffer(text, 'base64');
         const attachment = new Attachment(buffer, 'wordcloud.png');
 
         message.channel.send({
