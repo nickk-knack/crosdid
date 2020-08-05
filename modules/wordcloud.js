@@ -25,7 +25,7 @@ module.exports = {
     const rawMsgs = await message.channel.fetchMessages({ limit: limit });
     console.log(`fetched ${rawMsgs.size} messages`);
     const wordsArr = [];
-    rawMsgs.each((msg) => {
+    rawMsgs.forEach((msg) => {
       const words = msg.content.match(/\w+/gu);
       wordsArr.concat(words);
     });
