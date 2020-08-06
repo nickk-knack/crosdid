@@ -46,7 +46,7 @@ module.exports = {
     }
 
     // Instantiate canvas
-    const can = new Canvas(1, 1);
+    const can = new Canvas.Canvas(1, 1);
 
     // Build word cloud
     const endCloud = (w) => {
