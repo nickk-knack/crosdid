@@ -1,7 +1,7 @@
 const { Attachment } = require('discord.js');
 const randomHex = require('random-hex');
-const fetch = require('node-fetch');
-const MIN_COLORS = 4;
+const Canvas = require('canvas');
+const cloud = require('d3-cloud');
 
 module.exports = {
   name: 'wordcloud',
@@ -11,10 +11,10 @@ module.exports = {
   guildOnly: true,
   cooldown: 10,
   async execute(message, args) {
-    // get message data (words array)
+    // get message data (words map)
+    const wordsMap = new Map();
     const rawMsgs = await message.channel.fetchMessages({ limit: 100 });
     console.log(`fetched ${rawMsgs.size} messages`);
-    const wordsArr = [];
     rawMsgs.forEach((msg) => {
       const { content } = msg;
       const wordRegex = /\w+/gu;
@@ -24,67 +24,55 @@ module.exports = {
         console.log(`no words found in message: "${content}"`);
       } else {
         for (const word of words) {
-          wordsArr.push(word);
+          // either add a new word to the map, or increment the words frequency
+          wordsMap.set(word, 1 + (wordsMap.has(word) ? wordsMap.get(word) : 0));
         }
       }
     });
-    console.log(`got ${wordsArr.length} words`);
+    console.log(`got ${wordsMap.size} words`);
 
-    // create color array (based on length of words array)
-    const colorArray = [];
-    const numColors = (wordsArr.length / 10) + MIN_COLORS; // add a color for each 10 words
-    for (let i = 0; i < numColors; i++) {
-      colorArray.push(randomHex.generate());
+    // compile chart data
+    const words = [];
+    const keysIt = wordsMap.keys();
+    let curKey = keysIt.next();
+    while (!curKey.done) {
+      const key = curKey.value;
+      words.push({
+        text: key,
+        size: (10 + wordsMap.get(key)) * 90,
+      });
+
+      curKey = keysIt.next();
     }
 
-    // set up request
-    const reqUrl = 'https://textvis-word-cloud-v1.p.rapidapi.com/v1/textToCloud';
+    // Instantiate canvas
+    const can = new Canvas(1, 1);
 
-    const headers = {
-      'x-rapidapi-host': 'textvis-word-cloud-v1.p.rapidapi.com',
-      'x-rapidapi-key': process.env.WORD_CLOUD_API_KEY,
-      'content-type': 'application/json',
-      'accept': 'application/json',
-    };
+    // Build word cloud
+    const endCloud = (w) => {
+      console.log(`Finished word cloud, placed ${w.length} words.`);
+      const cBuf = can.toBuffer();
+      const attachment = new Attachment(cBuf, 'wordcloud.png');
 
-    const data = {
-      text: wordsArr.join(' '),
-      scale: 1,
-      width: 1200,
-      height: 1000,
-      colors: colorArray,
-      font: 'Tahoma',
-      language: 'en',
-      uppercase: false,
-    };
-
-    const opts = {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(data),
-    };
-
-    // freakin send it
-    fetch(reqUrl, opts)
-      .then((res) => res.text())
-      .then((text) => {
-        console.log(text); // will regret this
-        const buffer = Buffer.from(text, 'base64');
-        const attachment = new Attachment(buffer, 'wordcloud.png');
-
-        message.channel.send({
-          files: [attachment],
-          embed: {
-            image: {
-              url: 'attachment://wordcloud.png',
-            },
-            color: parseInt(randomHex.generate(), 16),
+      message.channel.send({
+        files: [attachment],
+        embed: {
+          image: {
+            url: 'attachment://wordcloud.png',
           },
-        }).catch(console.error);
-      })
-      .catch((err) => {
-        console.error(err);
-        message.reply('an error occured while generating your word cloud.');
-      });
+          color: parseInt(randomHex.generate(), 16),
+        },
+      }).catch(console.error);
+    };
+
+    cloud().size([1200, 1000])
+      .canvas(() => can)
+      .words(words)
+      .padding(5)
+      .rotate(() => ~~(Math.random() * 2) * 90)
+      .font('Tahoma')
+      .fontSize((w) => w.size)
+      .on('end', endCloud)
+      .start();
   },
 };
