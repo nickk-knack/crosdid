@@ -46,7 +46,7 @@ module.exports = {
     }
 
     // Instantiate canvas
-    const can = new Canvas.Canvas(1, 1);
+    const can = new Canvas.Canvas(1200, 1000);
 
     // Build word cloud
     const endCloud = (w) => {
@@ -69,7 +69,6 @@ module.exports = {
       .canvas(() => can)
       .words(words)
       .padding(5)
-      .rotate(() => ~~(Math.random() * 2) * 90)
       .font('Tahoma')
       .fontSize((w) => w.size)
       .on('end', endCloud)
