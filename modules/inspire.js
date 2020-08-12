@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
 const fetch = require('node-fetch');
 
@@ -14,7 +14,7 @@ module.exports = {
     fetch(`http://inspirobot.me/api?generate=true${args.length && args[0] === 'xmas' ? '&season=xmas' : ''}`)
       .then((res) => res.text())
       .then((data) => {
-        const embed = new Discord.RichEmbed()
+        const embed = new MessageEmbed()
           .setColor(randomHex.generate())
           .setImage(data);
 

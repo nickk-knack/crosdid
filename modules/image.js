@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const GoogleImages = require('google-images');
 const randomHex = require('random-hex');
 const GoogleAPIKey = process.env.GOOGLE_API_KEY;
@@ -26,7 +26,7 @@ module.exports = {
         // This check is technically legacy shit, but I'm going to leave it in "just in case"
         if (typeof randomImage === 'undefined') return message.reply(`no results found for \`${query}\``);
 
-        const embed = new Discord.RichEmbed()
+        const embed = new MessageEmbed()
           .setColor(randomHex.generate())
           .setTitle(query)
           .setImage(randomImage.url);
