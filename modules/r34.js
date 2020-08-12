@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
 const fetch = require('node-fetch');
 const parser = require('xml2js').parseStringPromise;
@@ -28,7 +28,7 @@ module.exports = {
 
             const { post } = json.posts;
             const fileUrl = post[Math.floor(Math.random() * post.length)].$.file_url;
-            const embed = new Discord.RichEmbed()
+            const embed = new MessageEmbed()
               .setColor(randomHex.generate())
               .setTitle(args.join(' '))
               .setImage(fileUrl);

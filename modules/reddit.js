@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const randomHex = require('random-hex');
 const trim = (str, max) => (str.length > max) ? `${str.slice(0, max - 3)}...` : str;
@@ -66,7 +66,7 @@ module.exports = {
 
         const [result] = results;
 
-        const embed = new Discord.RichEmbed()
+        const embed = new MessageEmbed()
           .setTitle(`${result.subreddit_name_prefixed} - ${trim(result.title, 253 - result.subreddit_name_prefixed.length)}`)
           .setDescription(result.is_self ? trim(result.selftext, 2048) : `[permalink](https://reddit.com${result.permalink})`)
           .setURL(result.is_self ? `https://reddit.com${result.permalink}` : result.url)
