@@ -1,4 +1,4 @@
-const { Attachment } = require('discord.js');
+const { MessageAttachment } = require('discord.js');
 const randomHex = require('random-hex');
 const Canvas = require('canvas');
 const cloud = require('d3-cloud');
@@ -52,7 +52,7 @@ module.exports = {
     const endCloud = (w) => {
       console.log(`Finished word cloud, placed ${w.length} words.`);
       const cBuf = can.toBuffer();
-      const attachment = new Attachment(cBuf, 'wordcloud.png');
+      const attachment = new MessageAttachment(cBuf, 'wordcloud.png');
 
       message.channel.send({
         files: [attachment],
