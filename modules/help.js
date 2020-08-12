@@ -1,5 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
+const trim = (str, max) => (str.length > max) ? `${str.slice(0, max - 3)}...` : str;
 
 module.exports = {
   name: 'help',
@@ -17,7 +18,7 @@ module.exports = {
       embed
         .setTitle('Help/Commands')
         .setDescription(`You can send ${prefix}help [command name] for info on a specific command.`)
-        .addField('**Command List**', commands.map((command) => command.name).join(', '));
+        .addField('**Command List**', trim(commands.map((command) => command.name).join(', '), 1024));
     } else {
       const command = commands.get(args[0]) || commands.find((cmd) => cmd.aliases && cmd.aliases.includes(args[0]));
 
@@ -46,7 +47,7 @@ module.exports = {
       }
 
       if (command.usage) {
-        embed.addField('Usage:', `\`${prefix}${command.name} ${command.usage}\``);
+        embed.addField('Usage:', trim(`\`${prefix}${command.name} ${command.usage}\``, 1024));
       }
 
       if (command.opOnly || command.guildOnly) {
