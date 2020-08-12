@@ -18,6 +18,12 @@ const port = process.env.PORT || 3000;
 const DEBUG = process.env.PRINT_DEBUG || false;
 const dbFileName = process.env.DB_FILE_NAME || 'db.json';
 
+// Extra functions
+const getRandomFromArray = (array) => array[Math.floor(Math.random() * array.length)];
+
+// Start of the main bot code
+console.log('Starting bot...');
+
 // Discord.js globals
 const client = new Discord.Client({
   disabledEvents: ['TYPING_START'],
@@ -57,12 +63,6 @@ console.log(`Loaded local database file from ${dbFileName}`);
 // Get prefix from db
 const prefix = db.get('commandPrefix').value();
 
-// Extra functions
-const getRandomFromArray = (array) => array[Math.floor(Math.random() * array.length)];
-
-// Start of the main bot code
-console.log('Starting bot...');
-
 // Load in all command modules
 console.log('\tLoading command modules...');
 
@@ -92,7 +92,7 @@ client.once('ready', () => {
   console.log(`\tLogged in as ${client.user.tag}!`);
 
   // Go through joined guilds, make sure there is a per-guild config in db
-  for (const g of [...client.guilds.values()]) {
+  for (const g of [...client.guilds.cache.values()]) {
     // Check that the guild is available first
     if (!g.available) continue;
 
@@ -100,7 +100,7 @@ client.once('ready', () => {
     if (!db.has(g.id).value()) {
       db.set(g.id, dbDefaultGuildObj).write();
 
-      g.members.forEach((m) => {
+      g.members.cache.forEach((m) => {
         if (!m.user.bot && !db.get(`${g.id}.users`).find({ id: m.id }).value()) {
           db.get(`${g.id}.users`).push({
             id: m.id,
@@ -166,7 +166,7 @@ client.on('message', async (msg) => {
       // Get random reaction, react with it
       if (secretlyReact) {
         const reaction = getRandomFromArray(userSecretReacts);
-        msg.react(reaction.custom ? msg.guild.emojis.get(reaction.emoji) : reaction.emoji);
+        msg.react(reaction.custom ? msg.guild.emojis.cache.get(reaction.emoji) : reaction.emoji);
       }
     }
 
@@ -271,10 +271,10 @@ client.on('message', async (msg) => {
   try {
     msg.channel.startTyping();
     command.execute(msg, args);
-    msg.channel.stopTyping(true);
   } catch (error) {
     console.error(error);
     msg.reply(`an error occurred while executing the \`${commandName}\` command: ${error.message}`);
+  } finally {
     msg.channel.stopTyping(true);
   }
 });
@@ -290,11 +290,11 @@ client.on('emojiCreate', (emoji) => {
   // Get config from db
   const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
     settings.channel_override : db.get(`${emoji.guild.id}.announcements.channel`).value();
-  const emojiChannel = emoji.guild.channels.find((c) => c.name === emojiChannelName);
+  const emojiChannel = emoji.guild.channels.cache.find((c) => c.name === emojiChannelName);
   const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Created';
 
   // Create and send embed, then react to the message with the emoji
-  const embed = new Discord.RichEmbed()
+  const embed = new Discord.MessageEmbed()
     .setColor(randomHex.generate())
     .setImage(emoji.url)
     .setTitle(title)
@@ -314,11 +314,11 @@ client.on('emojiDelete', (emoji) => {
   // Get config from db
   const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
     settings.channel_override : db.get(`${emoji.guild.id}.announcements.channel`).value();
-  const emojiChannel = emoji.guild.channels.find((c) => c.name === emojiChannelName);
+  const emojiChannel = emoji.guild.channels.cache.find((c) => c.name === emojiChannelName);
   const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Deleted';
 
   // Create and send embed
-  const embed = new Discord.RichEmbed()
+  const embed = new Discord.MessageEmbed()
     .setColor(randomHex.generate())
     .setImage(emoji.url)
     .setTitle(title)
@@ -338,11 +338,11 @@ client.on('emojiUpdate', (oldEmoji, newEmoji) => {
   // Get config from db
   const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
     settings.channel_override : db.get(`${newEmoji.guild.id}.announcements.channel`).value();
-  const emojiChannel = newEmoji.guild.channels.find((c) => c.name === emojiChannelName);
+  const emojiChannel = newEmoji.guild.channels.cache.find((c) => c.name === emojiChannelName);
   const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Updated';
 
   // Create and send embed, then react to the message with the emoji
-  const embed = new Discord.RichEmbed()
+  const embed = new Discord.MessageEmbed()
     .setColor(randomHex.generate())
     .setImage(newEmoji.url)
     .addField('Old Emoji', `**[${oldEmoji.name}](${oldEmoji.url})**`, true)
@@ -371,7 +371,7 @@ client.on('messageReactionAdd', (reaction, user) => {
 
     // Get message author, and begin message content
     const { author } = reaction.message;
-    const embed = new Discord.RichEmbed()
+    const embed = new Discord.MessageEmbed()
       .setColor(randomHex.generate())
       .setTitle(`${user.tag} reacted to your message`)
       .addField('Your message', `> ${reaction.message.content}`);
@@ -391,7 +391,7 @@ client.on('messageReactionAdd', (reaction, user) => {
 
 // Rate limiting event
 client.on('rateLimit', (info) => {
-  if (DEBUG) console.warn(`Rate limit: ${info.limit} (td: ${info.timeDifference}ms)`, `${info.method}:${info.path}`);
+  if (DEBUG) console.warn(`Rate limit: ${info.limit} (td: ${info.timeDifference}ms)`, `[${info.method}]:[${info.path}]:[${info.route}]`);
 });
 
 // Channel creation event
@@ -406,7 +406,7 @@ client.on('channelCreate', (channel) => {
   if (!settings.enabled) return;
 
   // Get a reference to the defined announcements channel
-  const announcementsChannel = channel.guild.channels.find((c) => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
+  const announcementsChannel = channel.guild.channels.cache.find((c) => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
 
   // Bail if the channel doesn't exist
   if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
@@ -414,7 +414,7 @@ client.on('channelCreate', (channel) => {
   // Send random message from appropriate messages array + the new channel name to announcements channel
   const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Created';
 
-  const embed = new Discord.RichEmbed()
+  const embed = new Discord.MessageEmbed()
     .setColor(randomHex.generate())
     .setTitle(title)
     .setDescription(channel);
@@ -434,7 +434,7 @@ client.on('channelDelete', (channel) => {
   if (!settings.enabled) return;
 
   // Get a reference to the defined announcements channel
-  const announcementsChannel = channel.guild.channels.find((c) => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
+  const announcementsChannel = channel.guild.channels.cache.find((c) => c.name === db.get(`${channel.guild.id}.announcements.channel`).value());
 
   // Bail if the channel doesn't exist
   if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
@@ -442,7 +442,7 @@ client.on('channelDelete', (channel) => {
   // Send random message from appropriate messages array + the old channel name to announcements channel
   const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Deleted';
 
-  const embed = new Discord.RichEmbed()
+  const embed = new Discord.MessageEmbed()
     .setColor(randomHex.generate())
     .setTitle(title)
     .setDescription(channel);
@@ -462,7 +462,7 @@ client.on('channelUpdate', (oldChannel, newChannel) => {
   if (!settings.enabled) return;
 
   // Get a reference to the defined announcements channel
-  const announcementsChannel = newChannel.guild.channels.find((c) => c.name === db.get(`${newChannel.guild.id}.announcements.channel`).value());
+  const announcementsChannel = newChannel.guild.channels.cache.find((c) => c.name === db.get(`${newChannel.guild.id}.announcements.channel`).value());
 
   // Bail if the channel doesn't exist
   if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${newChannel.guild.id} is invalid!`);
@@ -471,26 +471,13 @@ client.on('channelUpdate', (oldChannel, newChannel) => {
   const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Updated';
 
   // Future Todo: find specific differences between old and new channel (for both text and voice channels) and add fields for each
-  const embed = new Discord.RichEmbed()
+  const embed = new Discord.MessageEmbed()
     .setColor(randomHex.generate())
     .setTitle(title)
     .addField('Old Channel', `${oldChannel}${oldChannel.type === 'text' ? `\n"${oldChannel.topic}"` : ''}`, true)
     .addField('New Channel', `${newChannel}${newChannel.type === 'text' ? `\n"${newChannel.topic}"` : ''}`, true);
 
   announcementsChannel.send(embed);
-});
-
-// Disconnect event
-client.on('disconnect', (event) => {
-  console.log(`Bot disconnected ${event.wasClean ? 'cleanly' : 'unexpectedly'} with code ${event.code} for reason: "${event.reason}".`);
-
-  process.exitCode = event.code === 1000 ? 0 : event.code;
-  process.kill(process.pid, 'SIGTERM');
-});
-
-// Reconnecting event
-client.on('reconnecting', () => {
-  console.log('Bot is attemping at reconnecting...');
 });
 
 // Logging events
@@ -508,18 +495,10 @@ client.login(token);
 // Set up express webserver
 app.use(bodyParser.json());
 
-const server = app.listen(port, () => {
+app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 
 app.get('/', (req, res) => {
   res.end('hello crosdid');
-});
-
-process.on('SIGTERM', () => {
-  server.close(() => {
-    console.log('Server shut down.');
-  });
-
-  client.destroy().then(() => console.log('Client shut down.'));
 });
