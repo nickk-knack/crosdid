@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
     const prefix = process.env.PREFIX || message.client.user.toString();
     const { db, commands } = message.client;
 
-    const embed = new Discord.RichEmbed().setColor(randomHex.generate());
+    const embed = new MessageEmbed().setColor(randomHex.generate());
 
     if (!args.length) {
       embed
