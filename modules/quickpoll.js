@@ -1,4 +1,4 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
 const emojiRegex = /^<:.+:\d+>$/gu;
 
@@ -33,7 +33,7 @@ module.exports = {
     if (responses.length !== emojis.length) return message.reply(`you fool! You only provided ${emojis.length} emoji options for ${responses.length} questions!`);
 
     try {
-      const embed = new RichEmbed()
+      const embed = new MessageEmbed()
         .setColor(randomHex.generate())
         .setTitle(title);
 
@@ -41,11 +41,11 @@ module.exports = {
         embed.addField(`Option: ${emojis[index]}`, val, true);
       });
 
-      const sent = await message.channel.send(`This poll will end in ${pollTime / 1000 / 60} minutes, at ${new Date(Date.now() + pollTime).toString()}`, embed);
+      const sent = await message.channel.send(`This poll will end in ${pollTime / 1000 / 60} minutes, at ${new Date(Date.now() + pollTime).toString()}`, { embed: embed });
 
       for (const emoji of emojis) {
         const guildEmoji = emojiRegex.test(emoji);
-        const react = guildEmoji ? message.guild.emojis.find((e) => e.toString() === emoji) : emoji;
+        const react = guildEmoji ? message.guild.emojis.cache.find((e) => e.toString() === emoji) : emoji;
 
         await sent.react(react).catch((e) => {
           console.error(react, e);
