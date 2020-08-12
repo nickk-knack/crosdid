@@ -1,4 +1,4 @@
-const { Attachment } = require('discord.js');
+const { MessageAttachment } = require('discord.js');
 const randomHex = require('random-hex');
 const fetch = require('node-fetch');
 
@@ -14,7 +14,7 @@ module.exports = {
     fetch(personUrl)
       .then((res) => res.buffer())
       .then((buffer) => {
-        const attachment = new Attachment(buffer, 'fakeperson.png');
+        const attachment = new MessageAttachment(buffer, 'fakeperson.png');
 
         message.channel.send({
           files: [attachment],
