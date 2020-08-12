@@ -13,7 +13,7 @@ module.exports = {
   async execute(message, args) {
     // get message data (words map)
     const wordsMap = new Map();
-    const rawMsgs = await message.channel.fetchMessages({ limit: 100 });
+    const rawMsgs = await message.channel.messages.fetch({ limit: 100 });
     console.log(`fetched ${rawMsgs.size} messages`);
     rawMsgs.forEach((msg) => {
       const { content } = msg;
