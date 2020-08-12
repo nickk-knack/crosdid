@@ -50,6 +50,8 @@
 3. `b`
    1. might have trouble with double b's
    2. just test the regex shit
+4. `wordcloud`
+   1. image generation does not fuckin work lmao
 
 ## Command Updates
 
