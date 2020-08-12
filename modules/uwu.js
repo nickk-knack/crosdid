@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
 const fetch = require('node-fetch');
 
@@ -26,7 +26,7 @@ module.exports = {
 
         const result = json[Math.floor(Math.random() * json.length)];
 
-        const embed = new Discord.RichEmbed()
+        const embed = new MessageEmbed()
           .setColor(randomHex.generate())
           .setTitle(args.join(' '))
           .setDescription(result.tags)

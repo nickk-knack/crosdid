@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
 const fetch = require('node-fetch');
 const trim = (str, max) => (str.length > max) ? `${str.slice(0, max - 3)}...` : str;
@@ -21,7 +21,7 @@ module.exports = {
 
         const answer = json.list[Math.floor(Math.random() * json.list.length)];
 
-        const embed = new Discord.RichEmbed()
+        const embed = new MessageEmbed()
           .setColor(randomHex.generate())
           .setThumbnail('https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/UD_logo-01.svg/512px-UD_logo-01.svg.png')
           .setTitle(answer.word)

@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
 const wiki = require('wikijs').default();
 
@@ -7,7 +7,7 @@ const wiki = require('wikijs').default();
 // What's extra weird is those don't normally fail, and clicking on the links in the error message seems to give valid output
 // Likely rate limiting
 const buildEmbed = (query, page, more) => {
-  const embed = new Discord.RichEmbed()
+  const embed = new MessageEmbed()
     .setColor(randomHex.generate())
     .setTitle(`"**${page.raw.title}**"`)
     .setURL(page.raw.fullurl)

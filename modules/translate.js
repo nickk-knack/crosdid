@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
 const translate = require('yandex-translate')(process.env.YANDEX_TRANSLATE_API_KEY);
 const { stripIndents } = require('common-tags');
@@ -147,7 +147,7 @@ module.exports = {
       const fromLang = langs[toFromLang[0]];
 
       // Create and send embed with info
-      const embed = new Discord.RichEmbed()
+      const embed = new MessageEmbed()
         .setColor(randomHex.generate())
         .setTitle(`Translation from ${fromLang} to ${toLang}`)
         .setDescription(res.text.join());
