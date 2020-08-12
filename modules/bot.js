@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
 const { stripIndent } = require('common-tags');
 
@@ -166,7 +166,7 @@ announcements <channel <announcement channel name>> |
           return message.reply('successfully **disabled** trigger phrases for the guild.');
         case 'list':
         case 'l': {
-          const embed = new Discord.MessageEmbed().setColor(randomHex.generate());
+          const embed = new MessageEmbed().setColor(randomHex.generate());
           let i = -1;
 
           for (const phrase of dbPhrases.value()) {
