@@ -20,13 +20,13 @@ module.exports = {
       return;
     }
 
-    const { voiceChannel } = message.member;
-    if (voiceChannel) {
-      voiceChannel.join().then((connection) => {
+    const { channel } = message.member.voice;
+    if (channel) {
+      channel.join().then((connection) => {
         const stream = ytdl('https://www.youtube.com/watch?v=3kc70k14uDc', { filter: 'audioonly' });
-        const dispatcher = connection.playStream(stream);
+        const dispatcher = connection.play(stream);
 
-        dispatcher.on('end', () => voiceChannel.leave());
+        dispatcher.on('finish', () => channel.leave());
       });
     }
   },
