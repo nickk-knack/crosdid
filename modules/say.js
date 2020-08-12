@@ -7,7 +7,7 @@ module.exports = {
   opOnly: true,
   cooldown: 0,
   execute(message, args) {
-    const channel = message.mentions.channels.first();
+    const channel = message.mentions.channels.cache.first();
     args.shift();
     channel.send(args.join(' '));
   },

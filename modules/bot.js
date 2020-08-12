@@ -346,7 +346,7 @@ announcements <channel <announcement channel name>> |
       switch (subcommandArg) {
         case 'channel': {
           const channelName = args.shift();
-          if (message.guild.channels.find((c) => c.name === channelName) === null) return message.reply(`${channelName} does not exist in this guild!`);
+          if (message.guild.channels.cache.find((c) => c.name === channelName) === null) return message.reply(`${channelName} does not exist in this guild!`);
 
           db.set(`${message.guild.id}.announcements.channel`, channelName).write();
           return message.reply(`successfully set the announcements channel to #${channelName}`);
