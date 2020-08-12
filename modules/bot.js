@@ -37,13 +37,11 @@ const dbDefaultGuildObj = {
     emoji_create: {
       enabled: false,
       channel_override: '',
-      message_prepend: true,
       messages: [],
     },
     emoji_delete: {
       enabled: false,
       channel_override: '',
-      message_prepend: true,
       messages: [],
     },
     emoji_update: {
@@ -62,24 +60,24 @@ module.exports.dbDefaultGuildObj = dbDefaultGuildObj;
 module.exports = {
   name: 'bot',
   description: 'Modify various bot settings on the fly',
-  usage: stripIndent`<activity <enable |
+  usage: stripIndent`activity <enable |
                 disable |
                 type <playing | streaming | listening | watching> |
-                text <activity text>>> |
-<phrases <enable |
+                text <activity text>> |
+phrases <enable |
           disable |
           list |
           addtrigger <trigger> |
           addresponse <trigger index> <response> |
           removetrigger <trigger index> |
-          removeresponse <trigger index> <response index>>> |
-<avatar <get | set <image url>>> |
-<secret <messages | reacts> <enable |
+          removeresponse <trigger index> <response index>> |
+avatar <get | set <image url>> |
+secret <messages | reacts> <enable |
                              disable |
-                             chance <get | 0.0 - 1.0>>> |
-<reactionNotify <enable | disable>> |
-<update <guilds | users>
-<announcements <channel <announcement channel name>>|
+                             chance <get | 0.0 - 1.0>> |
+reactionNotify <enable | disable> |
+update <guilds | users> |
+announcements <channel <announcement channel name>> |
                <enable/disable <channel_create |
                                 channel_delete |
                                 channel_update |
@@ -94,7 +92,7 @@ module.exports = {
                             emoji_update> <message>> |
                <overridechan <emoji_create |
                               emoji_delete |
-                              emoji_update> <emoji channel name>>>`,
+                              emoji_update> <emoji channel name>>`,
   args: true,
   minArgsLength: 2,
   guildOnly: true,
@@ -168,7 +166,7 @@ module.exports = {
           return message.reply('successfully **disabled** trigger phrases for the guild.');
         case 'list':
         case 'l': {
-          const embed = new Discord.RichEmbed().setColor(randomHex.generate());
+          const embed = new Discord.MessageEmbed().setColor(randomHex.generate());
           let i = -1;
 
           for (const phrase of dbPhrases.value()) {
@@ -245,7 +243,12 @@ module.exports = {
           break;
         }
         case 'get':
-          return message.reply(message.client.user.avatarURL);
+          return message.reply(
+            message.client.user.avatarURL({
+              dynamic: true,
+              format: 'png',
+              size: 1024,
+            }));
         default:
           return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: get, set)`);
       }
@@ -303,7 +306,7 @@ module.exports = {
           const guildsAdded = [];
 
           // Go through joined guilds, make sure there is a per-guild config in db
-          for (const g of [...message.client.guilds.values()]) {
+          for (const g of [...message.client.guilds.cache.values()]) {
             // Check that the guild is available first
             if (!g.available) continue;
 
@@ -320,7 +323,7 @@ module.exports = {
           const usersAdded = [];
 
           // go through all users in current guild, add shit to db for them
-          message.guild.members.forEach((m) => {
+          message.guild.members.cache.forEach((m) => {
             if (!m.user.bot && !db.get(`${message.guild.id}.users`).find({ id: m.id }).value()) {
               db.get(`${message.guild.id}.users`).push({
                 id: m.id,
@@ -379,7 +382,7 @@ module.exports = {
 
           if (!args.length) return message.reply("you didn't provide a channel name!");
           const channelName = args.shift();
-          if (message.guild.channels.find((c) => c.name === channelName) === null) return message.reply(`${channelName} does not exist in this guild!`);
+          if (message.guild.channels.cache.find((c) => c.name === channelName) === null) return message.reply(`${channelName} does not exist in this guild!`);
 
           db.set(`${message.guild.id}.announcements.${announcement}.channel_override`, channelName).write();
           return message.reply(`successfully overrode the announcements channel for ${announcement} to #${channelName}`);
