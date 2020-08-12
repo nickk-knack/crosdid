@@ -26,7 +26,7 @@ module.exports = {
     const { db } = message.client;
     const subcommand = args.shift().toLowerCase();
     const subcommandArg = args.shift().toLowerCase();
-    const user = message.mentions.members.first();
+    const user = message.mentions.members.cache.first();
 
     let dbUser = db.get(`${message.guild.id}.users`).find({ id: user.id });
 
