@@ -100,14 +100,16 @@ client.once('ready', () => {
     if (!db.has(g.id).value()) {
       db.set(g.id, dbDefaultGuildObj).write();
 
-      g.members.cache.forEach((m) => {
-        if (!m.user.bot && !db.get(`${g.id}.users`).find({ id: m.id }).value()) {
-          db.get(`${g.id}.users`).push({
-            id: m.id,
-            messages: [],
-            reactions: [],
-          }).write();
-        }
+      g.members.fetch().then((fetched) => {
+        fetched.forEach((m) => {
+          if (!m.user.bot && !db.get(`${g.id}.users`).find({ id: m.id }).value()) {
+            db.get(`${g.id}.users`).push({
+              id: m.id,
+              messages: [],
+              reactions: [],
+            }).write();
+          }
+        });
       });
     }
   }
