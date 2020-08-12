@@ -1,4 +1,4 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
 const moment = require('moment');
 const momentDurationFormatSetup = require('moment-duration-format');
@@ -25,7 +25,7 @@ module.exports = {
     const life = moment.duration(nowMoment.diff(createdMoment));
     const lifeStr = life.format('Y [years], M [months], W [weeks], D [days], h [hours], m [minutes], s [seconds]');
 
-    const embed = new RichEmbed()
+    const embed = new MessageEmbed()
       .setColor(randomHex.generate())
       .setTitle('About the bot')
       .setThumbnail(message.client.user.avatarURL)
