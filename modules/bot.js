@@ -59,40 +59,15 @@ module.exports.dbDefaultGuildObj = dbDefaultGuildObj;
 
 module.exports = {
   name: 'bot',
-  description: 'Modify various bot settings on the fly',
-  usage: stripIndent`activity <enable |
-                disable |
-                type <playing | streaming | listening | watching> |
-                text <activity text>> |
-phrases <enable |
-          disable |
-          list |
-          addtrigger <trigger> |
-          addresponse <trigger index> <response> |
-          removetrigger <trigger index> |
-          removeresponse <trigger index> <response index>> |
-avatar <get | set <image url>> |
-secret <messages | reacts> <enable |
-                             disable |
-                             chance <get | 0.0 - 1.0>> |
-reactionNotify <enable | disable> |
-update <guilds | users> |
-announcements <channel <announcement channel name>> |
-               <enable/disable <channel_create |
-                                channel_delete |
-                                channel_update |
-                                emoji_create |
-                                emoji_delete |
-                                emoji_update>> |
-               <addmessage <channel_create |
-                            channel_delete |
-                            channel_update |
-                            emoji_create |
-                            emoji_delete |
-                            emoji_update> <message>> |
-               <overridechan <emoji_create |
-                              emoji_delete |
-                              emoji_update> <emoji channel name>>`,
+  description: 'Modify various bot settings on the fly. Use the help subcommand for further help.',
+  usage: `help [subcommand] |
+      activity <...> |
+      phrases <...> |
+      avatar <...> |
+      secret <...> |
+      reactionNotify <...> |
+      update <...> |
+      announcements <...>`,
   args: true,
   minArgsLength: 2,
   guildOnly: true,
@@ -103,7 +78,66 @@ announcements <channel <announcement channel name>> |
     const subcommand = args.shift().toLowerCase();
     const subcommandArg = args.shift().toLowerCase();
 
-    if (subcommand === 'activity') {
+    if (subcommand === 'help') {
+      const prefix = process.env.PREFIX || message.client.user.toString();
+      let msg = `\n${prefix}${module.exports.name} `;
+
+      switch (subcommandArg) {
+        case 'help':
+          msg += 'help <activity | phrases | avatar | secret | reactionNotify | update | annoucnements | help>';
+          break;
+        case 'activity':
+          msg += stripIndent`activity <enable> |
+                        <disable> |
+                        <type <playing | streaming | listening | watching>> |
+                        <text <activity text>>`;
+          break;
+        case 'phrases':
+          msg += stripIndent`phrases <enable> |
+                        <disable> |
+                        <list> |
+                        <addtrigger <trigger>> |
+                        <addresponse <trigger index> <response>> |
+                        <removetrigger <trigger index>> |
+                        <removeresponse <trigger index> <response index>>`;
+          break;
+        case 'avatar':
+          msg += 'avatar <get | set <image url>>';
+          break;
+        case 'secret':
+          msg += 'secret <messages | reacts> <enable | disable | chance <get | 0.0 - 1.0>>';
+          break;
+        case 'reactionNotify':
+          msg += 'reactionNotify <enable | disable>';
+          break;
+        case 'update':
+          msg += 'update <guilds | users>';
+          break;
+        case 'announcements':
+          msg += stripIndent`announcements <channel <announcement_channel_name>> |
+                                      <enable | disable <channel_create |
+                                                                        channel_delete |
+                                                                        channel_update |
+                                                                        emoji_create |
+                                                                        emoji_delete |
+                                                                        emoji_update>> |
+                                      <addmessage <channel_create |
+                                                                    channel_delete |
+                                                                    channel_update |
+                                                                    emoji_create |
+                                                                    emoji_delete |
+                                                                    emoji_update> <message>> |
+                                      <overridechan <emoji_create |
+                                                                    emoji_delete |
+                                                                    emoji_update> <emoji_channel_name>>`;
+          break;
+        default:
+          msg = `unknown subcommand: ${subcommandArg}`;
+          break;
+      }
+
+      return message.reply(msg);
+    } else if (subcommand === 'activity') {
       switch (subcommandArg) {
         case 'enable':
           db.set('activitySettings.enabled', true).write();
@@ -323,16 +357,18 @@ announcements <channel <announcement channel name>> |
           const usersAdded = [];
 
           // go through all users in current guild, add shit to db for them
-          message.guild.members.cache.forEach((m) => {
-            if (!m.user.bot && !db.get(`${message.guild.id}.users`).find({ id: m.id }).value()) {
-              db.get(`${message.guild.id}.users`).push({
-                id: m.id,
-                messages: [],
-                reactions: [],
-              }).write();
+          message.guild.members.fetch().then((fetched) => {
+            fetched.forEach((m) => {
+              if (!m.user.bot && !db.get(`${message.guild.id}.users`).find({ id: m.id }).value()) {
+                db.get(`${message.guild.id}.users`).push({
+                  id: m.id,
+                  messages: [],
+                  reactions: [],
+                }).write();
 
-              usersAdded.push(m.user.username);
-            }
+                usersAdded.push(m.user.username);
+              }
+            });
           });
 
           return message.reply(`successfully updated user db information for current guild!${usersAdded.length ? ` ${usersAdded.length} users added: ${usersAdded.join(', ')}` : ''}`);
