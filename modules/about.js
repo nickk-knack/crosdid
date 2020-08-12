@@ -33,8 +33,8 @@ module.exports = {
       .setTimestamp(Date.now())
       .setFooter('created with 💖 by nick')
       .setURL('https://github.com/nickk-knack/crosdid')
-      .addField('How long have I been alive?', `${lifeStr} ago.`, true)
-      .addField('Number of guilds I am in', message.client.guilds.size, true)
+      .addField('How long have I been alive?', lifeStr, true)
+      .addField('Number of guilds I am in', message.client.guilds.cache.size, true)
       .addField('Am I overall good or bad?', `I am ${Math.max(badPercent, goodPercent).toFixed(4) * 100}% ${badPercent > goodPercent ? 'bad...' : 'good!'}`, true)
       .addField("Total number of times I've been thanked 😇", globalThankCount, true);
 
