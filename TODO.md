@@ -2,23 +2,18 @@
 
 ## General
 
-1. **update discord.js to v12**
-   1. [update guide](https://discordjs.guide/additional-info/changes-in-v12.html)
-   2. [latest docs](https://discord.js.org/#/docs/main/stable/general/welcome)
-   3. [you'll want to put bot in maintenance and quit it before testing](https://dashboard.heroku.com/apps/crosdid/settings)
-   4. should test now, i think everything is up to v12
-2. Reimplement logging with `winston`
+1. Reimplement logging with `winston`
    1. Use `chalk` for coloring output?
    2. Point is going to be removing all `console.log` calls, eventually re-enable `no-console` in `.eslintrc.json`
-3. only async command modules that use await
+2. only async command modules that use await
    1. could update some commands to switch from using promise syntax to using async/await syntax
    2. should prob do that on a separate branch tho
    3. keep in mind, you will need to put it all in a try/catch block
-4. use `querystring` (native to node) to create query strings for requests
+3. use `querystring` (native to node) to create query strings for requests
    1. especially in `urban`
-5. should probably go through and rethink error handling in command modules
+4. should probably go through and rethink error handling in command modules
    1. throw error objects and handle them in client.on('message') instead of console.error + message.reply each time you should just be throwing
-6. re-enable, test, fix reactionNotify functionality
+5. re-enable, test, fix reactionNotify functionality
 
 ## New Commands
 
@@ -42,23 +37,21 @@
 
 ## Bug fixes
 
-1. **`bot`**
-   1. cut down on the usage by adding a help subcommand to spit out more detailed info
-2. `wikipedia`
+1. `wikipedia`
    1. Embed don't work like it used to, p much everything is missing
    2. probably investigate the buildEmbed function
-3. `quickpoll`
+2. `quickpoll`
    1. winningReacts may or may not be broken still
    2. emojiRegex may be failing, something is causing guild emojis to be passed through as a regular emoji (~line 50)
       1. can't really find a pattern to it
    3. look around at other projects using discord.js, see if this (or similar) is implemented
-4. `e621`
+3. `e621`
    1. getting 403 forbidden on requests
    2. also look into arg parsing
-5. `b`
+4. `b`
    1. might have trouble with double b's
    2. just test the regex shit
-6. `wordcloud`
+5. `wordcloud`
    1. image generation does not fuckin work lmao
 
 ## Command Updates
