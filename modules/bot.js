@@ -291,7 +291,7 @@ module.exports = {
           return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: get, set)`);
       }
     } else if (subcommand === 'username') {
-      // note: this may actually not stick
+      // note: this requires the bot to restart for change to be effective
       const now = (new Date()).valueOf();
       const lastUsernameChangeDate = db.get('last_username_change_date').value();
       const timeDiff = now - lastUsernameChangeDate;
