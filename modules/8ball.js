@@ -36,8 +36,7 @@ module.exports = {
     }
 
     if (args.join(' ').toLowerCase() == 'am i stupid?') {
-      message.reply('\u22c5.\u22c5');
-      return;
+      return message.reply('\u22c5.\u22c5');
     }
 
     message.reply(responses[Math.floor(Math.random() * responses.length)]);
