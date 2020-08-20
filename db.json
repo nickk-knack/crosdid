@@ -1,5 +1,5 @@
 {
-  "command_prefix": ".",
+  "command_prefix": "[.]",
   "global_disabled_cmd_modules": [
     "pornhub",
     "_translate"
@@ -12,7 +12,7 @@
     "type": "WATCHING",
     "text": "the world burn"
   },
-  "last_username_change_date": 1597899256986,
+  "last_username_change_date": 1597938168486,
   "global_good_count": 14,
   "global_bad_count": 15,
   "global_thank_count": 8,
