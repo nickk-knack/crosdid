@@ -2,18 +2,14 @@
 
 ## General
 
-1. Change command parsing to not lowercase all arguments
-   1. Will require sweeping changes to all command modules to make things lowercase when necessary
-2. Reimplement logging with `winston`
+1. Reimplement logging with `winston`
    1. Use `chalk` for coloring output?
    2. Point is going to be removing all `console.log` calls, eventually re-enable `no-console` in `.eslintrc.json`
-3. only async command modules that use await
-   1. could update some commands to switch from using promise syntax to using async/await syntax
-   2. should prob do that on a separate branch tho
-   3. keep in mind, you will need to put it all in a try/catch block
-4. should probably go through and rethink error handling in command modules
+2. should probably go through and rethink error handling in command modules
    1. throw error objects and handle them in client.on('message') instead of console.error + message.reply each time you should just be throwing
-5. re-enable, test, fix reactionNotify functionality
+3. re-enable, test, fix reactionNotify functionality
+4. switch db to fileasync? might improve speed, but that also might be unnecessary
+5. create a util.js module containing common functions used between >1 command (or have general usefulness for the future)
 
 ## New Commands
 
@@ -44,15 +40,16 @@
    1. Embed don't work like it used to, p much everything is missing
    2. probably investigate the buildEmbed function
    3. could be api issues too, which mega sucks. bumping this down in priority
+   4. should prob be rewritten, and rewrite should be async!
 
 ## Command Updates
 
-1. `bot` - add prefix viewer/changer subcommand
-2. `fakeperson` - add address generation from fakeaddressgenerator?
-3. `alexa` - check comments
-4. `quickpoll` - use moment, add try/catches where necessary for async/await stuff
-5. `garf` and `sona` - add arguments for taking up to 30 vals for generation
+1. `fakeperson` - add address generation from fakeaddressgenerator?
+2. `alexa` - check comments
+3. `quickpoll` - use moment, add try/catches where necessary for async/await stuff
+4. `garf` and `sona` - add arguments for taking up to 30 vals for generation
    1. can be done a bunch of different ways i think
+5. `strawpoll` - need to rewrite and reimplement poll creation
 
 ## Links
 
