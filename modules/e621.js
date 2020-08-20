@@ -33,8 +33,6 @@ module.exports = {
       limit: length,
     }).replace(/%20/gu, '+');
 
-    console.log(query);
-
     fetch(`https://e621.net/posts.json?${query}`, opts)
       .then((res) => {
         if (!res.ok) {
@@ -66,7 +64,7 @@ module.exports = {
           .setAuthor(result.tags.artist.join(', '))
           .setTimestamp(new Date(result.updated_at));
 
-        addFieldIfNotEmpty(embed, 'General tags', result.tags.general, true);
+        addFieldIfNotEmpty(embed, 'General tags', result.tags.general, false);
         addFieldIfNotEmpty(embed, 'Species tags', result.tags.species, true);
         addFieldIfNotEmpty(embed, 'Character tags', result.tags.character, true);
         addFieldIfNotEmpty(embed, 'Copyright tags', result.tags.copyright, true);
