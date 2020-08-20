@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
-const { stripIndent } = require('common-tags');
+const { stripIndent, stripIndents } = require('common-tags');
 
 const validActivities = ['PLAYING', 'STREAMING', 'LISTENING', 'WATCHING'];
 const validAnnouncements = ['channel_create', 'channel_delete', 'channel_update', 'emoji_create', 'emoji_delete', 'emoji_update'];
@@ -60,7 +60,8 @@ module.exports.dbDefaultGuildObj = dbDefaultGuildObj;
 module.exports = {
   name: 'bot',
   description: 'Modify various bot settings on the fly. Use the help subcommand for further help.',
-  usage: `help [subcommand] |
+  usage: stripIndents`help [subcommand] |
+      prefix <...> |
       activity <...> |
       phrases <...> |
       avatar <...> |
@@ -77,7 +78,8 @@ module.exports = {
   execute(message, args) {
     const { db } = message.client;
     const subcommand = args.shift().toLowerCase();
-    const subcommandArg = args.shift().toLowerCase();
+    const subcommandArgOriginal = args.shift();
+    const subcommandArg = subcommandArgOriginal.toLowerCase();
 
     if (subcommand === 'help') {
       const prefix = db.get('command_prefix').value() || message.client.user.toString();
@@ -86,6 +88,9 @@ module.exports = {
       switch (subcommandArg) {
         case 'help':
           msg += 'help <activity | phrases | avatar | secret | reactionNotify | update | annoucnements | help>';
+          break;
+        case 'prefix':
+          msg += 'prefix <get | set [new prefix char]>\n\nYou must include a regex escape for any characters that need it (ex: \'.\')';
           break;
         case 'activity':
           msg += stripIndent`activity <enable> |
@@ -141,6 +146,17 @@ module.exports = {
       }
 
       return message.reply(msg);
+    } else if (subcommand === 'prefix') {
+      if (subcommandArg === 'set') {
+        const newPrefix = args.shift();
+        db.set('command_prefix', newPrefix).write();
+        return message.reply(`set the command prefix to '${newPrefix}'`);
+      } else if (subcommandArg === 'get') {
+        const prefix = db.get('command_prefix').value() || message.client.user.toString();
+        return message.reply(`the current command prefix is '${prefix}'`);
+      } else {
+        return message.reply(`unknown subcommand argument '${subcommandArg}' for \`prefix\` subcommand.`);
+      }
     } else if (subcommand === 'activity') {
       switch (subcommandArg) {
         case 'enable':
@@ -292,14 +308,18 @@ module.exports = {
       }
     } else if (subcommand === 'username') {
       // note: this requires the bot to restart for change to be effective
+      if (!subcommandArgOriginal) {
+        return message.reply('you must supply a username to set!');
+      }
+
       const now = (new Date()).valueOf();
       const lastUsernameChangeDate = db.get('last_username_change_date').value();
       const timeDiff = now - lastUsernameChangeDate;
 
       if (timeDiff > (30 * 60 * 1000)) {
-        message.client.user.setUsername(subcommandArg);
+        message.client.user.setUsername(subcommandArgOriginal);
         db.set('last_username_change_date', now).write();
-        return message.reply(`successfully set bot's username to ${subcommandArg}`);
+        return message.reply(`successfully set bot's username to ${subcommandArgOriginal}`);
       } else {
         return message.reply(`you cannot change the bot's username for another ${30 - (timeDiff / 1000 / 60)} minutes.`);
       }
