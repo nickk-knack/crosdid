@@ -11,6 +11,7 @@ const Discord = require('discord.js');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 const randomHex = require('random-hex');
+const { getRandomFromArray } = require('./util');
 
 // Environment constants
 const token = process.env.TOKEN;
@@ -19,7 +20,6 @@ const DEBUG = process.env.PRINT_DEBUG || false;
 const dbFileName = process.env.DB_FILE_NAME || 'db.json';
 
 // Extra functions
-const getRandomFromArray = (array) => array[Math.floor(Math.random() * array.length)];
 
 // Start of the main bot code
 console.log('Starting bot...');

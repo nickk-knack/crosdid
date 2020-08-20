@@ -1,3 +1,5 @@
+const getRandomFromArray = (array) => array[Math.floor(Math.random() * array.length)];
+
 const trim = (str, max) => (str.length > max) ? `${str.slice(0, max - 3)}...` : str;
 
 const hashString = (string) => {
@@ -80,6 +82,7 @@ const addFieldIfNotEmpty = (embed, fieldName, fieldData, inline) => {
 };
 
 module.exports = {
+  getRandomFromArray: getRandomFromArray,
   trim: trim,
   hashString: hashString,
   normalizeHash: normalizeHash,
