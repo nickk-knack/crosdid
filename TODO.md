@@ -2,63 +2,54 @@
 
 ## General
 
-1. Reimplement logging with `winston`
+1. Change command parsing to not lowercase all arguments
+   1. Will require sweeping changes to all command modules to make things lowercase when necessary
+2. Reimplement logging with `winston`
    1. Use `chalk` for coloring output?
    2. Point is going to be removing all `console.log` calls, eventually re-enable `no-console` in `.eslintrc.json`
-2. only async command modules that use await
+3. only async command modules that use await
    1. could update some commands to switch from using promise syntax to using async/await syntax
    2. should prob do that on a separate branch tho
    3. keep in mind, you will need to put it all in a try/catch block
-3. use `querystring` (native to node) to create query strings for requests
-   1. especially in `urban`
 4. should probably go through and rethink error handling in command modules
    1. throw error objects and handle them in client.on('message') instead of console.error + message.reply each time you should just be throwing
 5. re-enable, test, fix reactionNotify functionality
 
 ## New Commands
 
-1. Add back `prefix` command from old discord bot, read from db
-   1. allow setting prefix from here, because fuck adding that to the already too-big bot command
-2. `reactionNotify` - let users enable/disable reactionNotify on an individual basis
-   1. Will need to add to base user db object
-3. `weather` - use darksky stuff if you still have it
+1. `weather` - use darksky stuff if you still have it
    1. `darkskyjs`
    2. take zip as argument
    3. default to user location? idk if thats possible
    4. maybe default to bot location then
-4. look into KSoft APIs for commands
-5. `amazon` - search amazon for items
-6. `quote` - generate and send a random quote? might be dumb idk
-7. unicode text fucker, given input perform replacements on text to get funky text
-8. `ask` - based on question form, give a quasirealistic answer (speech processing???)
-9. `remind` - set a reminder for a user, store info for reminder in db for keeping them when offline
-10. `imageflip` (or similar) - meme making shit
-11. ps name gen
+2. look into KSoft APIs for commands
+3. `amazon` - search amazon for items
+4. `quote` - generate and send a random quote? might be dumb idk
+5. unicode text fucker, given input perform replacements on text to get funky text
+6. `ask` - based on question form, give a quasirealistic answer (speech processing???)
+7. `remind` - set a reminder for a user, store info for reminder in db for keeping them when offline
+8. `imageflip` (or similar) - meme making shit
+9. ps name gen
 
 ## Bug fixes
 
-1. `wikipedia`
-   1. Embed don't work like it used to, p much everything is missing
-   2. probably investigate the buildEmbed function
-2. `quickpoll`
+1. `quickpoll`
    1. winningReacts may or may not be broken still
    2. emojiRegex may be failing, something is causing guild emojis to be passed through as a regular emoji (~line 50)
       1. can't really find a pattern to it
    3. look around at other projects using discord.js, see if this (or similar) is implemented
-3. `e621`
-   1. getting 403 forbidden on requests
-   2. also look into arg parsing
-4. `b`
-   1. might have trouble with double b's
-   2. just test the regex shit
-5. `wordcloud`
+2. `wordcloud`
    1. image generation does not fuckin work lmao
+3. `wikipedia`
+   1. Embed don't work like it used to, p much everything is missing
+   2. probably investigate the buildEmbed function
+   3. could be api issues too, which mega sucks. bumping this down in priority
 
 ## Command Updates
 
-1. `fakeperson` - add address generation from fakeaddressgenerator?
-2. `alexa` - check comments
-3. `bot` - set username
+1. `bot` - add prefix viewer/changer subcommand
+2. `fakeperson` - add address generation from fakeaddressgenerator?
+3. `alexa` - check comments
 4. `quickpoll` - use moment, add try/catches where necessary for async/await stuff
 5. `garf` and `sona` - add arguments for taking up to 30 vals for generation
    1. can be done a bunch of different ways i think
