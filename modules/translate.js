@@ -106,7 +106,7 @@ module.exports = {
 
                 Supported languages: [${Object.keys(langs).join(', ')}]
 
-                Use "${process.env.PREFIX}translate <lang>" to see what language a language code refers to.`,
+                Use "translate <lang>" to see what language a language code refers to.`,
   usage: '<to_language_code> [text]',
   args: true,
   cooldown: 3,
