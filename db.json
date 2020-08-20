@@ -1,7 +1,8 @@
 {
   "command_prefix": ".",
   "global_disabled_cmd_modules": [
-    "pornhub"
+    "pornhub",
+    "_translate"
   ],
   "operators": [
     "140225600966098944"

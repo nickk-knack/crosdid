@@ -1,6 +1,6 @@
-const { MessageEmbed } = require('discord.js');
-const randomHex = require('random-hex');
-const translate = require('yandex-translate')(process.env.YANDEX_TRANSLATE_API_KEY);
+// const { MessageEmbed } = require('discord.js');
+// const randomHex = require('random-hex');
+// const translate = require('yandex-translate')(process.env.YANDEX_TRANSLATE_API_KEY);
 const { stripIndents } = require('common-tags');
 
 const langs = {
@@ -134,25 +134,25 @@ module.exports = {
     }
 
     // Actually preform translation
-    translate.translate(text, { to: lang }, (err, res) => {
-      // On error, spit it out
-      if (err || res.code != 200) {
-        console.error(err);
-        message.reply('an error occurred while translating your text!');
-      }
+    // translate.translate(text, { to: lang }, (err, res) => {
+    //   // On error, spit it out
+    //   if (err || res.code != 200) {
+    //     console.error(err);
+    //     message.reply('an error occurred while translating your text!');
+    //   }
 
-      // From response, get the "to" and "from" languages
-      const toFromLang = res.lang.split('-');
-      const toLang = langs[toFromLang[1]];
-      const fromLang = langs[toFromLang[0]];
+    //   // From response, get the "to" and "from" languages
+    //   const toFromLang = res.lang.split('-');
+    //   const toLang = langs[toFromLang[1]];
+    //   const fromLang = langs[toFromLang[0]];
 
-      // Create and send embed with info
-      const embed = new MessageEmbed()
-        .setColor(randomHex.generate())
-        .setTitle(`Translation from ${fromLang} to ${toLang}`)
-        .setDescription(res.text.join());
+    //   // Create and send embed with info
+    //   const embed = new MessageEmbed()
+    //     .setColor(randomHex.generate())
+    //     .setTitle(`Translation from ${fromLang} to ${toLang}`)
+    //     .setDescription(res.text.join());
 
-      message.channel.send(embed);
-    });
+    //   message.channel.send(embed);
+    // });
   },
 };
