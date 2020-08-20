@@ -10,19 +10,19 @@ module.exports = {
     const bMessage = args.join(' ').trim();
 
     // normal strength b
-    let regex = /[b]+/giu;
+    let regex = /[b]/giu;
     const strength = Math.random();
 
     if (strength > 0.8) {
       // stronger b
-      regex = /[bp]+/giu;
+      regex = /[bp]/giu;
     } else if (strength < 0.1) {
       // stronger b, replace up to 10 random characters
-      regex = /[bp]+/giu;
+      regex = /[bp]/giu;
 
       const randomReplacements = Math.floor(Math.random() * 10) + 1;
       for (let i = 0; i < randomReplacements; i++) {
-        bMessage[Math.floor(Math.random() * bMessage.length())] = b;
+        bMessage[Math.floor(Math.random() * bMessage.length)] = b;
       }
     }
 
