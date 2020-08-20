@@ -1,4 +1,4 @@
-# todo
+# crosdid todo
 
 ## General
 
@@ -11,22 +11,6 @@
    3. will also help to sort of standardize error messages in a way
 3. re-enable, test, fix reactionNotify functionality
 4. switch db to fileasync? might improve speed, but that also might be unnecessary
-
-## New Commands
-
-1. `weather` - use darksky stuff if you still have it
-   1. `darkskyjs`
-   2. take zip as argument
-   3. default to user location? idk if thats possible
-   4. maybe default to bot location then
-2. look into KSoft APIs for commands
-3. `amazon` - search amazon for items
-4. `quote` - generate and send a random quote? might be dumb idk
-5. unicode text fucker, given input perform replacements on text to get funky text
-6. `ask` - based on question form, give a quasirealistic answer (speech processing???)
-7. `remind` - set a reminder for a user, store info for reminder in db for keeping them when offline
-8. `imageflip` (or similar) - meme making shit
-9. ps name gen
 
 ## Bug fixes
 
@@ -50,6 +34,23 @@
 3. `quickpoll` - use moment, add try/catches where necessary for async/await stuff
 4. `strawpoll` - need to rewrite and reimplement poll creation
 
+## New Commands
+
+1. `weather` - use darksky stuff if you still have it
+   1. `darkskyjs`
+   2. take zip as argument
+   3. default to user location? idk if thats possible
+   4. maybe default to bot location then
+2. look into KSoft APIs for commands
+3. `amazon` - search amazon for items
+4. `quote` - generate and send a random quote? might be dumb idk
+5. unicode text fucker, given input perform replacements on text to get funky text
+6. `ask` - based on question form, give a quasirealistic answer (speech processing???)
+7. `remind` - set a reminder for a user, store info for reminder in db for keeping them when offline
+8. `imageflip` (or similar) - meme making shit
+9. `repeat` - repeat last_command for current guild (guildOnly)
+10. ps name gen
+
 ## Links
 
 - [canvas for image manipulation](https://discordjs.guide/popular-topics/canvas.html#setting-up-canvas)
@@ -62,5 +63,3 @@
 ## Far out shit
 
 1. Command piping?
-2. Keep a command log, add command for repeating last command?
-3. add custom commands via a command, store in db?
