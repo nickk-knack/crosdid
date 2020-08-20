@@ -1,21 +1,22 @@
 {
-  "commandPrefix": ".",
-  "globalDisabledCmdModules": [
+  "command_prefix": ".",
+  "global_disabled_cmd_modules": [
     "pornhub"
   ],
   "operators": [
     "140225600966098944"
   ],
-  "activitySettings": {
+  "activity_settings": {
     "enabled": true,
     "type": "WATCHING",
     "text": "the world burn"
   },
+  "last_username_change_date": 1597899256986,
   "global_good_count": 14,
   "global_bad_count": 15,
   "global_thank_count": 8,
   "625766841779879967": {
-    "reactionNotify": false,
+    "reaction_notify": false,
     "secret_messages": {
       "enabled": true,
       "chance": 0.04
@@ -370,7 +371,7 @@
     "thank_count": 8
   },
   "140225766720798721": {
-    "reactionNotify": false,
+    "reaction_notify": false,
     "users": [],
     "disabledCmdModules": [],
     "enablePhrases": true,
@@ -415,7 +416,7 @@
     "thank_count": 0
   },
   "400513116376662017": {
-    "reactionNotify": false,
+    "reaction_notify": false,
     "users": [],
     "disabledCmdModules": [],
     "enablePhrases": true,
@@ -460,7 +461,7 @@
     "thank_count": 0
   },
   "459534426246873090": {
-    "reactionNotify": false,
+    "reaction_notify": false,
     "users": [],
     "disabledCmdModules": [],
     "enablePhrases": true,

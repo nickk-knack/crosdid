@@ -43,7 +43,7 @@ module.exports = {
 
         for (const file of commandModules) {
           if (!file.endsWith('.js')) continue;
-          if (db.get('globalDisabledCmdModules').includes(file.split('.')[0]).value()) continue;
+          if (db.get('global_disabled_cmd_modules').includes(file.split('.')[0]).value()) continue;
 
           delete require.cache[require.resolve(`./${file}`)];
 
@@ -56,7 +56,7 @@ module.exports = {
           }
         }
 
-        console.log(`\tAll command modules reloaded. Skipped the following: ${db.get('globalDisabledCmdModules').value().join(', ')}.`);
+        console.log(`\tAll command modules reloaded. Skipped the following: ${db.get('global_disabled_cmd_modules').value().join(', ')}.`);
       }
     }
 

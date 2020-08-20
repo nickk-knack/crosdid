@@ -9,8 +9,8 @@ module.exports = {
   usage: '[command name]',
   cooldown: 3,
   execute(message, args) {
-    const prefix = process.env.PREFIX || message.client.user.toString();
     const { db, commands } = message.client;
+    const prefix = db.get('command_prefix').value() || message.client.user.toString();
 
     const embed = new MessageEmbed().setColor(randomHex.generate());
 

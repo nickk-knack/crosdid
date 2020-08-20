@@ -35,7 +35,7 @@ module.exports = {
 
     // Get db reference
     const dbRef = (global || typeof message.guild === 'undefined' || message.guild === null) ?
-      db.get('globalDisabledCmdModules') :
+      db.get('global_disabled_cmd_modules') :
       db.get(`${message.guild.id}.disabledCmdModules`);
 
     // Set enable flag

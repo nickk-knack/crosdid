@@ -33,19 +33,19 @@ const cooldowns = new Discord.Collection();
 
 // lowdb setup
 const dbDefault = {
-  globalDisabledCmdModules: [
+  global_disabled_cmd_modules: [
     'reddit',
   ],
   operators: [],
-  activitySettings: {
+  activity_settings: {
     enabled: true,
     type: 'WATCHING',
     text: 'over my children',
-    url: '',
   },
-  good_count: 0,
-  bad_count: 0,
-  thank_count: 0,
+  last_username_change_date: 0,
+  global_good_count: 0,
+  global_bad_count: 0,
+  global_thank_count: 0,
 };
 
 // this is a cheesy change, requires that this plugin always be included...
@@ -61,7 +61,7 @@ client.db = db;
 console.log(`Loaded local database file from ${dbFileName}`);
 
 // Get prefix from db
-const prefix = db.get('commandPrefix').value();
+const prefix = db.get('command_prefix').value();
 
 // Load in all command modules
 console.log('\tLoading command modules...');
@@ -71,7 +71,7 @@ const commandModules = fs.readdirSync('./modules');
 for (const file of commandModules) {
   // If file is not a .js file or contained in the blacklist, skip it
   if (!file.endsWith('.js')) continue;
-  if (db.get('globalDisabledCmdModules').includes(file.split('.')[0]).value()) continue;
+  if (db.get('global_disabled_cmd_modules').includes(file.split('.')[0]).value()) continue;
 
   // Require the command module and set it in the client
   try {
@@ -82,7 +82,7 @@ for (const file of commandModules) {
   }
 }
 
-console.log(`\t\tCommand modules loaded. Skipped the following: ${db.get('globalDisabledCmdModules').value().join(', ')}.`);
+console.log(`\t\tCommand modules loaded. Skipped the following: ${db.get('global_disabled_cmd_modules').value().join(', ')}.`);
 
 // Events
 console.log('\tLoading events...');
@@ -120,7 +120,7 @@ client.once('ready', () => {
   }
 
   // Set the bot activity text
-  const activitySettings = db.get('activitySettings').value();
+  const activitySettings = db.get('activity_settings').value();
   if (activitySettings.enabled) {
     client.user
       .setActivity(activitySettings.text, { type: activitySettings.type })
@@ -367,7 +367,7 @@ client.on('messageReactionAdd', (reaction, user) => {
   // Auto-alert on react code (enabled on a per-guild basis)
   if (typeof reaction.message.guild !== 'undefined' &&
       reaction.message.guild.available &&
-      db.get(`${reaction.message.guild.id}.reactionNotify`).value()) {
+      db.get(`${reaction.message.guild.id}.reaction_notify`).value()) {
     // first check that you can send pms to the author! (i.e. that its not a bot)
     if (reaction.message.author.bot) return;
 
