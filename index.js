@@ -60,9 +60,6 @@ const db = low(adapter);
 client.db = db;
 console.log(`Loaded local database file from ${dbFileName}`);
 
-// Get prefix from db
-const prefix = db.get('command_prefix').value();
-
 // Load in all command modules
 console.log('\tLoading command modules...');
 
@@ -132,8 +129,11 @@ client.once('ready', () => {
 
 // Message event (command processing)
 client.on('message', async (msg) => {
+  // Get prefix from db
+  const prefix = db.get('command_prefix').value();
+
   // Command needs to start with prefix
-  const prefixRegex = new RegExp(`^(<@!?${client.user.id}> |\\${prefix})\\s*`, 'u');
+  const prefixRegex = new RegExp(`^(<@!?${client.user.id}> |${prefix})\\s*`, 'u');
 
   // Test if the message was a command
   if (!prefixRegex.test(msg.content)) {
