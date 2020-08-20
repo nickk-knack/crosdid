@@ -64,6 +64,7 @@ module.exports = {
       activity <...> |
       phrases <...> |
       avatar <...> |
+      username <...> |
       secret <...> |
       reactionNotify <...> |
       update <...> |
@@ -79,7 +80,7 @@ module.exports = {
     const subcommandArg = args.shift().toLowerCase();
 
     if (subcommand === 'help') {
-      const prefix = process.env.PREFIX || message.client.user.toString();
+      const prefix = db.get('command_prefix').value() || message.client.user.toString();
       let msg = `\n${prefix}${module.exports.name} `;
 
       switch (subcommandArg) {
@@ -103,6 +104,9 @@ module.exports = {
           break;
         case 'avatar':
           msg += 'avatar <get | set <image url>>';
+          break;
+        case 'username':
+          msg += 'username <new username>';
           break;
         case 'secret':
           msg += 'secret <messages | reacts> <enable | disable | chance <get | 0.0 - 1.0>>';
@@ -140,11 +144,11 @@ module.exports = {
     } else if (subcommand === 'activity') {
       switch (subcommandArg) {
         case 'enable':
-          db.set('activitySettings.enabled', true).write();
+          db.set('activity_settings.enabled', true).write();
           message.reply('successfully **enabled** the bot\'s activity message.');
           break;
         case 'disable':
-          db.set('activitySettings.enabled', false).write();
+          db.set('activity_settings.enabled', false).write();
           message.reply('successfully **disabled** the bot\'s activity message.');
           break;
         case 'type': {
@@ -152,7 +156,7 @@ module.exports = {
           const type = args.shift().toUpperCase();
           if (!validActivities.includes(type)) return message.reply(`invalid activity type: "${type}"`);
 
-          db.set('activitySettings.type', type).write();
+          db.set('activity_settings.type', type).write();
 
           message.reply(`successfully set the bot's activity type to "${type}".`);
           break;
@@ -160,7 +164,7 @@ module.exports = {
         case 'text': {
           if (!args.length) return message.reply('you did not provide enough arguments to execute that command!');
           const text = args.join(' ').trim();
-          db.set('activitySettings.text', text).write();
+          db.set('activity_settings.text', text).write();
 
           message.reply(`successfully set the bot's activity text to "${text}".`);
           break;
@@ -169,7 +173,7 @@ module.exports = {
           return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: enable, disable, type, text)`);
       }
 
-      const activitySettings = db.get('activitySettings').value();
+      const activitySettings = db.get('activity_settings').value();
 
       if (activitySettings.enabled) {
         message.client.user.setActivity(activitySettings.text, { type: activitySettings.type })
@@ -285,6 +289,19 @@ module.exports = {
             }));
         default:
           return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: get, set)`);
+      }
+    } else if (subcommand === 'username') {
+      // note: this may actually not stick
+      const now = (new Date()).valueOf();
+      const lastUsernameChangeDate = db.get('last_username_change_date').value();
+      const timeDiff = now - lastUsernameChangeDate;
+
+      if (timeDiff > (30 * 60 * 1000)) {
+        message.client.user.setUsername(subcommandArg);
+        db.set('last_username_change_date', now).write();
+        return message.reply(`successfully set bot's username to ${subcommandArg}`);
+      } else {
+        return message.reply(`you cannot change the bot's username for another ${30 - (timeDiff / 1000 / 60)} minutes.`);
       }
     } else if (subcommand === 'secret') {
       // Check that the subcommandArg is valid
