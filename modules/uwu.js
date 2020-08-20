@@ -1,45 +1,24 @@
-const { MessageEmbed } = require('discord.js');
-const randomHex = require('random-hex');
-const fetch = require('node-fetch');
-
 module.exports = {
   name: 'uwu',
-  description: 'Search e926',
-  args: true,
-  usage: '<tags>',
+  aliases: [],
+  description: 'Gives whatevwe you type cancew OwO',
+  usage: '<text>',
   guildOnly: false,
-  cooldown: 5,
-  async execute(message, args) {
-    const searchTerms = args.join('+');
-    const length = 10;
+  args: true,
+  cooldown: 3,
+  execute(message, args) {
+    const original = args.join(' ').trim();
 
-    fetch(`https://e926.net/post/index.json?tags=${searchTerms}&limit=${length}`)
-      .then((res) => res.json())
-      .then((json) => {
-        if (!json.length) {
-          return message.reply(`no results were found for \`${searchTerms}\``);
-        }
+    // maybe just convert whole thing to lower
+    // or maybe rewrite to preserve case tho?
 
-        if (json.success === false) {
-          return message.reply(`your request was unsuccessful for the following reason: ${json.reason}. "${json.message}"`);
-        }
+    let uwu = original.replace(/r/giu, 'w');
+    uwu = uwu.replace(/l/giu, 'w');
 
-        const result = json[Math.floor(Math.random() * json.length)];
-
-        const embed = new MessageEmbed()
-          .setColor(randomHex.generate())
-          .setTitle(args.join(' '))
-          .setDescription(result.tags)
-          .setImage(result.file_url)
-          .setURL(result.file_url)
-          .setAuthor(result.artist.join(' '))
-          .setTimestamp(new Date(result.created_at.s * 1000));
-
-        message.channel.send(embed).error(console.error);
-      })
-      .catch((err) => {
-        console.error(err);
-        return message.reply('an error occurred while performing the request to the API!');
-      });
+    // add a case for first instance of a word that starts with Th (ignore case)
+    uwu = uwu.replace(/you/giu, 'yuw');
+    uwu = uwu.replace(/\sth/giu, ' d');
+    uwu = uwu.replace(/th/giu, 'f');
+    message.channel.send(`${uwu} uwu`);
   },
 };
