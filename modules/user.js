@@ -28,7 +28,7 @@ module.exports = {
     const subcommandArg = args.shift().toLowerCase();
     const user = message.mentions.members.cache.first();
 
-    let dbUser = db.get(`${message.guild.id}.users`).find({ id: user.id });
+    let dbUser = db.get(`guilds.${message.guild.id}.users`).find({ id: user.id });
 
     switch (subcommand) {
       case 'messages':
@@ -39,7 +39,7 @@ module.exports = {
         break;
       case 'op': {
         // Coerce subcommandArg into a boolean, write it to db
-        const ops = db.get('operator');
+        const ops = db.get('operators');
 
         if (subcommandArg === 'true') {
           ops.push(user.id).write();

@@ -1,61 +1,11 @@
 const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
 const { stripIndent, stripIndents } = require('common-tags');
+const { dbDefaultGuildObj } = require('../util');
 
 const validActivities = ['PLAYING', 'STREAMING', 'LISTENING', 'WATCHING'];
 const validAnnouncements = ['channel_create', 'channel_delete', 'channel_update', 'emoji_create', 'emoji_delete', 'emoji_update'];
 const overrideableAnnouncements = ['emoji_create', 'emoji_delete', 'emoji_update'];
-
-const dbDefaultGuildObj = {
-  reactionNotify: false,
-  secret_messages: {
-    enabled: false,
-    chance: 0.05,
-  },
-  secret_reacts: {
-    enabled: false,
-    chance: 0.05,
-  },
-  users: [],
-  disabledCmdModules: [],
-  enablePhrases: true,
-  phrases: [],
-  announcements: {
-    channel: '',
-    channel_create: {
-      enabled: false,
-      messages: [],
-    },
-    channel_delete: {
-      enabled: false,
-      messages: [],
-    },
-    channel_update: {
-      enabled: false,
-      messages: [],
-    },
-    emoji_create: {
-      enabled: false,
-      channel_override: '',
-      messages: [],
-    },
-    emoji_delete: {
-      enabled: false,
-      channel_override: '',
-      messages: [],
-    },
-    emoji_update: {
-      enabled: false,
-      channel_override: '',
-      messages: [],
-    },
-  },
-  good_count: 0,
-  bad_count: 0,
-  thank_count: 0,
-};
-
-module.exports.dbDefaultGuildObj = dbDefaultGuildObj;
 
 module.exports = {
   name: 'bot',
@@ -207,16 +157,16 @@ module.exports = {
     } else if (subcommand === 'phrases') {
       if (!args.length && subcommandArg !== 'list') return message.reply('you did not provide enough arguments to execute that command!');
 
-      const dbPhrases = db.get(`${message.guild.id}.phrases`);
+      const dbPhrases = db.get(`guilds.${message.guild.id}.phrases`);
 
       switch (subcommandArg) {
         case 'enable':
         case 'e':
-          db.set(`${message.guild.id}.enablePhrases`, true);
+          db.set(`guilds.${message.guild.id}.enable_phrases`, true);
           return message.reply('successfully **enabled** trigger phrases for the guild.');
         case 'disable':
         case 'd':
-          db.set(`${message.guild.id}.enablePhrases`, false);
+          db.set(`guilds.${message.guild.id}.enable_phrases`, false);
           return message.reply('successfully **disabled** trigger phrases for the guild.');
         case 'list':
         case 'l': {
@@ -348,7 +298,7 @@ module.exports = {
       } else if (mode === 'chance') {
         setting = args.shift();
         if (setting === 'get') {
-          return message.reply(`chance for secret ${subcommandArg}: ${db.get(`${message.guild.id}.secret_${subcommandArg}.${mode}`).value()}`);
+          return message.reply(`chance for secret ${subcommandArg}: ${db.get(`guilds.${message.guild.id}.secret_${subcommandArg}.${mode}`).value()}`);
         }
 
         setting = parseFloat(setting);
@@ -358,15 +308,15 @@ module.exports = {
       }
 
       // Write new setting to db, return and reply to message
-      db.set(`${message.guild.id}.secret_${subcommandArg}.${mode}`, setting).write();
+      db.set(`guilds.${message.guild.id}.secret_${subcommandArg}.${mode}`, setting).write();
       return message.reply(msgReply);
     } else if (subcommand === 'reactionNotify') {
       switch (subcommandArg) {
         case 'enable':
-          db.set(`${message.guild.id}.${subcommand}`, true).write();
+          db.set(`guilds.${message.guild.id}.${subcommand}`, true).write();
           return message.reply('successfully **enabled** reaction notification for the guild.');
         case 'disable':
-          db.set(`${message.guild.id}.${subcommand}`, false).write();
+          db.set(`guilds.${message.guild.id}.${subcommand}`, false).write();
           return message.reply('successfully **disabled** reaction notification for the guild.');
         default:
           return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: enable, disable)`);
@@ -382,9 +332,22 @@ module.exports = {
             if (!g.available) continue;
 
             // Create guild config if non-existent
-            if (!db.has(g.id).value()) {
-              db.set(g.id, dbDefaultGuildObj).write();
+            const guildExists = db.has(`guilds.${g.id}`).value();
+            if (!guildExists) {
+              db.set(`guilds.${g.id}`, dbDefaultGuildObj).write();
               guildsAdded.push(g.name);
+
+              g.members.fetch().then((fetched) => {
+                fetched.forEach((m) => {
+                  if (!m.user.bot && !db.get(`guilds.${g.id}.users`).find({ id: m.id }).value()) {
+                    db.get(`guilds.${g.id}.users`).push({
+                      id: m.id,
+                      messages: [],
+                      reactions: [],
+                    }).write();
+                  }
+                });
+              });
             }
           }
 
@@ -396,8 +359,8 @@ module.exports = {
           // go through all users in current guild, add shit to db for them
           message.guild.members.fetch().then((fetched) => {
             fetched.forEach((m) => {
-              if (!m.user.bot && !db.get(`${message.guild.id}.users`).find({ id: m.id }).value()) {
-                db.get(`${message.guild.id}.users`).push({
+              if (!m.user.bot && !db.get(`guilds.${message.guild.id}.users`).find({ id: m.id }).value()) {
+                db.get(`guilds.${message.guild.id}.users`).push({
                   id: m.id,
                   messages: [],
                   reactions: [],
@@ -421,21 +384,21 @@ module.exports = {
           const channelName = args.shift();
           if (message.guild.channels.cache.find((c) => c.name === channelName) === null) return message.reply(`${channelName} does not exist in this guild!`);
 
-          db.set(`${message.guild.id}.announcements.channel`, channelName).write();
+          db.set(`guilds.${message.guild.id}.announcements.channel`, channelName).write();
           return message.reply(`successfully set the announcements channel to #${channelName}`);
         }
         case 'enable': {
           const announcement = args.shift().toLowerCase();
           if (!validAnnouncements.includes(announcement)) return message.reply(`invalid announcement event: ${announcement}`);
 
-          db.set(`${message.guild.id}.announcements.${announcement}.enabled`, true);
+          db.set(`guilds.${message.guild.id}.announcements.${announcement}.enabled`, true);
           return message.reply(`successfully enabled the \`${announcement}\` event for this guild.`);
         }
         case 'disable': {
           const announcement = args.shift().toLowerCase();
           if (!validAnnouncements.includes(announcement)) return message.reply(`invalid announcement event: ${announcement}`);
 
-          db.set(`${message.guild.id}.announcements.${announcement}.enabled`, false);
+          db.set(`guilds.${message.guild.id}.announcements.${announcement}.enabled`, false);
           return message.reply(`successfully disabled the \`${announcement}\` event for this guild.`);
         }
         case 'addmessage': {
@@ -446,7 +409,7 @@ module.exports = {
           const newMessage = args.join(' ');
           if (/^\s+$/giu.test(newMessage)) return message.reply(`your message can't be empty! ("${newMessage}")`);
 
-          db.get(`${message.guild.id}.announcements.${announcement}.messages`).push(newMessage).write();
+          db.get(`guilds.${message.guild.id}.announcements.${announcement}.messages`).push(newMessage).write();
           return message.reply(`successfully added "${newMessage}" as a message for the ${announcement} event`);
         }
         case 'overridechan': {
@@ -457,7 +420,7 @@ module.exports = {
           const channelName = args.shift();
           if (message.guild.channels.cache.find((c) => c.name === channelName) === null) return message.reply(`${channelName} does not exist in this guild!`);
 
-          db.set(`${message.guild.id}.announcements.${announcement}.channel_override`, channelName).write();
+          db.set(`guilds.${message.guild.id}.announcements.${announcement}.channel_override`, channelName).write();
           return message.reply(`successfully overrode the announcements channel for ${announcement} to #${channelName}`);
         }
         default:

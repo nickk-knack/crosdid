@@ -19,7 +19,7 @@ module.exports = {
   cooldown: 1,
   execute(message, args) {
     if (typeof message.guild !== 'undefined' && message.guild.available) {
-      message.client.db.update(`${message.guild.id}.bad_count`, (count) => count + 1).write();
+      message.client.db.update(`guilds.${message.guild.id}.bad_count`, (count) => count + 1).write();
     }
 
     message.client.db.update('global_bad_count', (count) => count + 1).write();

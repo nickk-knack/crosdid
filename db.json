@@ -16,494 +16,1157 @@
   "global_good_count": 14,
   "global_bad_count": 15,
   "global_thank_count": 8,
-  "625766841779879967": {
-    "reaction_notify": false,
-    "secret_messages": {
-      "enabled": true,
-      "chance": 0.04
-    },
-    "secret_reacts": {
-      "enabled": true,
-      "chance": 0.07
-    },
-    "users": [
-      {
-        "id": "250815455315492864",
-        "messages": [
-          "fuck off, andrew",
-          "are you done puking yet, andrew?",
-          "alexa, add small black anal beads to my shopping list",
-          "\"casually conservative\"",
-          "ah yes, thats because algebra",
-          "my cat has aids 😂",
-          "ayyy john arbuckle whats crackalackin binglebanger",
-          "this is my song, \"bh\" by \"guah\"",
-          "yo andrew u still got a long dick tho?",
-          "But no, i am not entirely sure what’s happening in that math."
-        ],
-        "reactions": [
-          {
-            "custom": true,
-            "emoji": "649669223844544512"
-          },
-          {
-            "custom": true,
-            "emoji": "652195997916594186"
-          },
-          {
-            "custom": true,
-            "emoji": "660988667057143808"
-          },
-          {
-            "custom": false,
-            "emoji": "😂"
-          }
-        ]
-      },
-      {
-        "id": "140225600966098944",
-        "messages": [
-          "nick is a bitch",
-          "high nick",
-          "danny rick lookin' fucker",
-          "ggggggg gg b ggg g gg g b ! g"
-        ],
-        "reactions": [
-          {
-            "custom": true,
-            "emoji": "652593020373303336"
-          },
-          {
-            "custom": true,
-            "emoji": "653691299953639427"
-          },
-          {
-            "custom": true,
-            "emoji": "653690343237353472"
-          },
-          {
-            "custom": true,
-            "emoji": "669332349183590421"
-          }
-        ]
-      },
-      {
-        "id": "206037113433620480",
-        "messages": [
-          "go photoshop a bigger dick on yourself, jake",
-          ".bad jake",
-          "shut up anprim",
-          "stay in nam"
-        ],
-        "reactions": [
-          {
-            "custom": true,
-            "emoji": "649815621210603531"
-          },
-          {
-            "custom": true,
-            "emoji": "650367361458896936"
-          },
-          {
-            "custom": true,
-            "emoji": "663079480255840287"
-          }
-        ]
-      },
-      {
-        "id": "621804005865029632",
-        "messages": [
-          "max, you MUST contact me",
-          "want a sprite cranberry?",
-          "max, are you a believer?",
-          "smart ass grad school lookin motherfucker",
-          "QUICK MAC WHAT DOES IT MEAN????? MMMAC!!!!!!!!",
-          "mac",
-          "hot teen big breats porn hub"
-        ],
-        "reactions": [
-          {
-            "custom": true,
-            "emoji": "650081690429161533"
-          },
-          {
-            "custom": true,
-            "emoji": "649996187780251658"
-          },
-          {
-            "custom": true,
-            "emoji": "649815673966559263"
-          },
-          {
-            "custom": true,
-            "emoji": "659504191214977034"
-          },
-          {
-            "custom": false,
-            "emoji": "👀"
-          }
-        ]
-      },
-      {
-        "id": "438132534555967509",
-        "messages": [
-          "matt, what's the derivative of e^x? bitch",
-          "who is this dude?",
-          "dumb question",
-          "oh my god you're alive"
-        ],
-        "reactions": [
-          {
-            "custom": true,
-            "emoji": "653328280660738048"
-          }
-        ]
-      },
-      {
-        "id": "518290855757348888",
-        "messages": [
-          "the epic memer has spoken",
-          "guys i lost my mom",
-          "this guy needs more random messages"
-        ],
-        "reactions": [
-          {
-            "custom": true,
-            "emoji": "649996307175571458"
-          },
-          {
-            "custom": true,
-            "emoji": "653993827106816030"
-          },
-          {
-            "custom": false,
-            "emoji": "🤠"
-          }
-        ]
-      },
-      {
-        "id": "189821621626732554",
-        "messages": [
-          "faewfwexxdb",
-          "babdnerionpko",
-          "zxvcxnkvrnoiniogarwniogsre",
-          "ajfewanoifjewanfewajifewjaoifewaioj",
-          "zxcvzxc",
-          "badabadbabdbadba",
-          "badabingbadaboom",
-          "O-oooooooooo AAAAE-A-A-I-A-U- JO-oooooooooooo AAE-O-A-A-U-U-A- E-eee-ee-eee AAAAE-A-E-I-E-A-JO-ooo-oo-oo-oo EEEEO-A-AAA-AAAA",
-          "you wanna hear a random signAAAaAALALAANFESNOVNSIUVBUOSEHUO#Y*R$HY*t8934try8943ry89438943wy89t43wh84e8",
-          "sSSSSS AAaAAA  R EWwE e eeE xDDDDDDDD",
-          "you have just violated the nec",
-          "AFdbADBADBaDbFGBbGFbrsTBTRHYhyWyrwyByrNrH^W$5g#Q5ge"
-        ],
-        "reactions": [
-          {
-            "custom": true,
-            "emoji": "650846853470093322"
-          },
-          {
-            "custom": true,
-            "emoji": "654752279517331457"
-          },
-          {
-            "custom": true,
-            "emoji": "654752346534051855"
-          }
-        ]
-      },
-      {
-        "id": "180151466789437440",
-        "messages": [
-          "the machine"
-        ],
-        "reactions": [
-          {
-            "custom": true,
-            "emoji": "652261387518869506"
-          },
-          {
-            "custom": true,
-            "emoji": "653691936468762626"
-          },
-          {
-            "custom": true,
-            "emoji": "643917245516480533"
-          }
-        ]
-      },
-      {
-        "id": "481955332864868388",
-        "messages": [],
-        "reactions": []
-      }
-    ],
-    "disabledCmdModules": [],
-    "enablePhrases": true,
-    "phrases": [
-      {
-        "trigger": "epic",
-        "responses": [
-          "ok now THIS is epic",
-          "OK now this is EPIC",
-          "ok now THIS is EPIC",
-          "OK now THIS is EPIC",
-          "OK now THIS... is EPIC",
-          "ok now THIS... is EPIC",
-          "ok now THIS... is epic",
-          "ok now THIS... this is epic."
-        ]
-      },
-      {
-        "trigger": "never have i ever",
-        "responses": [
-          "*puts finger down*"
-        ]
-      },
-      {
-        "trigger": "peepee poopoo",
-        "responses": [
-          "ring ding ding ding ding duh ding duh ding",
-          "i shidded and farded and cummed in my pANTSSSSSSS"
-        ]
-      },
-      {
-        "trigger": "o i am laffin",
-        "responses": [
-          "oial",
-          "i am laffin 4 real rn"
-        ]
-      },
-      {
-        "trigger": "shit asshole",
-        "responses": [
-          "wilbert fan shit asshole"
-        ]
-      },
-      {
-        "trigger": "i dont want it",
-        "responses": [
-          "I DONT WAAAANTTT IIIIITTTTTTTT!!!!!"
-        ]
-      },
-      {
-        "trigger": "hell yeah",
-        "responses": [
-          "https://imgur.com/63wf95x"
-        ]
-      },
-      {
-        "trigger": "^!$",
-        "responses": [
-          "❗"
-        ]
-      },
-      {
-        "trigger": "^!!$",
-        "responses": [
-          "‼️"
-        ]
-      },
-      {
-        "trigger": "^!\\?$",
-        "responses": [
-          "⁉️"
-        ]
-      },
-      {
-        "trigger": "^\\?$",
-        "responses": [
-          "❓"
-        ]
-      }
-    ],
-    "announcements": {
-      "channel": "announcement-town",
-      "channel_create": {
+  "guilds": {
+    "625766841779879967": {
+      "last_command": ".about",
+      "reaction_notify": false,
+      "secret_messages": {
         "enabled": true,
-        "messages": [
-          "new channel alert",
-          "check out the new channel"
-        ]
+        "chance": 0.04
       },
-      "channel_delete": {
+      "secret_reacts": {
         "enabled": true,
-        "messages": [
-          "rip to the following channel",
-          "i deleted the shit out of a channel"
-        ]
+        "chance": 0.07
       },
-      "channel_update": {
-        "enabled": true,
-        "messages": [
-          "a channel doth been updated",
-          "channel news"
-        ]
+      "users": [
+        {
+          "id": "250815455315492864",
+          "messages": [
+            "fuck off, andrew",
+            "are you done puking yet, andrew?",
+            "alexa, add small black anal beads to my shopping list",
+            "\"casually conservative\"",
+            "ah yes, thats because algebra",
+            "my cat has aids 😂",
+            "ayyy john arbuckle whats crackalackin binglebanger",
+            "this is my song, \"bh\" by \"guah\"",
+            "yo andrew u still got a long dick tho?",
+            "But no, i am not entirely sure what’s happening in that math."
+          ],
+          "reactions": [
+            {
+              "custom": true,
+              "emoji": "649669223844544512"
+            },
+            {
+              "custom": true,
+              "emoji": "652195997916594186"
+            },
+            {
+              "custom": true,
+              "emoji": "660988667057143808"
+            },
+            {
+              "custom": false,
+              "emoji": "😂"
+            }
+          ]
+        },
+        {
+          "id": "140225600966098944",
+          "messages": [
+            "nick is a bitch",
+            "high nick",
+            "danny rick lookin' fucker",
+            "ggggggg gg b ggg g gg g b ! g"
+          ],
+          "reactions": [
+            {
+              "custom": true,
+              "emoji": "652593020373303336"
+            },
+            {
+              "custom": true,
+              "emoji": "653691299953639427"
+            },
+            {
+              "custom": true,
+              "emoji": "653690343237353472"
+            },
+            {
+              "custom": true,
+              "emoji": "669332349183590421"
+            }
+          ]
+        },
+        {
+          "id": "206037113433620480",
+          "messages": [
+            "go photoshop a bigger dick on yourself, jake",
+            ".bad jake",
+            "shut up anprim",
+            "stay in nam"
+          ],
+          "reactions": [
+            {
+              "custom": true,
+              "emoji": "649815621210603531"
+            },
+            {
+              "custom": true,
+              "emoji": "650367361458896936"
+            },
+            {
+              "custom": true,
+              "emoji": "663079480255840287"
+            }
+          ]
+        },
+        {
+          "id": "621804005865029632",
+          "messages": [
+            "max, you MUST contact me",
+            "want a sprite cranberry?",
+            "max, are you a believer?",
+            "smart ass grad school lookin motherfucker",
+            "QUICK MAC WHAT DOES IT MEAN????? MMMAC!!!!!!!!",
+            "mac",
+            "hot teen big breats porn hub"
+          ],
+          "reactions": [
+            {
+              "custom": true,
+              "emoji": "650081690429161533"
+            },
+            {
+              "custom": true,
+              "emoji": "649996187780251658"
+            },
+            {
+              "custom": true,
+              "emoji": "649815673966559263"
+            },
+            {
+              "custom": true,
+              "emoji": "659504191214977034"
+            },
+            {
+              "custom": false,
+              "emoji": "👀"
+            }
+          ]
+        },
+        {
+          "id": "438132534555967509",
+          "messages": [
+            "matt, what's the derivative of e^x? bitch",
+            "who is this dude?",
+            "dumb question",
+            "oh my god you're alive"
+          ],
+          "reactions": [
+            {
+              "custom": true,
+              "emoji": "653328280660738048"
+            }
+          ]
+        },
+        {
+          "id": "518290855757348888",
+          "messages": [
+            "the epic memer has spoken",
+            "guys i lost my mom",
+            "this guy needs more random messages"
+          ],
+          "reactions": [
+            {
+              "custom": true,
+              "emoji": "649996307175571458"
+            },
+            {
+              "custom": true,
+              "emoji": "653993827106816030"
+            },
+            {
+              "custom": false,
+              "emoji": "🤠"
+            }
+          ]
+        },
+        {
+          "id": "189821621626732554",
+          "messages": [
+            "faewfwexxdb",
+            "babdnerionpko",
+            "zxvcxnkvrnoiniogarwniogsre",
+            "ajfewanoifjewanfewajifewjaoifewaioj",
+            "zxcvzxc",
+            "badabadbabdbadba",
+            "badabingbadaboom",
+            "O-oooooooooo AAAAE-A-A-I-A-U- JO-oooooooooooo AAE-O-A-A-U-U-A- E-eee-ee-eee AAAAE-A-E-I-E-A-JO-ooo-oo-oo-oo EEEEO-A-AAA-AAAA",
+            "you wanna hear a random signAAAaAALALAANFESNOVNSIUVBUOSEHUO#Y*R$HY*t8934try8943ry89438943wy89t43wh84e8",
+            "sSSSSS AAaAAA  R EWwE e eeE xDDDDDDDD",
+            "you have just violated the nec",
+            "AFdbADBADBaDbFGBbGFbrsTBTRHYhyWyrwyByrNrH^W$5g#Q5ge"
+          ],
+          "reactions": [
+            {
+              "custom": true,
+              "emoji": "650846853470093322"
+            },
+            {
+              "custom": true,
+              "emoji": "654752279517331457"
+            },
+            {
+              "custom": true,
+              "emoji": "654752346534051855"
+            }
+          ]
+        },
+        {
+          "id": "180151466789437440",
+          "messages": [
+            "the machine"
+          ],
+          "reactions": [
+            {
+              "custom": true,
+              "emoji": "652261387518869506"
+            },
+            {
+              "custom": true,
+              "emoji": "653691936468762626"
+            },
+            {
+              "custom": true,
+              "emoji": "643917245516480533"
+            }
+          ]
+        },
+        {
+          "id": "481955332864868388",
+          "messages": [],
+          "reactions": []
+        }
+      ],
+      "disabled_cmd_modules": [],
+      "enable_phrases": true,
+      "phrases": [
+        {
+          "trigger": "epic",
+          "responses": [
+            "ok now THIS is epic",
+            "OK now this is EPIC",
+            "ok now THIS is EPIC",
+            "OK now THIS is EPIC",
+            "OK now THIS... is EPIC",
+            "ok now THIS... is EPIC",
+            "ok now THIS... is epic",
+            "ok now THIS... this is epic."
+          ]
+        },
+        {
+          "trigger": "never have i ever",
+          "responses": [
+            "*puts finger down*"
+          ]
+        },
+        {
+          "trigger": "peepee poopoo",
+          "responses": [
+            "ring ding ding ding ding duh ding duh ding",
+            "i shidded and farded and cummed in my pANTSSSSSSS"
+          ]
+        },
+        {
+          "trigger": "o i am laffin",
+          "responses": [
+            "oial",
+            "i am laffin 4 real rn"
+          ]
+        },
+        {
+          "trigger": "shit asshole",
+          "responses": [
+            "wilbert fan shit asshole"
+          ]
+        },
+        {
+          "trigger": "i dont want it",
+          "responses": [
+            "I DONT WAAAANTTT IIIIITTTTTTTT!!!!!"
+          ]
+        },
+        {
+          "trigger": "hell yeah",
+          "responses": [
+            "https://imgur.com/63wf95x"
+          ]
+        },
+        {
+          "trigger": "^!$",
+          "responses": [
+            "❗"
+          ]
+        },
+        {
+          "trigger": "^!!$",
+          "responses": [
+            "‼️"
+          ]
+        },
+        {
+          "trigger": "^!\\?$",
+          "responses": [
+            "⁉️"
+          ]
+        },
+        {
+          "trigger": "^\\?$",
+          "responses": [
+            "❓"
+          ]
+        }
+      ],
+      "announcements": {
+        "channel": "announcement-town",
+        "channel_create": {
+          "enabled": true,
+          "messages": [
+            "new channel alert",
+            "check out the new channel"
+          ]
+        },
+        "channel_delete": {
+          "enabled": true,
+          "messages": [
+            "rip to the following channel",
+            "i deleted the shit out of a channel"
+          ]
+        },
+        "channel_update": {
+          "enabled": true,
+          "messages": [
+            "a channel doth been updated",
+            "channel news"
+          ]
+        },
+        "emoji_create": {
+          "enabled": true,
+          "channel_override": "emoji-town",
+          "messages": [
+            "hot off the presses:",
+            "brand new epic emoji:",
+            "EMOJI GET:"
+          ]
+        },
+        "emoji_delete": {
+          "enabled": true,
+          "channel_override": "emoji-town",
+          "messages": [
+            "this emoji sucked, it's gone now:",
+            "rip emoji:",
+            "in memoriam:"
+          ]
+        },
+        "emoji_update": {
+          "enabled": true,
+          "channel_override": "emoji-town",
+          "messages": [
+            "an emoji has been updated:",
+            "new old emoji:"
+          ]
+        }
       },
-      "emoji_create": {
-        "enabled": true,
-        "channel_override": "emoji-town",
-        "messages": [
-          "hot off the presses:",
-          "brand new epic emoji:",
-          "EMOJI GET:"
-        ]
-      },
-      "emoji_delete": {
-        "enabled": true,
-        "channel_override": "emoji-town",
-        "messages": [
-          "this emoji sucked, it's gone now:",
-          "rip emoji:",
-          "in memoriam:"
-        ]
-      },
-      "emoji_update": {
-        "enabled": true,
-        "channel_override": "emoji-town",
-        "messages": [
-          "an emoji has been updated:",
-          "new old emoji:"
-        ]
-      }
+      "good_count": 14,
+      "bad_count": 15,
+      "thank_count": 8
     },
-    "good_count": 14,
-    "bad_count": 15,
-    "thank_count": 8
-  },
-  "140225766720798721": {
-    "reaction_notify": false,
-    "users": [],
-    "disabledCmdModules": [],
-    "enablePhrases": true,
-    "phrases": [],
-    "announcements": {
-      "channel": "",
-      "channel_create": {
+    "140225766720798721": {
+      "last_command": "",
+      "reactionNotify": false,
+      "secret_messages": {
         "enabled": false,
-        "messages": []
+        "chance": 0.05
       },
-      "channel_delete": {
+      "secret_reacts": {
         "enabled": false,
-        "messages": []
+        "chance": 0.05
       },
-      "emoji_create": {
-        "enabled": false,
-        "channel_override": "",
-        "send_emoji": false,
-        "send_message": false,
-        "message_prepend": true,
-        "messages": []
+      "users": [
+        {
+          "id": "140225600966098944",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "140273567253135360",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "140922019733569536",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "141005743951314944",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "142469515979128832",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "144577371121385473",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "145644779198218251",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "174677814220554251",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "182615528383184896",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "184135199716671488",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "226560211773685761",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "247482408620916738",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "296744137808543744",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "424757592208834563",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "428605068141395978",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "466147196908339203",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "480117186007007232",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "540376645161189377",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "133398673009672192",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "142462974987206656",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "164588832837206019",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "166286413027999744",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "111291033513398272",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "143489669168889857",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "267823366944063488",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "285201311874416640",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "308011346329468928",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "327635747727212545",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "329468735029116929",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "329686828804210698",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "408850503091617803",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "412689677569753088",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "419710900631764992",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "431559004901343232",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "467734063747432448",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "519647082005397514",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "520034051520856074",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "564119118677278751",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "637510191151054849",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "654507971954475018",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "682798822262702133",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "701212902601785355",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "702452497373200435",
+          "messages": [],
+          "reactions": []
+        }
+      ],
+      "disabled_cmd_modules": [],
+      "enable_phrases": true,
+      "phrases": [],
+      "announcements": {
+        "channel": "",
+        "channel_create": {
+          "enabled": false,
+          "messages": []
+        },
+        "channel_delete": {
+          "enabled": false,
+          "messages": []
+        },
+        "channel_update": {
+          "enabled": false,
+          "messages": []
+        },
+        "emoji_create": {
+          "enabled": false,
+          "channel_override": "",
+          "messages": []
+        },
+        "emoji_delete": {
+          "enabled": false,
+          "channel_override": "",
+          "messages": []
+        },
+        "emoji_update": {
+          "enabled": false,
+          "channel_override": "",
+          "messages": []
+        }
       },
-      "emoji_delete": {
-        "enabled": false,
-        "channel_override": "",
-        "send_emoji": false,
-        "send_message": false,
-        "message_prepend": true,
-        "messages": []
-      },
-      "emoji_update": {
-        "enabled": false,
-        "channel_override": "",
-        "send_emoji": false,
-        "send_message": false,
-        "message_prepend": true,
-        "messages": []
-      }
+      "good_count": 0,
+      "bad_count": 0,
+      "thank_count": 0
     },
-    "good_count": 0,
-    "bad_count": 0,
-    "thank_count": 0
-  },
-  "400513116376662017": {
-    "reaction_notify": false,
-    "users": [],
-    "disabledCmdModules": [],
-    "enablePhrases": true,
-    "phrases": [],
-    "announcements": {
-      "channel": "",
-      "channel_create": {
+    "400513116376662017": {
+      "last_command": "",
+      "reactionNotify": false,
+      "secret_messages": {
         "enabled": false,
-        "messages": []
+        "chance": 0.05
       },
-      "channel_delete": {
+      "secret_reacts": {
         "enabled": false,
-        "messages": []
+        "chance": 0.05
       },
-      "emoji_create": {
-        "enabled": false,
-        "channel_override": "",
-        "send_emoji": false,
-        "send_message": false,
-        "message_prepend": true,
-        "messages": []
+      "users": [
+        {
+          "id": "140225600966098944",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "140273567253135360",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "140922019733569536",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "141005743951314944",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "142469515979128832",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "144577371121385473",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "145644779198218251",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "174677814220554251",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "182615528383184896",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "184135199716671488",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "226560211773685761",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "247482408620916738",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "296744137808543744",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "424757592208834563",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "428605068141395978",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "466147196908339203",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "480117186007007232",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "540376645161189377",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "133398673009672192",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "142462974987206656",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "164588832837206019",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "166286413027999744",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "111291033513398272",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "143489669168889857",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "267823366944063488",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "285201311874416640",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "308011346329468928",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "327635747727212545",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "329468735029116929",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "329686828804210698",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "408850503091617803",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "412689677569753088",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "419710900631764992",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "431559004901343232",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "467734063747432448",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "519647082005397514",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "520034051520856074",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "564119118677278751",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "637510191151054849",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "654507971954475018",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "682798822262702133",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "701212902601785355",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "702452497373200435",
+          "messages": [],
+          "reactions": []
+        }
+      ],
+      "disabled_cmd_modules": [],
+      "enable_phrases": true,
+      "phrases": [],
+      "announcements": {
+        "channel": "",
+        "channel_create": {
+          "enabled": false,
+          "messages": []
+        },
+        "channel_delete": {
+          "enabled": false,
+          "messages": []
+        },
+        "channel_update": {
+          "enabled": false,
+          "messages": []
+        },
+        "emoji_create": {
+          "enabled": false,
+          "channel_override": "",
+          "messages": []
+        },
+        "emoji_delete": {
+          "enabled": false,
+          "channel_override": "",
+          "messages": []
+        },
+        "emoji_update": {
+          "enabled": false,
+          "channel_override": "",
+          "messages": []
+        }
       },
-      "emoji_delete": {
-        "enabled": false,
-        "channel_override": "",
-        "send_emoji": false,
-        "send_message": false,
-        "message_prepend": true,
-        "messages": []
-      },
-      "emoji_update": {
-        "enabled": false,
-        "channel_override": "",
-        "send_emoji": false,
-        "send_message": false,
-        "message_prepend": true,
-        "messages": []
-      }
+      "good_count": 0,
+      "bad_count": 0,
+      "thank_count": 0
     },
-    "good_count": 0,
-    "bad_count": 0,
-    "thank_count": 0
-  },
-  "459534426246873090": {
-    "reaction_notify": false,
-    "users": [],
-    "disabledCmdModules": [],
-    "enablePhrases": true,
-    "phrases": [],
-    "announcements": {
-      "channel": "",
-      "channel_create": {
+    "459534426246873090": {
+      "last_command": "",
+      "reactionNotify": false,
+      "secret_messages": {
         "enabled": false,
-        "messages": []
+        "chance": 0.05
       },
-      "channel_delete": {
+      "secret_reacts": {
         "enabled": false,
-        "messages": []
+        "chance": 0.05
       },
-      "emoji_create": {
-        "enabled": false,
-        "channel_override": "",
-        "send_emoji": false,
-        "send_message": false,
-        "message_prepend": true,
-        "messages": []
+      "users": [
+        {
+          "id": "140225600966098944",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "140273567253135360",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "140922019733569536",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "141005743951314944",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "142469515979128832",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "144577371121385473",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "145644779198218251",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "174677814220554251",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "182615528383184896",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "184135199716671488",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "226560211773685761",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "247482408620916738",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "296744137808543744",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "424757592208834563",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "428605068141395978",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "466147196908339203",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "480117186007007232",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "540376645161189377",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "133398673009672192",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "142462974987206656",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "164588832837206019",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "166286413027999744",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "111291033513398272",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "143489669168889857",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "267823366944063488",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "285201311874416640",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "308011346329468928",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "327635747727212545",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "329468735029116929",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "329686828804210698",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "408850503091617803",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "412689677569753088",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "419710900631764992",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "431559004901343232",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "467734063747432448",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "519647082005397514",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "520034051520856074",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "564119118677278751",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "637510191151054849",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "654507971954475018",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "682798822262702133",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "701212902601785355",
+          "messages": [],
+          "reactions": []
+        },
+        {
+          "id": "702452497373200435",
+          "messages": [],
+          "reactions": []
+        }
+      ],
+      "disabled_cmd_modules": [],
+      "enable_phrases": true,
+      "phrases": [],
+      "announcements": {
+        "channel": "",
+        "channel_create": {
+          "enabled": false,
+          "messages": []
+        },
+        "channel_delete": {
+          "enabled": false,
+          "messages": []
+        },
+        "channel_update": {
+          "enabled": false,
+          "messages": []
+        },
+        "emoji_create": {
+          "enabled": false,
+          "channel_override": "",
+          "messages": []
+        },
+        "emoji_delete": {
+          "enabled": false,
+          "channel_override": "",
+          "messages": []
+        },
+        "emoji_update": {
+          "enabled": false,
+          "channel_override": "",
+          "messages": []
+        }
       },
-      "emoji_delete": {
-        "enabled": false,
-        "channel_override": "",
-        "send_emoji": false,
-        "send_message": false,
-        "message_prepend": true,
-        "messages": []
-      },
-      "emoji_update": {
-        "enabled": false,
-        "channel_override": "",
-        "send_emoji": false,
-        "send_message": false,
-        "message_prepend": true,
-        "messages": []
-      }
-    },
-    "good_count": 0,
-    "bad_count": 0,
-    "thank_count": 0
+      "good_count": 0,
+      "bad_count": 0,
+      "thank_count": 0
+    }
   }
 }

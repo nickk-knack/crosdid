@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const { addFieldIfNotEmpty } = require('../util');
 const randomHex = require('random-hex');
 const moment = require('moment');
 const momentDurationFormatSetup = require('moment-duration-format');
@@ -42,9 +43,11 @@ module.exports = {
 
     if (typeof message.guild !== 'undefined' && message.guild.available) {
       embed
-        .addField("Number of times I've been called bad in this guild...", db.get(`${message.guild.id}.bad_count`).value(), true)
-        .addField("Number of times I've been called good in this guild!", db.get(`${message.guild.id}.good_count`).value(), true)
-        .addField("Number of times I've been thanked in this guild 😇", db.get(`${message.guild.id}.thank_count`).value(), true);
+        .addField("Number of times I've been called bad in this guild...", db.get(`guilds.${message.guild.id}.bad_count`).value(), true)
+        .addField("Number of times I've been called good in this guild!", db.get(`guilds.${message.guild.id}.good_count`).value(), true)
+        .addField("Number of times I've been thanked in this guild 😇", db.get(`guilds.${message.guild.id}.thank_count`).value(), true);
+
+      addFieldIfNotEmpty(embed, 'The last command executed on this guild', db.get(`guilds.${message.guild.id}.last_command`).value(), true);
     }
 
     const { lastMessage } = message.client.user;

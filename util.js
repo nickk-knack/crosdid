@@ -76,9 +76,60 @@ const generateUserHexString = (length, args) => {
 };
 
 const addFieldIfNotEmpty = (embed, fieldName, fieldData, inline) => {
-  if (!fieldData.length) return;
+  if (typeof fieldData !== 'string') throw new Error('fieldData must be a string!');
+  if (fieldData === '') return;
 
-  embed.addField(fieldName, fieldData.join(', '), inline);
+  embed.addField(fieldName, fieldData, inline);
+};
+
+const dbDefaultGuildObj = {
+  last_command: '',
+  reactionNotify: false,
+  secret_messages: {
+    enabled: false,
+    chance: 0.05,
+  },
+  secret_reacts: {
+    enabled: false,
+    chance: 0.05,
+  },
+  users: [],
+  disabled_cmd_modules: [],
+  enable_phrases: true,
+  phrases: [],
+  announcements: {
+    channel: '',
+    channel_create: {
+      enabled: false,
+      messages: [],
+    },
+    channel_delete: {
+      enabled: false,
+      messages: [],
+    },
+    channel_update: {
+      enabled: false,
+      messages: [],
+    },
+    emoji_create: {
+      enabled: false,
+      channel_override: '',
+      messages: [],
+    },
+    emoji_delete: {
+      enabled: false,
+      channel_override: '',
+      messages: [],
+    },
+    emoji_update: {
+      enabled: false,
+      channel_override: '',
+      messages: [],
+    },
+  },
+  good_count: 0,
+  bad_count: 0,
+  thank_count: 0,
 };
 
 module.exports = {
@@ -89,4 +140,5 @@ module.exports = {
   generateRandomHexString: generateRandomHexString,
   generateUserHexString: generateUserHexString,
   addFieldIfNotEmpty: addFieldIfNotEmpty,
+  dbDefaultGuildObj: dbDefaultGuildObj,
 };

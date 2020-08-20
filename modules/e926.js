@@ -58,12 +58,12 @@ module.exports = {
         .setAuthor(result.tags.artist.join(', '))
         .setTimestamp(new Date(result.updated_at));
 
-      addFieldIfNotEmpty(embed, 'General tags', result.tags.general, false);
-      addFieldIfNotEmpty(embed, 'Species tags', result.tags.species, true);
-      addFieldIfNotEmpty(embed, 'Character tags', result.tags.character, true);
-      addFieldIfNotEmpty(embed, 'Copyright tags', result.tags.copyright, true);
-      addFieldIfNotEmpty(embed, 'Lore tags', result.tags.lore, true);
-      addFieldIfNotEmpty(embed, 'Meta tags', result.tags.meta, true);
+      addFieldIfNotEmpty(embed, 'General tags', result.tags.general.join(', '), false);
+      addFieldIfNotEmpty(embed, 'Species tags', result.tags.species.join(', '), true);
+      addFieldIfNotEmpty(embed, 'Character tags', result.tags.character.join(', '), true);
+      addFieldIfNotEmpty(embed, 'Copyright tags', result.tags.copyright.join(', '), true);
+      addFieldIfNotEmpty(embed, 'Lore tags', result.tags.lore.join(', '), true);
+      addFieldIfNotEmpty(embed, 'Meta tags', result.tags.meta.join(', '), true);
 
       message.channel.send(embed);
     } catch (err) {
