@@ -1,6 +1,13 @@
 const { MessageEmbed } = require('discord.js');
+const querystring = require('querystring');
 const randomHex = require('random-hex');
 const fetch = require('node-fetch');
+
+const addFieldIfNotEmpty = (embed, fieldName, fieldData, inline) => {
+  if (!fieldData.length) return;
+
+  embed.addField(fieldName, fieldData.join(', '), inline);
+};
 
 module.exports = {
   name: 'e926',
@@ -11,36 +18,64 @@ module.exports = {
   guildOnly: false,
   cooldown: 5,
   async execute(message, args) {
-    const searchTerms = args.join('+');
+    const searchTerms = args.join(' ');
     const length = 10;
 
-    fetch(`https://e926.net/post/index.json?tags=${searchTerms}&limit=${length}`)
-      .then((res) => res.json())
+    const opts = {
+      method: 'GET',
+      headers: {
+        'User-Agent': 'crosdid/1.0',
+      },
+    };
+
+    const query = querystring.stringify({
+      tags: searchTerms,
+      limit: length,
+    }).replace(/%20/gu, '+');
+
+    fetch(`https://e926.net/posts.json?${query}`, opts)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`server responded [${res.status}]: ${res.statusText}`);
+        }
+
+        return res.json();
+      })
       .then((json) => {
-        if (!json.length) {
+        const { posts } = json;
+
+        if (typeof posts === 'undefined') {
+          return message.reply('the posts object was undefined for your search. what the fuck?');
+        }
+
+        if (!posts.length) {
           return message.reply(`no results were found for \`${searchTerms}\``);
         }
 
-        if (json.success === false) {
-          return message.reply(`your request was unsuccessful for the following reason: ${json.reason}. "${json.message}"`);
-        }
-
-        const result = json[Math.floor(Math.random() * json.length)];
+        const result = posts[Math.floor(Math.random() * posts.length)];
 
         const embed = new MessageEmbed()
           .setColor(randomHex.generate())
-          .setTitle(args.join(' '))
-          .setDescription(result.tags)
-          .setImage(result.file_url)
-          .setURL(result.file_url)
-          .setAuthor(result.artist.join(' '))
-          .setTimestamp(new Date(result.created_at.s * 1000));
+          .setTitle(args.map((e) => `"${e}"`).join(' + '))
+          .setDescription(result.description)
+          .setImage(result.file.url)
+          .setThumbnail(result.preview.url)
+          .setURL(`https://e621.net/posts/${result.id}?q=${query}`)
+          .setAuthor(result.tags.artist.join(', '))
+          .setTimestamp(new Date(result.updated_at));
 
-        message.channel.send(embed).error(console.error);
+        addFieldIfNotEmpty(embed, 'General tags', result.tags.general, false);
+        addFieldIfNotEmpty(embed, 'Species tags', result.tags.species, true);
+        addFieldIfNotEmpty(embed, 'Character tags', result.tags.character, true);
+        addFieldIfNotEmpty(embed, 'Copyright tags', result.tags.copyright, true);
+        addFieldIfNotEmpty(embed, 'Lore tags', result.tags.lore, true);
+        addFieldIfNotEmpty(embed, 'Meta tags', result.tags.meta, true);
+
+        message.channel.send(embed);
       })
       .catch((err) => {
         console.error(err);
-        return message.reply('an error occurred while performing the request to the API!');
+        return message.reply(`an error occurred while performing the request to the API: ${err}`);
       });
   },
 };
