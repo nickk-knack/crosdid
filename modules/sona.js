@@ -40,7 +40,7 @@ module.exports = {
         validString = true;
       } else {
         // If this has taken more than 50 tries, abort
-        if (iterations > 50) throw 'Could not generate a valid hex string';
+        if (iterations > 50) throw new Error('Could not generate a valid hex string');
 
         // Reset string and try again, wrong length
         hexString = '';
