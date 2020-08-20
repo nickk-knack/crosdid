@@ -33,49 +33,47 @@ module.exports = {
       limit: length,
     }).replace(/%20/gu, '+');
 
-    fetch(`https://e621.net/posts.json?${query}`, opts)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`server responded [${res.status}]: ${res.statusText}`);
-        }
+    try {
+      const response = await fetch(`https://e621.net/posts.json?${query}`, opts);
 
-        return res.json();
-      })
-      .then((json) => {
-        const { posts } = json;
+      if (!response.ok) {
+        throw new Error(`server responded [${response.status}]: ${response.statusText}`);
+      }
 
-        if (typeof posts === 'undefined') {
-          return message.reply('the posts object was undefined for your search. what the fuck?');
-        }
+      const json = await response.json();
+      const { posts } = json;
 
-        if (!posts.length) {
-          return message.reply(`no results were found for \`${searchTerms}\``);
-        }
+      if (typeof posts === 'undefined') {
+        return message.reply('the posts object was undefined for your search. what the fuck?');
+      }
 
-        const result = posts[Math.floor(Math.random() * posts.length)];
+      if (!posts.length) {
+        return message.reply(`no results were found for \`${searchTerms}\``);
+      }
 
-        const embed = new MessageEmbed()
-          .setColor(randomHex.generate())
-          .setTitle(args.map((e) => `"${e}"`).join(' + '))
-          .setDescription(result.description)
-          .setImage(result.file.url)
-          .setThumbnail(result.preview.url)
-          .setURL(`https://e621.net/posts/${result.id}?q=${query}`)
-          .setAuthor(result.tags.artist.join(', '))
-          .setTimestamp(new Date(result.updated_at));
+      const result = posts[Math.floor(Math.random() * posts.length)];
 
-        addFieldIfNotEmpty(embed, 'General tags', result.tags.general, false);
-        addFieldIfNotEmpty(embed, 'Species tags', result.tags.species, true);
-        addFieldIfNotEmpty(embed, 'Character tags', result.tags.character, true);
-        addFieldIfNotEmpty(embed, 'Copyright tags', result.tags.copyright, true);
-        addFieldIfNotEmpty(embed, 'Lore tags', result.tags.lore, true);
-        addFieldIfNotEmpty(embed, 'Meta tags', result.tags.meta, true);
+      const embed = new MessageEmbed()
+        .setColor(randomHex.generate())
+        .setTitle(args.map((e) => `"${e}"`).join(' + '))
+        .setDescription(result.description)
+        .setImage(result.file.url)
+        .setThumbnail(result.preview.url)
+        .setURL(`https://e621.net/posts/${result.id}?q=${query}`)
+        .setAuthor(result.tags.artist.join(', '))
+        .setTimestamp(new Date(result.updated_at));
 
-        message.channel.send(embed);
-      })
-      .catch((err) => {
-        console.error(err);
-        return message.reply(`an error occurred while performing the request to the API: ${err}`);
-      });
+      addFieldIfNotEmpty(embed, 'General tags', result.tags.general, false);
+      addFieldIfNotEmpty(embed, 'Species tags', result.tags.species, true);
+      addFieldIfNotEmpty(embed, 'Character tags', result.tags.character, true);
+      addFieldIfNotEmpty(embed, 'Copyright tags', result.tags.copyright, true);
+      addFieldIfNotEmpty(embed, 'Lore tags', result.tags.lore, true);
+      addFieldIfNotEmpty(embed, 'Meta tags', result.tags.meta, true);
+
+      message.channel.send(embed);
+    } catch (err) {
+      console.error(err);
+      return message.reply(`an error occurred while performing the request to the API: ${err}`);
+    }
   },
 };

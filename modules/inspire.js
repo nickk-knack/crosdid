@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const querystring = require('querystring');
 const randomHex = require('random-hex');
 const fetch = require('node-fetch');
 
@@ -11,18 +12,21 @@ module.exports = {
   guildOnly: false,
   cooldown: 5,
   async execute(message, args) {
-    fetch(`http://inspirobot.me/api?generate=true${args.length && args[0] === 'xmas' ? '&season=xmas' : ''}`)
-      .then((res) => res.text())
-      .then((data) => {
-        const embed = new MessageEmbed()
-          .setColor(randomHex.generate())
-          .setImage(data);
+    try {
+      const qObj = { generate: true };
+      if (args.length && args[0] === 'xmas') qObj.season = 'xmas';
 
-        message.channel.send(embed).catch(console.error);
-      })
-      .catch((err) => {
-        console.error(err);
-        message.reply(`I had trouble getting inspired... (${err.message})`);
-      });
+      const query = querystring.stringify(qObj);
+      const response = await fetch(`http://inspirobot.me/api?${query}`);
+      const data = await response.text();
+      const embed = new MessageEmbed()
+        .setColor(randomHex.generate())
+        .setImage(data);
+
+      message.channel.send(embed);
+    } catch (err) {
+      console.error(err);
+      message.reply(`I had trouble getting inspired... (${err.message})`);
+    }
   },
 };

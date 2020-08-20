@@ -35,30 +35,27 @@ module.exports = {
   args: false,
   guildOnly: false,
   cooldown: 3,
-  execute(message, args) {
-    const catUrl = 'https://thiscatdoesnotexist.com/';
-
+  async execute(message, args) {
     const randomMessage = messages[Math.floor(Math.random() * messages.length)];
 
-    fetch(catUrl)
-      .then((res) => res.buffer())
-      .then((buffer) => {
-        const cattachment = new MessageAttachment(buffer, 'fakecat.png');
+    try {
+      const response = await fetch('https://thiscatdoesnotexist.com/');
+      const buffer = await response.buffer();
+      const cattachment = new MessageAttachment(buffer, 'fakecat.png');
 
-        message.channel.send({
-          files: [cattachment],
-          embed: {
-            title: randomMessage,
-            image: {
-              url: 'attachment://fakecat.png',
-            },
-            color: parseInt(randomHex.generate(), 16),
+      message.channel.send({
+        files: [cattachment],
+        embed: {
+          title: randomMessage,
+          image: {
+            url: 'attachment://fakecat.png',
           },
-        }).catch(console.error);
-      })
-      .catch((err) => {
-        console.error(err);
-        message.reply('an error occured while trying to get your cat!');
+          color: parseInt(randomHex.generate(), 16),
+        },
       });
+    } catch (err) {
+      console.error(err);
+      message.reply('an error occured while trying to get your cat!');
+    }
   },
 };

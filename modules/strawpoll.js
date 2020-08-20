@@ -2,7 +2,7 @@ const strawpoll = require('strawpolljs');
 // following would be for the create option
 // const fetch = require('node-fetch');
 
-const read = (args) => {
+const read = async (args) => {
   args.shift();
 
   const isURL = args[0].match(/https:\/\/(?:www\.)?strawpoll.me\/\d+/giu);
@@ -23,28 +23,26 @@ const read = (args) => {
     return 'something went seriously wrong, yo';
   }
 
-  strawpoll
-    .readPoll(pollNum)
-    .then((res) => {
-      const json = JSON.parse(res);
+  try {
+    const response = await strawpoll.readPoll(pollNum);
+    const json = JSON.parse(response);
+    const topResult = {
+      result: '',
+      votes: 0,
+    };
 
-      const topRes = {
-        result: '',
-        votes: 0,
-      };
-
-      for (let i = 0; i < json.votes.length; i++) {
-        if (json.votes[i] > topRes.votes) {
-          topRes.votes = json.votes[i];
-          topRes.result = json.options[i];
-        }
+    for (let i = 0; i < json.votes.length; i++) {
+      if (json.votes[i] > topResult.votes) {
+        topResult.votes = json.votes[i];
+        topResult.result = json.options[i];
       }
+    }
 
-      return `Winning result for "${json.title.trim()}": "${topRes.result.trim()}" with ${topRes.votes} votes.`;
-    }).catch((err) => {
-      console.error(err);
-      return 'An error occurred while processing the read request!';
-    });
+    return `Winning result for "${json.title.trim()}": "${topResult.result.trim()}" with ${topResult.votes} votes.`;
+  } catch (err) {
+    console.error(err);
+    return 'An error occurred while processing the read request!';
+  }
 };
 
 // bad, work on later
@@ -147,9 +145,10 @@ module.exports = {
   usage: '<-r> <link | poll number> | [-m] <"title"> <options> ',
   args: true,
   cooldown: 5,
-  execute(message, args) {
+  async execute(message, args) {
     if (args[0] == '-r') {
-      message.reply(read(args));
+      const res = await read(args);
+      message.reply(res);
     } else {
       // create(args);
       message.reply('no');

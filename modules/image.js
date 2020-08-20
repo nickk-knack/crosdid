@@ -12,38 +12,38 @@ module.exports = {
   usage: '<search query>',
   guildOnly: false,
   cooldown: 3,
-  execute(message, args) {
+  async execute(message, args) {
     const query = args.join(' ').trim();
     const client = new GoogleImages(GoogleCSEID, GoogleAPIKey);
 
-    client.search(query)
-      .then((images) => {
-        // Check if there were no results
-        if (!images.length) return message.reply(`no results found for \`${query}\``);
+    try {
+      const images = await client.search(query);
 
-        // Get random image
-        const randomImage = images[Math.floor(Math.random() * images.length)];
-        // This check is technically legacy shit, but I'm going to leave it in "just in case"
-        if (typeof randomImage === 'undefined') return message.reply(`no results found for \`${query}\``);
+      // Check if there were no results
+      if (!images.length) return message.reply(`no results found for \`${query}\``);
 
-        const embed = new MessageEmbed()
-          .setColor(randomHex.generate())
-          .setTitle(query)
-          .setImage(randomImage.url);
+      // Get random image
+      const randomImage = images[Math.floor(Math.random() * images.length)];
+      // This check is technically legacy shit, but I'm going to leave it in "just in case"
+      if (typeof randomImage === 'undefined') return message.reply(`no results found for \`${query}\``);
 
-        message.channel.send(embed);
-      })
-      .catch((e) => {
-        switch (e.statusCode) {
-          case 403:
-            message.reply("I literally can't search anymore");
-            break;
-          case 404:
-            message.reply(`no results found for \`${query}\``);
-            break;
-          default:
-            console.error(e);
-        }
-      });
+      const embed = new MessageEmbed()
+        .setColor(randomHex.generate())
+        .setTitle(query)
+        .setImage(randomImage.url);
+
+      message.channel.send(embed);
+    } catch (e) {
+      switch (e.statusCode) {
+        case 403:
+          message.reply("I literally can't search anymore");
+          break;
+        case 404:
+          message.reply(`no results found for \`${query}\``);
+          break;
+        default:
+          console.error(e);
+      }
+    }
   },
 };

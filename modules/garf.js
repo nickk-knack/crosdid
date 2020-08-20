@@ -11,7 +11,7 @@ module.exports = {
   args: false,
   guildOnly: false,
   cooldown: 3,
-  execute(message, args) {
+  async execute(message, args) {
     let hexString = '';
     let validString = false;
     let iterations = 0;
@@ -38,6 +38,7 @@ module.exports = {
       if (hexString.length === SLIDER_COUNT * 2) {
         // Break loop, it's valid
         validString = true;
+        // console.log(hexString);
       } else {
         // If this has taken more than 50 tries, abort
         if (iterations > 50) throw 'Could not generate a valid hex string';
@@ -47,28 +48,23 @@ module.exports = {
       }
     }
 
-    const garfUrl = `http://codeparade.net/garfield/gen_${hexString}.jpg`;
+    try {
+      const response = await fetch(`http://codeparade.net/garfield/gen_${hexString}.jpg`);
+      const buffer = await response.buffer();
+      const attachment = new MessageAttachment(buffer, 'garf.jpg');
 
-    // console.log(garfUrl);
-
-    fetch(garfUrl)
-      .then((res) => res.buffer())
-      .then((buffer) => {
-        const attachment = new MessageAttachment(buffer, 'garf.jpg');
-
-        message.channel.send({
-          files: [attachment],
-          embed: {
-            image: {
-              url: 'attachment://garf.jpg',
-            },
-            color: parseInt(randomHex.generate(), 16),
+      message.channel.send({
+        files: [attachment],
+        embed: {
+          image: {
+            url: 'attachment://garf.jpg',
           },
-        }).catch(console.error);
-      })
-      .catch((err) => {
-        console.error(err);
-        message.reply('an error occured while trying to get your garfield.');
+          color: parseInt(randomHex.generate(), 16),
+        },
       });
+    } catch (err) {
+      console.error(err);
+      message.reply('an error occured while trying to get your garfield.');
+    }
   },
 };

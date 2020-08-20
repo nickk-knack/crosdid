@@ -11,7 +11,7 @@ module.exports = {
   args: false,
   guildOnly: false,
   cooldown: 3,
-  execute(message, args) {
+  async execute(message, args) {
     let hexString = '';
     let validString = false;
     let iterations = 0;
@@ -47,26 +47,23 @@ module.exports = {
       }
     }
 
-    const furUrl = `http://codeparade.net/furry/gen_${hexString}.jpg`;
+    try {
+      const response = await fetch(`http://codeparade.net/furry/gen_${hexString}.jpg`);
+      const buffer = await response.buffer();
+      const attachment = new MessageAttachment(buffer, 'sona.jpg');
 
-    fetch(furUrl)
-      .then((res) => res.buffer())
-      .then((buffer) => {
-        const attachment = new MessageAttachment(buffer, 'sona.jpg');
-
-        message.channel.send({
-          files: [attachment],
-          embed: {
-            image: {
-              url: 'attachment://sona.jpg',
-            },
-            color: parseInt(randomHex.generate(), 16),
+      message.channel.send({
+        files: [attachment],
+        embed: {
+          image: {
+            url: 'attachment://sona.jpg',
           },
-        }).catch(console.error);
-      })
-      .catch((err) => {
-        console.error(err);
-        message.reply('an error occured while trying to get your fursona.');
+          color: parseInt(randomHex.generate(), 16),
+        },
       });
+    } catch (err) {
+      console.error(err);
+      message.reply('an error occured while trying to get your fursona.');
+    }
   },
 };

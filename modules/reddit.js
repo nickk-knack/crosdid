@@ -15,7 +15,7 @@ module.exports = {
   args: true,
   guildOnly: false,
   cooldown: 5,
-  execute(message, args) {
+  async execute(message, args) {
     // Get options and search query from args
     const subredditFlagIndex = args.findIndex((val) => /^-s$|^--sub$/giu.test(val));
     let subreddit = '';
@@ -65,35 +65,36 @@ module.exports = {
       raw_json: 1,
     });
 
-    fetch(`${url}?${query}`)
-      .then((res) => res.json())
-      .then((data) => data.data.children.map((d) => d.data))
-      .then((results) => {
-        if (!results.length) return message.reply(`there were no results found for ${search}!`);
+    // Perform request, return data
+    try {
+      const response = await fetch(`${url}?${query}`);
+      const json = await response.json();
+      const results = json.data.children.map((d) => d.data);
 
-        const [result] = results;
+      if (!results.length) return message.reply(`there were no results found for ${search}!`);
 
-        const embed = new MessageEmbed()
-          .setTitle(`${result.subreddit_name_prefixed} - ${trim(result.title, 253 - result.subreddit_name_prefixed.length)}`)
-          .setDescription(result.is_self ? trim(result.selftext, 2048) : `[permalink](https://reddit.com${result.permalink})`)
-          .setURL(result.is_self ? `https://reddit.com${result.permalink}` : result.url)
-          .setAuthor(result.author, '', `https://reddit.com/u/${result.author}`)
-          .setColor(randomHex.generate())
-          .setTimestamp(new Date(result.created_utc * 1000))
-          .setFooter(`${result.score} points`);
+      const [result] = results;
 
-        // Set image/thumbnail separately, don't want duplicate images in the embed
-        if (domainRegex.test(result.domain)) {
-          embed.setImage(result.url);
-        } else {
-          embed.setThumbnail(thumbRegex.test(result.thumbnail) ? result.thumbnail : '');
-        }
+      const embed = new MessageEmbed()
+        .setTitle(`${result.subreddit_name_prefixed} - ${trim(result.title, 253 - result.subreddit_name_prefixed.length)}`)
+        .setDescription(result.is_self ? trim(result.selftext, 2048) : `[permalink](https://reddit.com${result.permalink})`)
+        .setURL(result.is_self ? `https://reddit.com${result.permalink}` : result.url)
+        .setAuthor(result.author, '', `https://reddit.com/u/${result.author}`)
+        .setColor(randomHex.generate())
+        .setTimestamp(new Date(result.created_utc * 1000))
+        .setFooter(`${result.score} points`);
 
-        message.channel.send(embed).catch(console.error);
-      })
-      .catch((err) => {
-        console.error(err);
-        return message.reply('there was an error while querying the reddit API!');
-      });
+      // Set image/thumbnail separately, don't want duplicate images in the embed
+      if (domainRegex.test(result.domain)) {
+        embed.setImage(result.url);
+      } else {
+        embed.setThumbnail(thumbRegex.test(result.thumbnail) ? result.thumbnail : '');
+      }
+
+      message.channel.send(embed);
+    } catch (err) {
+      console.error(err);
+      return message.reply('there was an error while querying the reddit API!');
+    }
   },
 };

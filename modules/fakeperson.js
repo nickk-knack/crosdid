@@ -8,27 +8,24 @@ module.exports = {
   description: 'Sends an AI generated person directly to chat.',
   args: false,
   cooldown: 3,
-  execute(message, args) {
-    const personUrl = 'https://thispersondoesnotexist.com/image';
+  async execute(message, args) {
+    try {
+      const response = await fetch('https://thispersondoesnotexist.com/image');
+      const buffer = await response.buffer();
+      const attachment = new MessageAttachment(buffer, 'fakeperson.png');
 
-    fetch(personUrl)
-      .then((res) => res.buffer())
-      .then((buffer) => {
-        const attachment = new MessageAttachment(buffer, 'fakeperson.png');
-
-        message.channel.send({
-          files: [attachment],
-          embed: {
-            image: {
-              url: 'attachment://fakeperson.png',
-            },
-            color: parseInt(randomHex.generate(), 16),
+      message.channel.send({
+        files: [attachment],
+        embed: {
+          image: {
+            url: 'attachment://fakeperson.png',
           },
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        message.reply('an error occured while trying to get a fake human...');
+          color: parseInt(randomHex.generate(), 16),
+        },
       });
+    } catch (err) {
+      console.error(err);
+      message.reply('an error occured while trying to get a fake human...');
+    }
   },
 };
