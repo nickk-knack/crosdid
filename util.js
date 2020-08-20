@@ -69,6 +69,8 @@ const generateUserHexString = (length, args) => {
   if (hexString.length !== length * 2) {
     throw new Error(`Could not generate a valid hex string from args: ${argsCopy.join(' ')}`);
   }
+
+  return hexString;
 };
 
 const addFieldIfNotEmpty = (embed, fieldName, fieldData, inline) => {
