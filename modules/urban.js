@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const querystring = require('querystring');
 const randomHex = require('random-hex');
 const fetch = require('node-fetch');
 const trim = (str, max) => (str.length > max) ? `${str.slice(0, max - 3)}...` : str;
@@ -12,7 +13,11 @@ module.exports = {
   guildOnly: false,
   cooldown: 5,
   async execute(message, args) {
-    fetch(`http://api.urbandictionary.com/v0/define?term=${args.join('%20')}`)
+    const query = querystring.stringify({
+      term: args.join(' '),
+    });
+
+    fetch(`http://api.urbandictionary.com/v0/define?${query}`)
       .then((res) => res.json())
       .then((json) => {
         if (!json.list.length) {

@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const querystring = require('querystring');
 const fetch = require('node-fetch');
 const randomHex = require('random-hex');
 const trim = (str, max) => (str.length > max) ? `${str.slice(0, max - 3)}...` : str;
@@ -56,9 +57,15 @@ module.exports = {
 
     // Put together data
     const url = `https://www.reddit.com/${subreddit !== '' ? `r/${subreddit}/` : ''}search.json`;
-    const query = `?q=${search}&sort=${sortType}&limit=${limit}&restrict_sr=false&raw_json=1`;
+    const query = querystring.stringify({
+      q: search,
+      sort: sortType,
+      limit: limit,
+      restrict_sr: false,
+      raw_json: 1,
+    });
 
-    fetch(`${url}${query}`)
+    fetch(`${url}?${query}`)
       .then((res) => res.json())
       .then((data) => data.data.children.map((d) => d.data))
       .then((results) => {

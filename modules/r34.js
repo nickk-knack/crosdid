@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const querystring = require('querystring');
 const randomHex = require('random-hex');
 const fetch = require('node-fetch');
 const parser = require('xml2js').parseStringPromise;
@@ -16,9 +17,17 @@ module.exports = {
   cooldown: 5,
   execute(message, args) {
     const limit = 20;
-    const query = args.join('+').trim();
+    const searchTerms = args.join(' ');
 
-    fetch(`https://rule34.xxx/index.php?page=dapi&s=post&q=index&tags=${query}&limit=${limit}`)
+    const query = querystring.stringify({
+      page: 'dapi',
+      s: 'post',
+      q: 'index',
+      tags: searchTerms,
+      limit: limit,
+    }).replace(/%20/gu, '+');
+
+    fetch(`https://rule34.xxx/index.php?${query}`)
       .then((res) => res.text())
       .then((body) => {
         parser(body.toString('utf8'))
