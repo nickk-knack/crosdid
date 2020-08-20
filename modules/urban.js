@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js');
 const querystring = require('querystring');
 const randomHex = require('random-hex');
 const fetch = require('node-fetch');
-const trim = (str, max) => (str.length > max) ? `${str.slice(0, max - 3)}...` : str;
+const { trim } = require('../util');
 
 module.exports = {
   name: 'urban',

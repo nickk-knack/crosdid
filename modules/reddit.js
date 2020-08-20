@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js');
 const querystring = require('querystring');
 const fetch = require('node-fetch');
 const randomHex = require('random-hex');
-const trim = (str, max) => (str.length > max) ? `${str.slice(0, max - 3)}...` : str;
+const { trim } = require('../util');
 const sortTypes = ['relevance', 'hot', 'top', 'new', 'comments'];
 const thumbRegex = /^https?:\/\/[^\s$.?#].[^\s]*$/gmiu;
 const domainRegex = /(?:i\.)?(?:imgur|redd|gfy|giphy)/giu;

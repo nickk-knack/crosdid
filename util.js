@@ -1,3 +1,21 @@
+const trim = (str, max) => (str.length > max) ? `${str.slice(0, max - 3)}...` : str;
+
+const hashString = (string) => {
+  let hash = 0;
+
+  if (string.length === 0) return hash;
+
+  for (let i = 0; i < string.length; i++) {
+    const char = string.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash |= 0;
+  }
+
+  return hash + 0x7FFFffff;
+};
+
+const normalizeHash = (val) => (val / 0xFFFFfffe);
+
 const generateRandomHexString = (length) => {
   let hexString = '';
   let validString = false;
@@ -53,7 +71,17 @@ const generateUserHexString = (length, args) => {
   }
 };
 
+const addFieldIfNotEmpty = (embed, fieldName, fieldData, inline) => {
+  if (!fieldData.length) return;
+
+  embed.addField(fieldName, fieldData.join(', '), inline);
+};
+
 module.exports = {
+  trim: trim,
+  hashString: hashString,
+  normalizeHash: normalizeHash,
   generateRandomHexString: generateRandomHexString,
   generateUserHexString: generateUserHexString,
+  addFieldIfNotEmpty: addFieldIfNotEmpty,
 };

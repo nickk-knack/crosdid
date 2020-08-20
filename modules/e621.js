@@ -2,12 +2,7 @@ const { MessageEmbed } = require('discord.js');
 const querystring = require('querystring');
 const fetch = require('node-fetch');
 const randomHex = require('random-hex');
-
-const addFieldIfNotEmpty = (embed, fieldName, fieldData, inline) => {
-  if (!fieldData.length) return;
-
-  embed.addField(fieldName, fieldData.join(', '), inline);
-};
+const { addFieldIfNotEmpty } = require('../util');
 
 module.exports = {
   name: 'e621',
