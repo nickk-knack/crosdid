@@ -25,8 +25,7 @@ module.exports = {
 
       message.channel.send(embed);
     } catch (err) {
-      console.error(err);
-      message.reply(`I had trouble getting inspired... (${err.message})`);
+      throw new Error(`I had trouble getting inspired... (${err})`);
     }
   },
 };

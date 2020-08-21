@@ -93,8 +93,7 @@ module.exports = {
 
       message.channel.send(embed);
     } catch (err) {
-      console.error(err);
-      return message.reply('there was an error while querying the reddit API!');
+      throw new Error(`there was an error while querying the reddit API! (${err})`);
     }
   },
 };

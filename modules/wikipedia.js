@@ -23,8 +23,7 @@ module.exports = {
         search = await wiki.random(5);
         searchResult = search[Math.floor(Math.random() * search.length)];
       } catch (err) {
-        console.error(err);
-        message.reply('could not get a random page! Something is fucky.');
+        throw new Error(`could not get a random page! Something is fucky. (${err})`);
       }
     } else {
       // Get "limit" flag and new "limit"
@@ -55,8 +54,7 @@ module.exports = {
 
         searchResult = search.results[Math.floor(Math.random() * search.results.length)];
       } catch (err) {
-        console.error(err);
-        message.reply(`an error occurred while processing that request! (${err})`);
+        throw new Error(`an error occurred while processing that request! (${err})`);
       }
     }
 
@@ -84,8 +82,7 @@ module.exports = {
 
       return message.channel.send(embed);
     } catch (err) {
-      console.error(err);
-      return message.reply(`an error occurred while building the embed... (${err})`);
+      throw new Error(`an error occurred while building the embed... (${err})`);
     }
   },
 };

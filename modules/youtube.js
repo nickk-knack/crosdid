@@ -84,8 +84,7 @@ module.exports = {
 
     search(query, opts, (err, res) => {
       if (err) {
-        console.error(err);
-        return message.reply(`no results found for \`${query}\``);
+        throw new Error(`an error occurred while searching. (${err})`);
       }
 
       if (!res.length) return message.reply(`no results found for \`${query}\``);
@@ -94,7 +93,7 @@ module.exports = {
       const chosen = res[Math.floor(Math.random() * res.length)];
 
       // Future todo: if the 'kind' is 'youtube#playlist' or 'youtube#channel', make it a custom embed
-      message.channel.send(chosen.link);
+      return message.channel.send(chosen.link);
     });
   },
 };

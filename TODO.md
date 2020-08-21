@@ -5,12 +5,8 @@
 1. Reimplement logging with `winston`
    1. Use `chalk` for coloring output?
    2. Point is going to be removing all `console.log` calls, eventually re-enable `no-console` in `.eslintrc.json`
-2. should probably go through and rethink error handling in command modules
-   1. throw error objects and handle them in client.on('message') instead of console.error + message.reply each time you should just be throwing
-   2. e.g. "catch and rethrow"
-   3. will also help to sort of standardize error messages in a way
-3. re-enable, test, fix reactionNotify functionality
-4. switch db to fileasync? might improve speed, but that also might be unnecessary
+2. re-enable, test, fix reactionNotify functionality
+3. switch db to fileasync? might improve speed, but that also might be unnecessary
 
 ## Bug fixes
 
@@ -28,6 +24,7 @@
 2. `alexa` - check comments
 3. `quickpoll` - use moment, add try/catches where necessary for async/await stuff
 4. `strawpoll` - need to rewrite and reimplement poll creation
+5. `youtube` - look at comments
 
 ## New Commands
 

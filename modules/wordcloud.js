@@ -62,7 +62,7 @@ module.exports = {
           },
           color: parseInt(randomHex.generate(), 16),
         },
-      }).catch(console.error);
+      });
     };
 
     cloud().size([1200, 1000])

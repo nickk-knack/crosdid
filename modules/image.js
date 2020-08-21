@@ -42,7 +42,7 @@ module.exports = {
           message.reply(`no results found for \`${query}\``);
           break;
         default:
-          console.error(e);
+          throw new Error(`an error occurred requesting your image. (${e})`);
       }
     }
   },

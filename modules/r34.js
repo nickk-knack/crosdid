@@ -43,8 +43,7 @@ module.exports = {
 
       message.channel.send(embed);
     } catch (err) {
-      console.error(err);
-      message.reply(`something went wrong! (\`${err.message}\`)`);
+      throw new Error(`something went wrong! (\`${err}\`)`);
     }
   },
 };

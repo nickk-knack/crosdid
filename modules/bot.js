@@ -144,14 +144,12 @@ module.exports = {
       if (activitySettings.enabled) {
         message.client.user.setActivity(activitySettings.text, { type: activitySettings.type })
           .catch((e) => {
-            console.error(e);
-            message.reply('there was an error setting the activity. Check the console for debugging information.');
+            throw new Error(`there was an error setting the activity. (${e})`);
           });
       } else {
         message.client.user.setActivity(null)
           .catch((e) => {
-            console.error(e);
-            message.reply('there was an error setting the activity. Check the console for debugging information.');
+            throw new Error(`there was an error setting the activity. (${e})`);
           });
       }
     } else if (subcommand === 'phrases') {
@@ -241,8 +239,7 @@ module.exports = {
           message.client.user.setAvatar(avatarUrl)
             .then(() => message.reply(`successfully set avatar to ${avatarUrl}`))
             .catch((e) => {
-              console.error(e);
-              message.reply('there was an error setting the avatar. Check the console for debugging information.');
+              throw new Error(`there was an error setting the avatar. (${e})`);
             });
           break;
         }

@@ -137,8 +137,7 @@ module.exports = {
     // translate.translate(text, { to: lang }, (err, res) => {
     //   // On error, spit it out
     //   if (err || res.code != 200) {
-    //     console.error(err);
-    //     message.reply('an error occurred while translating your text!');
+    //     throw new Error(`an error occurred while translating your text! (${err})`);
     //   }
 
     //   // From response, get the "to" and "from" languages

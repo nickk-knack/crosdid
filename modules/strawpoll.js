@@ -19,8 +19,7 @@ const read = async (args) => {
   } else if (isID) {
     pollNum = args.shift();
   } else {
-    console.error('wtf? this shouldn\'t happen');
-    return 'something went seriously wrong, yo';
+    throw new Error('something went seriously wrong, yo. (got neither a url nor an id)');
   }
 
   try {
@@ -40,8 +39,7 @@ const read = async (args) => {
 
     return `Winning result for "${json.title.trim()}": "${topResult.result.trim()}" with ${topResult.votes} votes.`;
   } catch (err) {
-    console.error(err);
-    return 'An error occurred while processing the read request!';
+    throw new Error(`an error occurred while processing the read request! ${err}`);
   }
 };
 

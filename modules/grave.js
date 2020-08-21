@@ -32,8 +32,7 @@ module.exports = {
         },
       });
     } catch (err) {
-      console.error(err);
-      message.reply(`an error occurred while fetching that gravestone: \`${err.message}\``);
+      throw new Error(`an error occurred while fetching that gravestone: \`${err}\``);
     }
   },
 };

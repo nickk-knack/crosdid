@@ -48,7 +48,7 @@ module.exports = {
         const react = guildEmoji ? message.guild.emojis.cache.find((e) => e.toString() === emoji) : emoji;
 
         await sent.react(react).catch((e) => {
-          console.error(react, e);
+          throw new Error(`error reacting with ${react}. (${e})`);
         });
       }
 
@@ -60,16 +60,17 @@ module.exports = {
       if (winningReacts.size > 1) {
         // tie between some reacts
         sent.edit(`There was a tie between ${winningReacts.map((react) => `"**${responses[emojis.indexOf(react.emoji.toString())]}**"`).join(', ')}, with each getting **${winningReacts[0].count - 1} votes**`)
-          .catch(console.error);
+          .catch((err) => { throw new Error(`error editing message. (${err})`); }); // was just catch(console.error) before
       } else if (winningReacts.size === 1) {
         const winningReact = winningReacts.first();
         sent.edit(`The winning choice is "**${responses[emojis.indexOf(winningReact.emoji.toString())]}**" with **${winningReact.count - 1} votes**`)
-          .catch(console.error);
+          .catch((err) => { throw new Error(`error editing message. (${err})`); });
       } else {
-        sent.edit('There were no winners????').catch(console.error);
+        sent.edit('There were no winners????')
+          .catch((err) => { throw new Error(`error editing message. (${err})`); });
       }
     } catch (e) {
-      console.error(e);
+      throw new Error(`an error occurred while creating the poll. (${e})`);
     }
   },
 };

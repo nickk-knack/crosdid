@@ -67,8 +67,7 @@ module.exports = {
 
       message.channel.send(embed);
     } catch (err) {
-      console.error(err);
-      return message.reply(`an error occurred while performing the request to the API: ${err}`);
+      throw new Error(`an error occurred while performing the request to the API: ${err}`);
     }
   },
 };

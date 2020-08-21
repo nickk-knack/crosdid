@@ -33,8 +33,7 @@ module.exports = {
           const newCommand = require(`./${command.name}.js`); // eslint-disable-line global-require
           commands.set(newCommand.name, newCommand);
         } catch (e) {
-          console.error(e);
-          return message.reply('there was an error while reloading that command.');
+          throw new Error(`there was an error while reloading that command. (${e})`);
         }
       } else {
         console.log('Reloading all commands');
@@ -51,8 +50,7 @@ module.exports = {
             const command = require(`./${file}`); // eslint-disable-line global-require
             commands.set(command.name, command);
           } catch (e) {
-            console.error(e);
-            return message.reply(`there was an error while reloading commands at ${file}`);
+            throw new Error(`there was an error while reloading commands at ${file}. (${e})`);
           }
         }
 

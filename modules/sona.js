@@ -36,8 +36,7 @@ module.exports = {
         },
       });
     } catch (err) {
-      console.error(err);
-      message.reply('an error occured while trying to get your fursona.');
+      throw new Error(`an error occured while trying to get your fursona. (${err})`);
     }
   },
 };
