@@ -66,7 +66,7 @@ module.exports = {
         case 'secret':
           msg += 'secret <messages | reacts> <enable | disable | chance <get | 0.0 - 1.0>>';
           break;
-        case 'reactionNotify':
+        case 'reactionnotify':
           msg += 'reactionNotify <enable | disable>';
           break;
         case 'update':
@@ -307,7 +307,7 @@ module.exports = {
       // Write new setting to db, return and reply to message
       db.set(`guilds.${message.guild.id}.secret_${subcommandArg}.${mode}`, setting).write();
       return message.reply(msgReply);
-    } else if (subcommand === 'reactionNotify') {
+    } else if (subcommand === 'reactionnotify') {
       switch (subcommandArg) {
         case 'enable':
           db.set(`guilds.${message.guild.id}.${subcommand}`, true).write();
