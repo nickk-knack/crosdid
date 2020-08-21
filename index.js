@@ -359,7 +359,7 @@ client.on('emojiUpdate', (oldEmoji, newEmoji) => {
 });
 
 // Message reaction add event
-client.on('messageReactionAdd', (reaction, user) => {
+client.on('messageReactionAdd', async (reaction, user) => {
   // Any other reaction processing goes here:
   // (i.e., giving a user a role on a react)
 
@@ -373,25 +373,33 @@ client.on('messageReactionAdd', (reaction, user) => {
       reaction.message.guild.available &&
       db.get(`guilds.${reaction.message.guild.id}.reaction_notify`).value()) {
     // first check that you can send pms to the author! (i.e. that its not a bot)
-    if (reaction.message.author.bot) return;
-
-    // Get message author, and begin message content
     const { author } = reaction.message;
-    const embed = new Discord.MessageEmbed()
-      .setColor(randomHex.generate())
-      .setTitle(`${user.tag} reacted to your message`)
-      .addField('Your message', `> ${reaction.message.content}`);
+    if (author.bot) return;
 
-    // detect if the emoji is a guild emoji (true) or regular emoji (false), append to message
-    if (typeof reaction.emoji.url !== 'undefined') {
-      embed.setImage(reaction.emoji.url)
-        .addField('Reaction', `"${reaction.emoji.name}" from guild "${reaction.message.guild.name}"`);
-    } else {
-      embed.addField('Reaction', reaction.emoji);
+    try {
+      // Create a DM channel to user
+      const dm = await author.createDM();
+
+      // Begin message content
+      const embed = new Discord.MessageEmbed()
+        .setColor(randomHex.generate())
+        .setTitle(`${user.tag} reacted to your message`)
+        .addField('Your message', `> ${reaction.message.content}`);
+
+      // detect if the emoji is a guild emoji (true) or regular emoji (false), append to message
+      if (typeof reaction.emoji.url !== 'undefined') {
+        embed
+          .setImage(reaction.emoji.url)
+          .addField('Reaction', `"${reaction.emoji.name}" from guild "${reaction.message.guild.name}"`);
+      } else {
+        embed.addField('Reaction', reaction.emoji);
+      }
+
+      // Send message to author
+      dm.send(embed);
+    } catch (err) {
+      console.error(`could not send DM to ${author}. (${err})`);
     }
-
-    // Send message to author
-    author.send(embed);
   }
 });
 
