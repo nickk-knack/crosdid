@@ -6,6 +6,7 @@
    1. Use `chalk` for coloring output?
    2. Point is going to be removing all `console.log` calls, eventually re-enable `no-console` in `.eslintrc.json`
 2. re-enable, test, fix reactionNotify functionality
+   1. was trying to do this, but using `bot` command to enable reactionNotify didn't exactly work. need to look into this
 3. switch db to fileasync? might improve speed, but that also might be unnecessary
 
 ## Bug fixes
@@ -23,7 +24,7 @@
 1. `fakeperson` - add address generation from fakeaddressgenerator?
 2. `alexa` - check comments
 3. `quickpoll` - use moment, add try/catches where necessary for async/await stuff
-4. `strawpoll` - need to rewrite and reimplement poll creation
+4. `strawpoll` - need to test poll creation reimplementation
 5. `youtube` - look at comments
 
 ## New Commands
