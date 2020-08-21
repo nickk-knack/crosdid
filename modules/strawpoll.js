@@ -1,6 +1,5 @@
 const strawpoll = require('strawpolljs');
-// following would be for the create option
-// const fetch = require('node-fetch');
+const fetch = require('node-fetch');
 
 const read = async (args) => {
   args.shift();
@@ -43,98 +42,85 @@ const read = async (args) => {
   }
 };
 
-// bad, work on later
-// const create = (args, bot) => {
-//   // Title parsing
+// untested
+const create = async (args) => {
+  // Title parsing
+  const titleArray = [];
+  if (!args[0].startsWith('"')) {
+    return 'Your title must be enclosed in quotation marks!';
+  }
 
-//   const titleArray = [];
+  titleArray.push(args.shift());
+  while (!args[0].includes('"')) {
+    if (args.length) {
+      titleArray.push(args.shift());
+    } else {
+      return 'Your title must be enclosed in quotation marks!';
+    }
+  }
 
-//   if (!args[0].startsWith('"')) {
-//     bot.sendMessage('Your title must be enclosed in quotation marks!');
-//     return;
-//   }
+  if (!args[0].includes('"')) {
+    return 'Your title must be enclosed in quotation marks!';
+  }
 
-//   titleArray.push(args.shift());
+  titleArray.push(args.shift());
+  if (!args.length) {
+    return 'You need to include some options with your poll!';
+  }
 
-//   while (!args[0].includes('"')) {
-//     if (args.length) {
-//       titleArray.push(args.shift());
-//     } else {
-//       bot.sendMessage('Your title must be enclosed in quotation marks!');
-//       return;
-//     }
-//   }
+  const title = titleArray.join(' ');
 
-//   if (!args[0].includes('"')) {
-//     bot.sendMessage('Your title must be enclosed in quotation marks!');
-//     return;
-//   }
+  // The rest of the command parsing (aka draw the rest of the fucking owl)
+  const multi = args.includes('-m');
+  args = args.filter((item) => item != '-m');
+  const options = args.join(' ').split(/\s\|\s/gu);
 
-//   titleArray.push(args.shift());
+  console.log(title, multi, options);
 
-//   if (!args.length) {
-//     bot.sendMessage('You need to include some options with your poll!');
-//     return;
-//   }
+  // Create poll
+  // TODO: test this mess
+  try {
+    const response = await fetch('https://strawpoll.me/api/v2/polls', {
+      method: 'POST',
+      redirect: 'follow',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        title: title,
+        options: options,
+        multi: multi,
+      },
+    });
+    const json = await response.json();
 
-//   const title = titleArray.join(' ');
+    console.log(json);
 
-//   // The rest of the command parsing (aka draw the rest of the fucking owl)
+    if (json.id) {
+      return `https://strawpoll.me/${json.id}`;
+    } else {
+      return 'something went wrong while creating that strawpoll...';
+    }
+  } catch (error) {
+    throw new Error(`an error occurred while creating the strawpoll. (${error})`);
+  }
 
-//   const multi = args.includes('-m');
-//   args = args.filter(item => item != '-m');
-//   const options = args.join(' ').split(/\s\|\s/g);
-
-//   console.log(title, multi, options);
-
-//   // Create poll
-
-//   // TODO: finish fixing this fucking mess
-
-//   req({
-//     method: 'POST',
-//     uri: 'https://strawpoll.me/api/v2/polls',
-//     followAllRedirects: true,
-//     body: {
-//       title: title,
-//       options: options,
-//       mutli: multi,
-//     },
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//   }, (err, res, body) => {
-//     if (err) {
-//       console.error(err);
-//       bot.sendMessage('Ruh roh, raggy! [Something went wrong processing that request...]');
-//       return;
-//     }
-
-//     console.log(body);
-
-//     // if (body.id !== undefined) {
-//     // 	bot.sendMessage(`https://strawpoll.me/${json.id}`);
-//     // } else {
-//     // 	bot.sendMessage('Ruh roh, raggy! [Something went wrong processing that request...]');
-//     // }
-//   });
-
-//   // strawpoll.createPoll({
-//   // 	title: title,
-//   // 	options: options,
-//   // 	multi: multi,
-//   // }).then(res => {
-//   // 	const json = JSON.parse(res);
-//   // 	if (json.id !== undefined) {
-//   // 		bot.sendMessage(`https://strawpoll.me/${json.id}`);
-//   // 	} else {
-//   // 		bot.sendMessage('Ruh roh, raggy! [Something went wrong processing that request...]');
-//   // 	}
-//   // }).catch(err => {
-//   // 	console.error(err);
-//   // 	bot.sendMessage('Ruh roh, raggy! [Something went wrong processing that request...]');
-//   // });
-// };
+  // strawpoll.createPoll({
+  // 	title: title,
+  // 	options: options,
+  // 	multi: multi,
+  // }).then(res => {
+  // 	const json = JSON.parse(res);
+  // 	if (json.id !== undefined) {
+  // 		bot.sendMessage(`https://strawpoll.me/${json.id}`);
+  // 	} else {
+  // 		bot.sendMessage('Ruh roh, raggy! [Something went wrong processing that request...]');
+  // 	}
+  // }).catch(err => {
+  // 	console.error(err);
+  // 	bot.sendMessage('Ruh roh, raggy! [Something went wrong processing that request...]');
+  // });
+};
 
 module.exports = {
   name: 'strawpoll',
@@ -144,12 +130,8 @@ module.exports = {
   args: true,
   cooldown: 5,
   async execute(message, args) {
-    if (args[0] == '-r') {
-      const res = await read(args);
-      message.reply(res);
-    } else {
-      // create(args);
-      message.reply('no');
-    }
+    const readFlag = args[0].toLowerCase();
+    const res = (readFlag === '-r') ? await read(args) : await create(args);
+    message.reply(res);
   },
 };
