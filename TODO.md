@@ -21,11 +21,6 @@
    3. look around at other projects using discord.js, see if this (or similar) is implemented
 2. `wordcloud`
    1. image generation does not fuckin work lmao
-3. `wikipedia`
-   1. Embed don't work like it used to, p much everything is missing
-   2. probably investigate the buildEmbed function
-   3. could be api issues too, which mega sucks. bumping this down in priority
-   4. should prob be rewritten, and rewrite should be async!
 
 ## Command Updates
 
@@ -47,6 +42,8 @@
 5. unicode text fucker, given input perform replacements on text to get funky text
 6. `ask` - based on question form, give a quasirealistic answer (speech processing???)
 7. `remind` - set a reminder for a user, store info for reminder in db for keeping them when offline
+   1. on bot startup, check for existing reminders and re-set interval
+   2. db should keep time set, time to remind, text, and maybe more?
 8. `imageflip` (or similar) - meme making shit
 9. `repeat` - repeat last_command for current guild (guildOnly)
 10. ps name gen
