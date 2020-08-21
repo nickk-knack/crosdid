@@ -18,7 +18,7 @@
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".about",
+      "last_command": ".wiki cbt",
       "reaction_notify": false,
       "secret_messages": {
         "enabled": true,
@@ -371,7 +371,8 @@
       },
       "good_count": 14,
       "bad_count": 15,
-      "thank_count": 8
+      "thank_count": 8,
+      "reactionnotify": true
     },
     "140225766720798721": {
       "last_command": "",
@@ -639,7 +640,7 @@
       "thank_count": 0
     },
     "400513116376662017": {
-      "last_command": "",
+      "last_command": ".wiki cock and ball torture",
       "reactionNotify": false,
       "secret_messages": {
         "enabled": false,
