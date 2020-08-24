@@ -287,10 +287,8 @@ client.on('message', async (msg) => {
 
 // Emoji creation event
 client.on('emojiCreate', (emoji) => {
-  // Access db for event settings
-  const settings = db.get(`guilds.${emoji.guild.id}.announcements.emoji_create`).value();
-
   // Return early if this feature is disabled
+  const settings = db.get(`guilds.${emoji.guild.id}.announcements.emoji_create`).value();
   if (!settings.enabled) return;
 
   // Get config from db
@@ -311,10 +309,8 @@ client.on('emojiCreate', (emoji) => {
 
 // Emoji delete event
 client.on('emojiDelete', (emoji) => {
-  // Access db for event settings
-  const settings = db.get(`guilds.${emoji.guild.id}.announcements.emoji_delete`).value();
-
   // Return early if this feature is disabled
+  const settings = db.get(`guilds.${emoji.guild.id}.announcements.emoji_delete`).value();
   if (!settings.enabled) return;
 
   // Get config from db
@@ -335,10 +331,8 @@ client.on('emojiDelete', (emoji) => {
 
 // Emoji update event
 client.on('emojiUpdate', (oldEmoji, newEmoji) => {
-  // Access db for event settings
-  const settings = db.get(`guilds.${newEmoji.guild.id}.announcements.emoji_update`).value();
-
   // Return early if this feature is disabled
+  const settings = db.get(`guilds.${newEmoji.guild.id}.announcements.emoji_update`).value();
   if (!settings.enabled) return;
 
   // Get config from db
@@ -386,7 +380,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         .setTitle(`${user.tag} reacted to your message`)
         .addField('Your message', `> ${reaction.message.content}`);
 
-      // detect if the emoji is a guild emoji (true) or regular emoji (false), append to message
+      // detect if the emoji is a guild emoji (true) or regular emoji (false), append to message, send
       if (typeof reaction.emoji.url !== 'undefined') {
         embed
           .setImage(reaction.emoji.url)
@@ -395,7 +389,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
         embed.addField('Reaction', reaction.emoji);
       }
 
-      // Send message to author
       dm.send(embed);
     } catch (err) {
       console.error(`could not send DM to ${author}. (${err})`);
@@ -413,21 +406,16 @@ client.on('channelCreate', (channel) => {
   // Only notify the creation of text and voice channels
   if (channel.type !== 'text' && channel.type !== 'voice') return;
 
-  // Get settings for this event from the db
-  const settings = db.get(`guilds.${channel.guild.id}.announcements.channel_create`).value();
-
   // Check if the event is enabled, return otherwise (has to happen after channel type check)
+  const settings = db.get(`guilds.${channel.guild.id}.announcements.channel_create`).value();
   if (!settings.enabled) return;
 
-  // Get a reference to the defined announcements channel
-  const announcementsChannel = channel.guild.channels.cache.find((c) => c.name === db.get(`guilds.${channel.guild.id}.announcements.channel`).value());
-
   // Bail if the channel doesn't exist
+  const announcementsChannel = channel.guild.channels.cache.find((c) => c.name === db.get(`guilds.${channel.guild.id}.announcements.channel`).value());
   if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
 
   // Send random message from appropriate messages array + the new channel name to announcements channel
   const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Created';
-
   const embed = new Discord.MessageEmbed()
     .setColor(randomHex.generate())
     .setTitle(title)
@@ -441,21 +429,16 @@ client.on('channelDelete', (channel) => {
   // Only notify the deletion of text and voice channels
   if (channel.type !== 'text' && channel.type !== 'voice') return;
 
-  // Get settings for this event from the db
-  const settings = db.get(`guilds.${channel.guild.id}.announcements.channel_delete`).value();
-
   // Check if the event is enabled, return otherwise (has to happen after channel type check)
+  const settings = db.get(`guilds.${channel.guild.id}.announcements.channel_delete`).value();
   if (!settings.enabled) return;
 
-  // Get a reference to the defined announcements channel
-  const announcementsChannel = channel.guild.channels.cache.find((c) => c.name === db.get(`guilds.${channel.guild.id}.announcements.channel`).value());
-
   // Bail if the channel doesn't exist
+  const announcementsChannel = channel.guild.channels.cache.find((c) => c.name === db.get(`guilds.${channel.guild.id}.announcements.channel`).value());
   if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
 
   // Send random message from appropriate messages array + the old channel name to announcements channel
   const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Deleted';
-
   const embed = new Discord.MessageEmbed()
     .setColor(randomHex.generate())
     .setTitle(title)
@@ -469,16 +452,12 @@ client.on('channelUpdate', (oldChannel, newChannel) => {
   // Only notify the deletion of text and voice channels (when enabled)
   if (newChannel.type !== 'text' && newChannel.type !== 'voice') return;
 
-  // Get settings for this event from the db
-  const settings = db.get(`guilds.${newChannel.guild.id}.announcements.channel_update`).value();
-
   // Check if the event is enabled, return otherwise (has to happen after channel type check)
+  const settings = db.get(`guilds.${newChannel.guild.id}.announcements.channel_update`).value();
   if (!settings.enabled) return;
 
-  // Get a reference to the defined announcements channel
-  const announcementsChannel = newChannel.guild.channels.cache.find((c) => c.name === db.get(`guilds.${newChannel.guild.id}.announcements.channel`).value());
-
   // Bail if the channel doesn't exist
+  const announcementsChannel = newChannel.guild.channels.cache.find((c) => c.name === db.get(`guilds.${newChannel.guild.id}.announcements.channel`).value());
   if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${newChannel.guild.id} is invalid!`);
 
   // Send random message from appropriate messages array + a bunch of updated info for the old->new channel
