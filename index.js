@@ -1,8 +1,10 @@
 // Load .env environment configuration
 require('dotenv').config();
-console.log('Parsed environment variables');
 
-// Packages
+// Requirements
+const winston = require('winston');
+winston.add(new winston.transport.Console(/* todo: custom format */));
+// todo: more transports
 const fs = require('fs');
 const express = require('express');
 const app = express();
@@ -13,6 +15,8 @@ const FileSync = require('lowdb/adapters/FileSync');
 const randomHex = require('random-hex');
 const { getRandomFromArray, dbDefaultGuildObj } = require('./util');
 
+winston.info('Parsed environment variables and loaded requirements');
+
 // Environment constants
 const token = process.env.TOKEN;
 const port = process.env.PORT || 3000;
@@ -22,7 +26,7 @@ const dbFileName = process.env.DB_FILE_NAME || 'db.json';
 // Extra functions
 
 // Start of the main bot code
-console.log('Starting bot...');
+winston.info('Starting bot...');
 
 // Discord.js globals
 const client = new Discord.Client({
@@ -57,10 +61,10 @@ const adapter = new FileSync(dbFileName, {
 
 const db = low(adapter);
 client.db = db;
-console.log(`Loaded local database file from ${dbFileName}`);
+winston.info(`Loaded local database file from ${dbFileName}`);
 
 // Load in all command modules
-console.log('\tLoading command modules...');
+winston.info('\tLoading command modules...');
 
 const commandModules = fs.readdirSync('./modules');
 
@@ -74,18 +78,18 @@ for (const file of commandModules) {
     const command = require(`./modules/${file}`); // eslint-disable-line global-require
     client.commands.set(command.name, command);
   } catch (e) {
-    console.error(`Error loading ${file}: `, e);
+    winston.error(`Error loading ${file}: `, e);
   }
 }
 
-console.log(`\t\tCommand modules loaded. Skipped the following: ${db.get('global_disabled_cmd_modules').value().join(', ')}.`);
+winston.info(`\t\tCommand modules loaded. Skipped the following: ${db.get('global_disabled_cmd_modules').value().join(', ')}.`);
 
 // Events
-console.log('\tLoading events...');
+winston.info('\tLoading events...');
 
 // Ready event
 client.once('ready', () => {
-  console.log(`\tLogged in as ${client.user.tag}!`);
+  winston.info(`\tLogged in as ${client.user.tag}!`);
 
   // Go through joined guilds, make sure there is a per-guild config in db
   for (const g of [...client.guilds.cache.values()]) {
@@ -113,7 +117,7 @@ client.once('ready', () => {
 
   // Check if there are no operators listed. If so, notify the user
   if (!db.get('operators').size().value()) {
-    console.log('WARNING: You have no operators listed in db.json, consider adding at least your discord user ID to the operators array.');
+    winston.warn('WARNING: You have no operators listed in db.json, consider adding at least your discord user ID to the operators array.');
   }
 
   // Set the bot activity text
@@ -121,10 +125,10 @@ client.once('ready', () => {
   if (activitySettings.enabled) {
     client.user
       .setActivity(activitySettings.text, { type: activitySettings.type })
-      .catch(console.error);
+      .catch(winston.error);
   }
 
-  console.log('Finished loading!');
+  winston.info('Finished loading!');
 });
 
 // Message event (command processing)
@@ -274,7 +278,7 @@ client.on('message', async (msg) => {
     msg.channel.startTyping();
     await command.execute(msg, args); // might need to make all commands async for this
   } catch (error) {
-    console.error(error);
+    winston.error(error);
     msg.reply(`an error occurred while executing the \`${commandName}\` command: ${error.message}`);
   } finally {
     msg.channel.stopTyping(true);
@@ -391,14 +395,14 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
       dm.send(embed);
     } catch (err) {
-      console.error(`could not send DM to ${author}. (${err})`);
+      winston.error(`could not send DM to ${author}. (${err})`);
     }
   }
 });
 
 // Rate limiting event
 client.on('rateLimit', (info) => {
-  if (DEBUG) console.warn(`Rate limit: ${info.limit} (td: ${info.timeDifference}ms)`, `[${info.method}]:[${info.path}]:[${info.route}]`);
+  if (DEBUG) winston.warn(`Rate limit: ${info.limit} (td: ${info.timeDifference}ms)`, `[${info.method}]:[${info.path}]:[${info.route}]`);
 });
 
 // Channel creation event
@@ -412,7 +416,7 @@ client.on('channelCreate', (channel) => {
 
   // Bail if the channel doesn't exist
   const announcementsChannel = channel.guild.channels.cache.find((c) => c.name === db.get(`guilds.${channel.guild.id}.announcements.channel`).value());
-  if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
+  if (typeof announcementsChannel === 'undefined') return winston.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
 
   // Send random message from appropriate messages array + the new channel name to announcements channel
   const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Created';
@@ -435,7 +439,7 @@ client.on('channelDelete', (channel) => {
 
   // Bail if the channel doesn't exist
   const announcementsChannel = channel.guild.channels.cache.find((c) => c.name === db.get(`guilds.${channel.guild.id}.announcements.channel`).value());
-  if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
+  if (typeof announcementsChannel === 'undefined') return winston.error(`The defined announcements channel for guild id ${channel.guild.id} is invalid!`);
 
   // Send random message from appropriate messages array + the old channel name to announcements channel
   const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Deleted';
@@ -458,7 +462,7 @@ client.on('channelUpdate', (oldChannel, newChannel) => {
 
   // Bail if the channel doesn't exist
   const announcementsChannel = newChannel.guild.channels.cache.find((c) => c.name === db.get(`guilds.${newChannel.guild.id}.announcements.channel`).value());
-  if (typeof announcementsChannel === 'undefined') return console.error(`The defined announcements channel for guild id ${newChannel.guild.id} is invalid!`);
+  if (typeof announcementsChannel === 'undefined') return winston.error(`The defined announcements channel for guild id ${newChannel.guild.id} is invalid!`);
 
   // Send random message from appropriate messages array + a bunch of updated info for the old->new channel
   const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Channel Updated';
@@ -474,22 +478,22 @@ client.on('channelUpdate', (oldChannel, newChannel) => {
 });
 
 // Logging events
-client.on('error', (error) => console.error(error));
-client.on('warn', (warn) => console.warn(warn));
+client.on('error', (error) => winston.error(error));
+client.on('warn', (warn) => winston.warn(warn));
 // if (DEBUG) client.on('debug', (info) => console.info(info));
-process.on('uncaughtException', (error) => console.error(error));
+process.on('uncaughtException', (error) => winston.error(error));
 
-console.log('\t\tEvents loaded.');
+winston.info('\t\tEvents loaded.');
 
 // Client login
-console.log('\tLogging in...');
+winston.info('\tLogging in...');
 client.login(token);
 
 // Set up express webserver
 app.use(bodyParser.json());
 
 app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+  winston.info(`Server listening on port ${port}`);
 });
 
 app.get('/', (req, res) => {
