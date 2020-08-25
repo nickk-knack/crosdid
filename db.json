@@ -1,7 +1,6 @@
 {
   "command_prefix": "[.]",
   "global_disabled_cmd_modules": [
-    "pornhub",
     "_translate"
   ],
   "operators": [
@@ -18,7 +17,7 @@
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".wiki cbt",
+      "last_command": ".ph gif good job fam",
       "reaction_notify": false,
       "secret_messages": {
         "enabled": true,

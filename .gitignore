@@ -72,6 +72,3 @@ typings/
 
 # ignore test js files
 *test*.js
-
-# ignore the dirty nasty
-modules/pornhub.js
