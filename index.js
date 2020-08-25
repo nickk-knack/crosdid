@@ -49,7 +49,6 @@ client.winston = winston;
 const dbDefault = {
   command_prefix: '.',
   global_disabled_cmd_modules: [
-    'pornhub',
     '_translate',
   ],
   operators: [],
