@@ -282,7 +282,7 @@ client.on('message', async (msg) => {
     msg.channel.startTyping();
     await command.execute(msg, args); // might need to make all commands async for this
   } catch (error) {
-    winston.error(error);
+    winston.error(error.message);
     msg.reply(`an error occurred while executing the \`${commandName}\` command: ${error.message}`);
   } finally {
     msg.channel.stopTyping(true);
