@@ -91,7 +91,7 @@ module.exports = {
         embed.setThumbnail(thumbRegex.test(result.thumbnail) ? result.thumbnail : '');
       }
 
-      message.channel.send(embed);
+      await message.channel.send(embed);
     } catch (err) {
       throw new Error(`There was an error while querying the reddit API! (${err})`);
     }

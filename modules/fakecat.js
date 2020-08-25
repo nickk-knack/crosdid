@@ -43,7 +43,7 @@ module.exports = {
       const buffer = await response.buffer();
       const cattachment = new MessageAttachment(buffer, 'fakecat.png');
 
-      message.channel.send({
+      await message.channel.send({
         files: [cattachment],
         embed: {
           title: randomMessage,

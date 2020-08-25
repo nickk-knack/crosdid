@@ -66,7 +66,7 @@ module.exports = {
       addFieldIfNotEmpty(embed, 'Lore tags', result.tags.lore.join(', '), true);
       addFieldIfNotEmpty(embed, 'Meta tags', result.tags.meta.join(', '), true);
 
-      message.channel.send(embed);
+      await message.channel.send(embed);
     } catch (err) {
       throw new Error(`An error occurred while performing the request to the API: ${err}`);
     }

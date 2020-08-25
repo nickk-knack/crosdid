@@ -26,7 +26,7 @@ module.exports = {
       const buffer = await response.buffer();
       const attachment = new MessageAttachment(buffer, 'sona.jpg');
 
-      message.channel.send({
+      await message.channel.send({
         files: [attachment],
         embed: {
           image: {

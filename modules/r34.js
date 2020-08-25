@@ -41,7 +41,7 @@ module.exports = {
         .setTitle(args.join(' '))
         .setImage(fileUrl);
 
-      message.channel.send(embed);
+      await message.channel.send(embed);
     } catch (err) {
       throw new Error(`Something went wrong while making the request. (\`${err}\`)`);
     }

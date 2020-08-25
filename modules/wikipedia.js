@@ -80,7 +80,7 @@ module.exports = {
         .setDescription(trim(summary, 2048));
         // .setThumbnail(randomImage);
 
-      return message.channel.send(embed);
+      await message.channel.send(embed);
     } catch (err) {
       throw new Error(`An error occurred while building the embed... (${err})`);
     }

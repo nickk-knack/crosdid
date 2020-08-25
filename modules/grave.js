@@ -22,7 +22,7 @@ module.exports = {
       const buffer = await response.buffer();
       const attachment = new MessageAttachment(buffer, 'gravestone.png');
 
-      message.channel.send({
+      await message.channel.send({
         files: [attachment],
         embed: {
           image: {

@@ -23,7 +23,7 @@ module.exports = {
         .setColor(randomHex.generate())
         .setImage(data);
 
-      message.channel.send(embed);
+      await message.channel.send(embed);
     } catch (err) {
       throw new Error(`I had trouble getting inspired... (${err})`);
     }

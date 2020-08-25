@@ -32,7 +32,7 @@ module.exports = {
         .setTitle(query)
         .setImage(randomImage.url);
 
-      message.channel.send(embed);
+      await message.channel.send(embed);
     } catch (e) {
       switch (e.statusCode) {
         case 403:
