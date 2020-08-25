@@ -16,22 +16,18 @@ module.exports = {
     // get message data (words map)
     const wordsMap = new Map();
     const rawMsgs = await message.channel.messages.fetch({ limit: 100 });
-    winston.info(`fetched ${rawMsgs.size} messages`);
     rawMsgs.forEach((msg) => {
       const { content } = msg;
       const wordRegex = /\w+/gu;
       const words = content.match(wordRegex);
 
-      if (!words) {
-        winston.info(`no words found in message: "${content}"`);
-      } else {
+      if (words) {
         for (const word of words) {
           // either add a new word to the map, or increment the words frequency
           wordsMap.set(word, 1 + (wordsMap.has(word) ? wordsMap.get(word) : 0));
         }
       }
     });
-    winston.info(`got ${wordsMap.size} words`);
 
     // compile chart data
     const words = [];
@@ -48,13 +44,13 @@ module.exports = {
     }
 
     // Instantiate canvas
-    const can = new Canvas.Canvas(1200, 1000);
+    const can = new Canvas.Canvas(1, 1);
 
     // Build word cloud
     const endCloud = (w) => {
-      winston.info(`Finished word cloud, placed ${w.length} words.`);
       const cBuf = can.toBuffer();
       const attachment = new MessageAttachment(cBuf, 'wordcloud.png');
+      winston.info(JSON.stringify(w));
 
       message.channel.send({
         files: [attachment],
@@ -63,6 +59,11 @@ module.exports = {
             url: 'attachment://wordcloud.png',
           },
           color: parseInt(randomHex.generate(), 16),
+          title: `Wordcloud for #${message.channel.name}`,
+          footer: {
+            text: `${wordsMap.size} words from ${rawMsgs.size} messages (${w.length} actually placed)`,
+          },
+          timestamp: new Date(),
         },
       });
     };
@@ -70,9 +71,10 @@ module.exports = {
     cloud().size([1200, 1000])
       .canvas(() => can)
       .words(words)
+      .text((d) => d.text)
       .padding(5)
       .font('Tahoma')
-      .fontSize((w) => w.size)
+      .fontSize((d) => d.size)
       .on('end', endCloud)
       .start();
   },
