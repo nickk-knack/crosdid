@@ -56,7 +56,8 @@ module.exports = {
         .setThumbnail(result.preview.url)
         .setURL(`https://e926.net/posts/${result.id}?q=${query}`)
         .setAuthor(result.tags.artist.join(', '))
-        .setTimestamp(new Date(result.updated_at));
+        .setTimestamp(new Date(result.updated_at))
+        .setFooter(`score: ${result.score.total}`);
 
       addFieldIfNotEmpty(embed, 'General tags', result.tags.general.join(', '), false);
       addFieldIfNotEmpty(embed, 'Species tags', result.tags.species.join(', '), true);
