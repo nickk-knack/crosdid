@@ -11,15 +11,15 @@ module.exports = {
   execute(message, args) {
     const mode = args.shift().toLowerCase();
     const { db, commands } = message.client;
+    let reply = '';
 
     if (mode === '-d' || mode === 'all') {
-      console.log('Reading database...');
       db.read();
+      reply += 'Read database into memory.';
     }
 
     if (mode === '-c' || mode === 'all') {
       if (args.length) {
-        console.log('Reloading single command...');
         const commandName = args.shift().toLowerCase();
         const command = commands.get(commandName) || commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
 
@@ -32,11 +32,12 @@ module.exports = {
         try {
           const newCommand = require(`./${command.name}.js`); // eslint-disable-line global-require
           commands.set(newCommand.name, newCommand);
+          reply += (reply.length ? '\n' : '');
+          reply += `Reloaded single command module: ${command.name}`;
         } catch (e) {
-          throw new Error(`there was an error while reloading that command. (${e})`);
+          throw new Error(`There was an error while reloading that command. (${e})`);
         }
       } else {
-        console.log('Reloading all commands');
         const commandModules = fs.readdirSync('./modules');
         commands.clear();
 
@@ -50,14 +51,15 @@ module.exports = {
             const command = require(`./${file}`); // eslint-disable-line global-require
             commands.set(command.name, command);
           } catch (e) {
-            throw new Error(`there was an error while reloading commands at ${file}. (${e})`);
+            throw new Error(`There was an error while reloading commands at ${file}. (${e})`);
           }
         }
 
-        console.log(`\tAll command modules reloaded. Skipped the following: ${db.get('global_disabled_cmd_modules').value().join(', ')}.`);
+        reply += (reply.length ? '\n' : '');
+        reply += `Reloaded all command modules. Skipped the following: ${db.get('global_disabled_cmd_modules').value().join(', ')}.`;
       }
     }
 
-    message.reply('reload complete!');
+    message.reply(reply);
   },
 };

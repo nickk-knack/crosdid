@@ -36,7 +36,7 @@ module.exports = {
         },
       });
     } catch (err) {
-      throw new Error(`an error occured while trying to get your garfield. (${err})`);
+      throw new Error(`An error occured while trying to get your garfield. (${err})`);
     }
   },
 };

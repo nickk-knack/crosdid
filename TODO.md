@@ -2,17 +2,10 @@
 
 ## General
 
-1. Reimplement logging with `winston`
-   1. Use `chalk` for coloring output?
-   2. Point is going to be removing all `console.log` calls, eventually re-enable `no-console` in `.eslintrc.json`
-   3. should be easier now, since only `index.js` will have console calls. all command modules must throw errors instead of directly console log.
-   4. should write custom printing function(s) using `chalk`, attach to appropriate transports on default winston logger.
-   5. [winston npm](https://www.npmjs.com/package/winston)
-   6. [chalk npm](https://www.npmjs.com/package/chalk)
-2. re-enable, test, fix reactionNotify functionality
+1. re-enable, test, fix reactionNotify functionality
    1. was trying to do this, but using `bot` command to enable reactionNotify didn't exactly work. need to look into this
       1. future nick: i meant that the db didnt update and the setting was not enabled, despite the bot saying it was. similar to db issue i encountered earlier in this command? i think with setting username
-3. switch db to fileasync? might improve speed, but that also might be unnecessary
+2. switch db to fileasync? might improve speed, but that also might be unnecessary
 
 ## Bug fixes
 

@@ -11,6 +11,8 @@ module.exports = {
   guildOnly: true,
   cooldown: 5,
   async execute(message, args) {
+    const { winston } = message.client;
+
     // Get options and search query from args
     const timeFlagIndex = args.findIndex((val) => /^-t$|^--time$/giu.test(val));
     let pollTime = 60 * 60 * 1000; // 60 minutes, converted to ms
@@ -48,29 +50,29 @@ module.exports = {
         const react = guildEmoji ? message.guild.emojis.cache.find((e) => e.toString() === emoji) : emoji;
 
         await sent.react(react).catch((e) => {
-          throw new Error(`error reacting with ${react}. (${e})`);
+          throw new Error(`Error reacting with ${react}. (${e})`);
         });
       }
 
       const collected = await sent.awaitReactions((reaction) => emojis.includes(reaction.emoji.toString()), { time: pollTime });
 
       const winningReacts = collected.sort((a, b) => a.count - b.count).filter((val, index, col) => val.count === col.last().count && val.count > 1);
-      console.log('Winners:', winningReacts);
+      winston.info('Winners:', winningReacts);
 
       if (winningReacts.size > 1) {
         // tie between some reacts
         sent.edit(`There was a tie between ${winningReacts.map((react) => `"**${responses[emojis.indexOf(react.emoji.toString())]}**"`).join(', ')}, with each getting **${winningReacts[0].count - 1} votes**`)
-          .catch((err) => { throw new Error(`error editing message. (${err})`); }); // was just catch(console.error) before
+          .catch((err) => { throw new Error(`Error editing message. (${err})`); });
       } else if (winningReacts.size === 1) {
         const winningReact = winningReacts.first();
         sent.edit(`The winning choice is "**${responses[emojis.indexOf(winningReact.emoji.toString())]}**" with **${winningReact.count - 1} votes**`)
-          .catch((err) => { throw new Error(`error editing message. (${err})`); });
+          .catch((err) => { throw new Error(`Error editing message. (${err})`); });
       } else {
         sent.edit('There were no winners????')
-          .catch((err) => { throw new Error(`error editing message. (${err})`); });
+          .catch((err) => { throw new Error(`Error editing message. (${err})`); });
       }
     } catch (e) {
-      throw new Error(`an error occurred while creating the poll. (${e})`);
+      throw new Error(`An error occurred while creating the poll. (${e})`);
     }
   },
 };

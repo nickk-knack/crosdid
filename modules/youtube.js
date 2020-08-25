@@ -84,7 +84,7 @@ module.exports = {
 
     search(query, opts, (err, res) => {
       if (err) {
-        throw new Error(`an error occurred while searching. (${err})`);
+        throw new Error(`An error occurred while searching. (${err})`);
       }
 
       if (!res.length) return message.reply(`no results found for \`${query}\``);

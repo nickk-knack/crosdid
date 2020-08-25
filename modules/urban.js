@@ -37,7 +37,7 @@ module.exports = {
 
       message.channel.send(embed);
     } catch (err) {
-      throw new Error(`an error occurred while querying the API! (${err})`);
+      throw new Error(`An error occurred while querying the API! (${err})`);
     }
   },
 };

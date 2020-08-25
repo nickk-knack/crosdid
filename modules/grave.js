@@ -32,7 +32,7 @@ module.exports = {
         },
       });
     } catch (err) {
-      throw new Error(`an error occurred while fetching that gravestone: \`${err}\``);
+      throw new Error(`An error occurred while fetching that gravestone: \`${err}\``);
     }
   },
 };

@@ -11,17 +11,19 @@ module.exports = {
   guildOnly: true,
   cooldown: 10,
   async execute(message, args) {
+    const { winston } = message.client;
+
     // get message data (words map)
     const wordsMap = new Map();
     const rawMsgs = await message.channel.messages.fetch({ limit: 100 });
-    console.log(`fetched ${rawMsgs.size} messages`);
+    winston.info(`fetched ${rawMsgs.size} messages`);
     rawMsgs.forEach((msg) => {
       const { content } = msg;
       const wordRegex = /\w+/gu;
       const words = content.match(wordRegex);
 
       if (!words) {
-        console.log(`no words found in message: "${content}"`);
+        winston.info(`no words found in message: "${content}"`);
       } else {
         for (const word of words) {
           // either add a new word to the map, or increment the words frequency
@@ -29,7 +31,7 @@ module.exports = {
         }
       }
     });
-    console.log(`got ${wordsMap.size} words`);
+    winston.info(`got ${wordsMap.size} words`);
 
     // compile chart data
     const words = [];
@@ -50,7 +52,7 @@ module.exports = {
 
     // Build word cloud
     const endCloud = (w) => {
-      console.log(`Finished word cloud, placed ${w.length} words.`);
+      winston.info(`Finished word cloud, placed ${w.length} words.`);
       const cBuf = can.toBuffer();
       const attachment = new MessageAttachment(cBuf, 'wordcloud.png');
 

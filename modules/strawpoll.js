@@ -18,7 +18,7 @@ const read = async (args) => {
   } else if (isID) {
     pollNum = args.shift();
   } else {
-    throw new Error('something went seriously wrong, yo. (got neither a url nor an id)');
+    throw new Error('Something went seriously wrong, yo. (got neither a url nor an id)');
   }
 
   try {
@@ -38,7 +38,7 @@ const read = async (args) => {
 
     return `Winning result for "${json.title.trim()}": "${topResult.result.trim()}" with ${topResult.votes} votes.`;
   } catch (err) {
-    throw new Error(`an error occurred while processing the read request! ${err}`);
+    throw new Error(`An error occurred while processing the read request! ${err}`);
   }
 };
 
@@ -75,7 +75,7 @@ const create = async (args) => {
   args = args.filter((item) => item != '-m');
   const options = args.join(' ').split(/\s\|\s/gu);
 
-  console.log(title, multi, options);
+  // console.log(title, multi, options);
 
   // Create poll
   // TODO: test this mess
@@ -94,7 +94,7 @@ const create = async (args) => {
     });
     const json = await response.json();
 
-    console.log(json);
+    // console.log(json);
 
     if (json.id) {
       return `https://strawpoll.me/${json.id}`;
@@ -102,7 +102,7 @@ const create = async (args) => {
       return 'something went wrong while creating that strawpoll...';
     }
   } catch (error) {
-    throw new Error(`an error occurred while creating the strawpoll. (${error})`);
+    throw new Error(`An error occurred while creating the strawpoll. (${error})`);
   }
 
   // strawpoll.createPoll({

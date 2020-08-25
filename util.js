@@ -1,3 +1,24 @@
+const chalk = require('chalk');
+const { format } = require('winston');
+
+const consolePrint = format.printf(({ level, message, timestamp }) => {
+  return chalk`{gray [${timestamp}] ({bold ${level}})}: ${message}`;
+});
+
+const filePrint = format.printf(({ level, message, timestamp }) => {
+  return `[${timestamp}] (${level}): ${message}`;
+});
+
+const consoleFormat = format.combine(
+  format.timestamp(),
+  consolePrint,
+);
+
+const fileFormat = format.combine(
+  format.timestamp(),
+  filePrint,
+);
+
 const getRandomFromArray = (array) => array[Math.floor(Math.random() * array.length)];
 
 const trim = (str, max) => (str.length > max) ? `${str.slice(0, max - 3)}...` : str;
@@ -40,7 +61,6 @@ const generateRandomHexString = (length) => {
     if (hexString.length === length * 2) {
       // Break loop, it's valid
       validString = true;
-      // console.log(hexString);
     } else {
       // If this has taken more than 50 tries, abort
       if (iterations > 50) throw new Error('Could not generate a valid hex string');
@@ -133,6 +153,8 @@ const dbDefaultGuildObj = {
 };
 
 module.exports = {
+  consoleFormat: consoleFormat,
+  fileFormat: fileFormat,
   getRandomFromArray: getRandomFromArray,
   trim: trim,
   hashString: hashString,

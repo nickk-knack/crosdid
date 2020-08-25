@@ -1,39 +1,49 @@
 // Load .env environment configuration
 require('dotenv').config();
 
+// Environment constants
+const token = process.env.TOKEN;
+const port = process.env.PORT || 3000;
+const DEBUG = process.env.DEBUG || false;
+const dbFileName = process.env.DB_FILE_NAME || 'db.json';
+
 // Requirements
 const winston = require('winston');
-winston.add(new winston.transport.Console(/* todo: custom format */));
-// todo: more transports
 const fs = require('fs');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const Discord = require('discord.js');
+const randomHex = require('random-hex');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
-const randomHex = require('random-hex');
-const { getRandomFromArray, dbDefaultGuildObj } = require('./util');
+const { getRandomFromArray, dbDefaultGuildObj, consoleFormat, fileFormat } = require('./util');
 
-winston.info('Parsed environment variables and loaded requirements');
+// Configure winston
+winston
+  .add(new winston.transports.Console({
+    format: consoleFormat,
+    handleExceptions: true,
+  }))
+  .add(new winston.transports.File({
+    filename: 'error.log',
+    level: 'error',
+    format: fileFormat,
+    handleExceptions: true,
+  }))
+  .add(new winston.transports.File({
+    filename: 'log.log',
+    format: fileFormat,
+  }))
+  .exitOnError = false;
 
-// Environment constants
-const token = process.env.TOKEN;
-const port = process.env.PORT || 3000;
-const DEBUG = process.env.PRINT_DEBUG || false;
-const dbFileName = process.env.DB_FILE_NAME || 'db.json';
-
-// Extra functions
-
-// Start of the main bot code
-winston.info('Starting bot...');
+winston.info('Parsed environment variables, loaded requirements, and configured logging');
 
 // Discord.js globals
-const client = new Discord.Client({
-  disabledEvents: ['TYPING_START'],
-});
-client.commands = new Discord.Collection();
+const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
+client.commands = new Discord.Collection();
+client.winston = winston;
 
 // lowdb setup
 const dbDefault = {
@@ -63,9 +73,6 @@ const db = low(adapter);
 client.db = db;
 winston.info(`Loaded local database file from ${dbFileName}`);
 
-// Load in all command modules
-winston.info('\tLoading command modules...');
-
 const commandModules = fs.readdirSync('./modules');
 
 for (const file of commandModules) {
@@ -78,18 +85,15 @@ for (const file of commandModules) {
     const command = require(`./modules/${file}`); // eslint-disable-line global-require
     client.commands.set(command.name, command);
   } catch (e) {
-    winston.error(`Error loading ${file}: `, e);
+    winston.error(`Error loading ${file}: ${e}`);
   }
 }
 
-winston.info(`\t\tCommand modules loaded. Skipped the following: ${db.get('global_disabled_cmd_modules').value().join(', ')}.`);
-
-// Events
-winston.info('\tLoading events...');
+winston.info(`Loaded command modules. Skipped the following: ${db.get('global_disabled_cmd_modules').value().join(', ')}`);
 
 // Ready event
 client.once('ready', () => {
-  winston.info(`\tLogged in as ${client.user.tag}!`);
+  winston.info(`Logged in as: ${client.user.tag}`);
 
   // Go through joined guilds, make sure there is a per-guild config in db
   for (const g of [...client.guilds.cache.values()]) {
@@ -395,7 +399,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
       dm.send(embed);
     } catch (err) {
-      winston.error(`could not send DM to ${author}. (${err})`);
+      winston.error(`Could not send DM to ${author}. (${err})`);
     }
   }
 });
@@ -480,13 +484,11 @@ client.on('channelUpdate', (oldChannel, newChannel) => {
 // Logging events
 client.on('error', (error) => winston.error(error));
 client.on('warn', (warn) => winston.warn(warn));
-// if (DEBUG) client.on('debug', (info) => console.info(info));
-process.on('uncaughtException', (error) => winston.error(error));
+// if (DEBUG) client.on('debug', (info) => winston.info(info));
 
-winston.info('\t\tEvents loaded.');
+winston.info('Loaded events');
 
 // Client login
-winston.info('\tLogging in...');
 client.login(token);
 
 // Set up express webserver

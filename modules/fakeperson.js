@@ -24,7 +24,7 @@ module.exports = {
         },
       });
     } catch (err) {
-      throw new Error(`an error occured while trying to get a fake human... (${err})`);
+      throw new Error(`An error occured while trying to get a fake human... (${err})`);
     }
   },
 };
