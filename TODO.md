@@ -18,11 +18,10 @@
 
 ## Command Updates
 
-1. `quickpoll` - use moment
-2. `strawpoll` - need to test poll creation reimplementation
-3. `fakeperson` - add address generation from fakeaddressgenerator?
-4. `alexa` - check comments
-5. `youtube` - look at comments
+1. `strawpoll` - need to test poll creation reimplementation
+2. `fakeperson` - add address generation from fakeaddressgenerator?
+3. `alexa` - check comments
+4. `youtube` - look at comments
 
 ## New Commands
 
