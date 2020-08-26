@@ -310,10 +310,10 @@ module.exports = {
     } else if (subcommand === 'reactionnotify') {
       switch (subcommandArg) {
         case 'enable':
-          db.set(`guilds.${message.guild.id}.${subcommand}`, true).write();
+          db.set(`guilds.${message.guild.id}.reaction_notify`, true).write();
           return message.reply('successfully **enabled** reaction notification for the guild.');
         case 'disable':
-          db.set(`guilds.${message.guild.id}.${subcommand}`, false).write();
+          db.set(`guilds.${message.guild.id}.reaction_notify`, false).write();
           return message.reply('successfully **disabled** reaction notification for the guild.');
         default:
           return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: enable, disable)`);
