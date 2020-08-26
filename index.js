@@ -403,11 +403,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
   }
 });
 
-// Rate limiting event
-client.on('rateLimit', (info) => {
-  if (DEBUG) winston.warn(`Rate limit: ${info.limit} (td: ${info.timeDifference}ms)`, `[${info.method}]:[${info.path}]:[${info.route}]`);
-});
-
 // Channel creation event
 client.on('channelCreate', (channel) => {
   // Only notify the creation of text and voice channels
@@ -478,6 +473,11 @@ client.on('channelUpdate', (oldChannel, newChannel) => {
     .addField('New Channel', `${newChannel}${newChannel.type === 'text' ? `\n"${newChannel.topic}"` : ''}`, true);
 
   announcementsChannel.send(embed);
+});
+
+// Rate limiting event
+client.on('rateLimit', (info) => {
+  if (DEBUG) winston.warn(`Rate limit: ${info.route}:${info.method} (limit: ${info.limit}, timeout: ${info.timeout}ms)`);
 });
 
 // Logging events
