@@ -17,8 +17,8 @@
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".ph gif good job fam",
-      "reaction_notify": false,
+      "last_command": ".qp -t 1 \"test\" \"yes | no\" \"❌ | <:mamamia:746038427832680449> \"",
+      "reaction_notify": true,
       "secret_messages": {
         "enabled": true,
         "chance": 0.04
@@ -376,8 +376,7 @@
       },
       "good_count": 14,
       "bad_count": 15,
-      "thank_count": 8,
-      "reactionnotify": true
+      "thank_count": 8
     },
     "140225766720798721": {
       "last_command": "",

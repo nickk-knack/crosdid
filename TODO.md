@@ -1,29 +1,27 @@
-# crosdid todo
+# crosdid todo list
 
-## General
+## General bot work
 
-1. re-enable, test, fix reactionNotify functionality
-   1. was trying to do this, but using `bot` command to enable reactionNotify didn't exactly work. need to look into this
-      1. future nick: i meant that the db didnt update and the setting was not enabled, despite the bot saying it was. similar to db issue i encountered earlier in this command? i think with setting username
-2. switch db to fileasync? might improve speed, but that also might be unnecessary
-3. add some sort of error/"unhandled promise rejection" happening with secret reacts
+1. switch db to fileasync? might improve speed, but that also might be unnecessary
+2. add some sort of error/"unhandled promise rejection" happening with secret reacts
+3. think about adding a `#bot-log` channel option and then use `winston-discordjs` to add a transport for logging to a discord channel. could be bad-fucking-ass.
 
-## Bug fixes
+## Bugs
 
-1. `quickpoll`
-   1. look around at other projects using discord.js, see if this (or similar) is implemented in order to make it better
-2. `wordcloud`
+1. `wordcloud`
    1. image generation does not fuckin work lmao
    2. maybe try testing canvas separately to find out if its your canvas installation or your code
+2. reaction notifications
+   1. there might be some sort of bug with the bot's secret react feature that causes two messages to be sent for a secret react
 
-## Command Updates
+## Existing command updates
 
 1. `strawpoll` - need to test poll creation reimplementation
 2. `fakeperson` - add address generation from fakeaddressgenerator?
 3. `alexa` - check comments
 4. `youtube` - look at comments
 
-## New Commands
+## New command ideas
 
 1. `weather` - use darksky stuff if you still have it
    1. `darkskyjs`
@@ -38,8 +36,11 @@
 7. `remind` - set a reminder for a user, store info for reminder in db for keeping them when offline
    1. on bot startup, check for existing reminders and re-set interval
    2. db should keep time set, time to remind, text, and maybe more?
+   3. this would require adding support to index.js for loading in the reminders from db on bootup
+   4. maybe create a **startup tasks** loading bit that can load `js` files from `/startup/` (or similar). that way, any modules can add code to index.js as well. extra modding functionality p much?
 8. `imageflip` (or similar) - meme making shit
 9. `repeat` - repeat last_command for current guild (guildOnly)
+   1. this might actually seriously suck big time, not actually easy
 10. ps name gen
 
 ## Links
@@ -51,6 +52,6 @@
 - [discord emoji info](https://github.com/AnIdiotsGuide/discordjs-bot-guide/blob/master/coding-guides/using-emojis.md)
 - [Wanna write some custom tags?](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates)
 
-## Far out shit
+## Far-out shit
 
-1. Command piping?
+1. Command piping? i dont even know where to start with my code
