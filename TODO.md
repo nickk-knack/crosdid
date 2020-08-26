@@ -6,23 +6,22 @@
    1. was trying to do this, but using `bot` command to enable reactionNotify didn't exactly work. need to look into this
       1. future nick: i meant that the db didnt update and the setting was not enabled, despite the bot saying it was. similar to db issue i encountered earlier in this command? i think with setting username
 2. switch db to fileasync? might improve speed, but that also might be unnecessary
+3. add some sort of error/"unhandled promise rejection" happening with secret reacts
 
 ## Bug fixes
 
 1. `quickpoll`
-   1. winningReacts may or may not be broken still
-   2. emojiRegex may be failing, something is causing guild emojis to be passed through as a regular emoji (~line 50)
-      1. can't really find a pattern to it
-   3. look around at other projects using discord.js, see if this (or similar) is implemented
+   1. look around at other projects using discord.js, see if this (or similar) is implemented in order to make it better
 2. `wordcloud`
    1. image generation does not fuckin work lmao
+   2. maybe try testing canvas separately to find out if its your canvas installation or your code
 
 ## Command Updates
 
-1. `fakeperson` - add address generation from fakeaddressgenerator?
-2. `alexa` - check comments
-3. `quickpoll` - use moment, add try/catches where necessary for async/await stuff
-4. `strawpoll` - need to test poll creation reimplementation
+1. `quickpoll` - use moment
+2. `strawpoll` - need to test poll creation reimplementation
+3. `fakeperson` - add address generation from fakeaddressgenerator?
+4. `alexa` - check comments
 5. `youtube` - look at comments
 
 ## New Commands
