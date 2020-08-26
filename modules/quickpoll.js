@@ -1,5 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
+const moment = require('moment');
 const emojiRegex = /<:.+:(?<id>\d+)>/gu;
 
 module.exports = {
@@ -41,8 +42,8 @@ module.exports = {
         embed.addField(`${emojis[index]}`, val, true);
       });
 
-      // TODO: change to using moment
-      const sent = await message.channel.send(`This poll will end in ${pollTime / 1000 / 60} minutes, at ${new Date(Date.now() + pollTime).toString()}`, { embed: embed });
+      const mPollTime = moment(moment() + pollTime);
+      const sent = await message.channel.send(`This poll will end ${mPollTime.fromNow()}, at ${mPollTime.format('h:mm:ss a [on] dddd, MMMM Do, YYYY')}.`, { embed: embed });
 
       emojis.forEach(async (emoji) => {
         // get proper react emoji
