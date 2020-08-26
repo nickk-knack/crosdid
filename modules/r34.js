@@ -17,7 +17,7 @@ module.exports = {
   cooldown: 5,
   async execute(message, args) {
     const limit = 20;
-    const searchTerms = args.join(' ');
+    const searchTerms = args.join('+');
 
     const query = querystring.stringify({
       page: 'dapi',
@@ -25,14 +25,14 @@ module.exports = {
       q: 'index',
       tags: searchTerms,
       limit: limit,
-    }).replace(/%20/gu, '+');
+    });
 
     try {
       const response = await fetch(`https://rule34.xxx/index.php?${query}`);
       const body = await response.text();
       const result = await parser(body.toString('utf8'));
       const json = JSON.parse(JSON.stringify(result));
-      if (json.posts.$.count === '0') return message.channel.send(`No results found for **${query}**`);
+      if (json.posts.$.count === '0') return message.channel.send(`No results found for **${searchTerms}**`);
 
       const { post } = json.posts;
       const fileUrl = post[Math.floor(Math.random() * post.length)].$.file_url;
