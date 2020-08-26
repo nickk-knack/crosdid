@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
-const emojiRegex = /^<:.+:\d+>$/gu;
+const emojiRegex = /<:.+:(?<id>\d+)>/gu;
 
 module.exports = {
   name: 'quickpoll',
@@ -11,8 +11,6 @@ module.exports = {
   guildOnly: true,
   cooldown: 5,
   async execute(message, args) {
-    const { winston } = message.client;
-
     // Get options and search query from args
     const timeFlagIndex = args.findIndex((val) => /^-t$|^--time$/giu.test(val));
     let pollTime = 60 * 60 * 1000; // 60 minutes, converted to ms
@@ -27,7 +25,7 @@ module.exports = {
     const reparsedArgs = args.join(' ').split('"').filter((val) => !(/^\s?$/giu.test(val)));
     const title = reparsedArgs.shift();
     const responses = reparsedArgs.shift().split(/\s*\|\s*/giu);
-    const emojis = reparsedArgs.shift().split(/\s*\|\s*/giu);
+    const emojis = reparsedArgs.shift().split(/\s*\|\s*/giu).map((e) => e.trim());
 
     if (typeof title === 'undefined') return message.reply('you forgot to add a title!');
     if (typeof responses === 'undefined') return message.reply('you forgot to add a list of responses!');
@@ -40,24 +38,28 @@ module.exports = {
         .setTitle(title);
 
       responses.forEach((val, index) => {
-        embed.addField(`Option: ${emojis[index]}`, val, true);
+        embed.addField(`${emojis[index]}`, val, true);
       });
 
+      // TODO: change to using moment
       const sent = await message.channel.send(`This poll will end in ${pollTime / 1000 / 60} minutes, at ${new Date(Date.now() + pollTime).toString()}`, { embed: embed });
 
-      for (const emoji of emojis) {
-        const guildEmoji = emojiRegex.test(emoji);
-        const react = guildEmoji ? message.guild.emojis.cache.find((e) => e.toString() === emoji) : emoji;
+      emojis.forEach(async (emoji) => {
+        // get proper react emoji
+        const guildEmoji = emojiRegex.exec(emoji);
+        const react = (guildEmoji === null) ? emoji : message.guild.emojis.cache.get(guildEmoji.groups.id);
 
+        // reset the regex (literally, the most important thing)
+        emojiRegex.lastIndex = 0;
+
+        // react
         await sent.react(react).catch((e) => {
-          throw new Error(`Error reacting with ${react}. (${e})`);
+          throw new Error(`Error reacting with ${react} - ${e}`);
         });
-      }
+      });
 
       const collected = await sent.awaitReactions((reaction) => emojis.includes(reaction.emoji.toString()), { time: pollTime });
-
       const winningReacts = collected.sort((a, b) => a.count - b.count).filter((val, index, col) => val.count === col.last().count && val.count > 1);
-      winston.info('Winners:', winningReacts);
 
       if (winningReacts.size > 1) {
         // tie between some reacts
@@ -72,7 +74,7 @@ module.exports = {
           .catch((err) => { throw new Error(`Error editing message. (${err})`); });
       }
     } catch (e) {
-      throw new Error(`An error occurred while creating the poll. (${e})`);
+      throw new Error(`An error occurred while creating the poll. (${e.message})`);
     }
   },
 };
