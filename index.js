@@ -391,7 +391,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
       if (typeof reaction.emoji.url !== 'undefined') {
         embed
           .setImage(reaction.emoji.url)
-          .addField('Reaction', `"${reaction.emoji.name}" from guild "${reaction.message.guild.name}"`);
+          .addField('Reaction', `"${reaction.emoji.name}" from the guild "${reaction.message.guild.name}"`);
       } else {
         embed.addField('Reaction', reaction.emoji);
       }
