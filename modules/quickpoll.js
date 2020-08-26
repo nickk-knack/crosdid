@@ -44,6 +44,7 @@ module.exports = {
 
       const mPollTime = moment(moment() + pollTime);
       const sent = await message.channel.send(`This poll will end ${mPollTime.fromNow()}, at ${mPollTime.format('h:mm:ss A ([UTC]ZZ) [on] dddd, MMMM Do, YYYY')}.`, { embed: embed });
+      message.channel.stopTyping(true);
 
       emojis.forEach(async (emoji) => {
         // get proper react emoji
