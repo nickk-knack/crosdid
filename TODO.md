@@ -3,7 +3,7 @@
 ## General bot work
 
 1. switch db to fileasync? might improve speed, but that also might be unnecessary
-2. add some sort of error/"unhandled promise rejection" happening with secret reacts
+2. add some sort of error handling for "unhandled promise rejection" happening with secret reacts
 3. think about adding a `#bot-log` channel option and then use `winston-discordjs` to add a transport for logging to a discord channel. could be bad-fucking-ass.
 
 ## Bugs
