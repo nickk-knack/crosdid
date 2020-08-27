@@ -111,6 +111,7 @@ client.once('ready', () => {
               id: m.id,
               messages: [],
               reactions: [],
+              reaction_notify: true,
             }).write();
           }
         });
@@ -374,8 +375,11 @@ client.on('messageReactionAdd', async (reaction, user) => {
       reaction.message.guild.available &&
       db.get(`guilds.${reaction.message.guild.id}.reaction_notify`).value()) {
     // first check that you can send pms to the author! (i.e. that its not a bot)
-    const { author } = reaction.message;
+    const { author, guild } = reaction.message;
     if (author.bot) return;
+
+    // then, check if the user has reaction_notify enabled
+    if (!db.get(`guilds.${guild.id}.users`).find({ id: author.id }).get('reaction_notify').value()) return;
 
     try {
       // Create a DM channel to user
@@ -385,16 +389,17 @@ client.on('messageReactionAdd', async (reaction, user) => {
       const embed = new Discord.MessageEmbed()
         .setColor(randomHex.generate())
         .setTitle(`${user.tag} reacted to your message`)
-        .addField('Your message', `> ${reaction.message.content}`);
+        .addField('Your message', `> ${reaction.message.content}`)
+        .addField('Reaction', `"${reaction.emoji}" from the "${reaction.message.guild.name}" guild.`);
 
-      // detect if the emoji is a guild emoji (true) or regular emoji (false), append to message, send
-      if (typeof reaction.emoji.url !== 'undefined') {
-        embed
-          .setImage(reaction.emoji.url)
-          .addField('Reaction', `"${reaction.emoji.name}" from the guild "${reaction.message.guild.name}"`);
-      } else {
-        embed.addField('Reaction', reaction.emoji);
-      }
+        // detect if the emoji is a guild emoji (true) or regular emoji (false), append to message, send
+      // if (typeof reaction.emoji.url !== 'undefined') {
+      //   embed
+      //     .setImage(reaction.emoji.url)
+      //     .addField('Reaction', `"${reaction.emoji.name}" from the guild "${reaction.message.guild.name}"`);
+      // } else {
+      //   embed.addField('Reaction', reaction.emoji);
+      // }
 
       dm.send(embed);
     } catch (err) {

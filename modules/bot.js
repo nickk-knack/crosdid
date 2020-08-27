@@ -341,6 +341,7 @@ module.exports = {
                       id: m.id,
                       messages: [],
                       reactions: [],
+                      reaction_notify: true,
                     }).write();
                   }
                 });
@@ -361,6 +362,7 @@ module.exports = {
                   id: m.id,
                   messages: [],
                   reactions: [],
+                  reaction_notify: true,
                 }).write();
 
                 usersAdded.push(m.user.username);

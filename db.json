@@ -17,7 +17,7 @@
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".r34 fleshlight",
+      "last_command": ".rnotify disable",
       "reaction_notify": true,
       "secret_messages": {
         "enabled": true,
@@ -59,7 +59,8 @@
               "custom": false,
               "emoji": "😂"
             }
-          ]
+          ],
+          "reaction_notify": true
         },
         {
           "id": "140225600966098944",
@@ -86,7 +87,8 @@
               "custom": true,
               "emoji": "669332349183590421"
             }
-          ]
+          ],
+          "reaction_notify": false
         },
         {
           "id": "206037113433620480",
@@ -109,7 +111,8 @@
               "custom": true,
               "emoji": "663079480255840287"
             }
-          ]
+          ],
+          "reaction_notify": true
         },
         {
           "id": "621804005865029632",
@@ -143,7 +146,8 @@
               "custom": false,
               "emoji": "👀"
             }
-          ]
+          ],
+          "reaction_notify": true
         },
         {
           "id": "438132534555967509",
@@ -158,7 +162,8 @@
               "custom": true,
               "emoji": "653328280660738048"
             }
-          ]
+          ],
+          "reaction_notify": true
         },
         {
           "id": "518290855757348888",
@@ -186,7 +191,8 @@
               "custom": false,
               "emoji": "👑"
             }
-          ]
+          ],
+          "reaction_notify": true
         },
         {
           "id": "189821621626732554",
@@ -237,12 +243,14 @@
               "custom": true,
               "emoji": "643917245516480533"
             }
-          ]
+          ],
+          "reaction_notify": true
         },
         {
           "id": "481955332864868388",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         }
       ],
       "disabled_cmd_modules": [],
@@ -393,217 +401,260 @@
         {
           "id": "140225600966098944",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "140273567253135360",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "140922019733569536",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "141005743951314944",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "142469515979128832",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "144577371121385473",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "145644779198218251",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "174677814220554251",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "182615528383184896",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "184135199716671488",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "226560211773685761",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "247482408620916738",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "296744137808543744",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "424757592208834563",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "428605068141395978",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "466147196908339203",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "480117186007007232",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "540376645161189377",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "133398673009672192",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "142462974987206656",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "164588832837206019",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "166286413027999744",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "111291033513398272",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "143489669168889857",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "267823366944063488",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "285201311874416640",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "308011346329468928",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "327635747727212545",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "329468735029116929",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "329686828804210698",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "408850503091617803",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "412689677569753088",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "419710900631764992",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "431559004901343232",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "467734063747432448",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "519647082005397514",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "520034051520856074",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "564119118677278751",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "637510191151054849",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "654507971954475018",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "682798822262702133",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "701212902601785355",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "702452497373200435",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         }
       ],
       "disabled_cmd_modules": [],
@@ -644,7 +695,7 @@
       "thank_count": 0
     },
     "400513116376662017": {
-      "last_command": ".r34 italian",
+      "last_command": "",
       "reactionNotify": false,
       "secret_messages": {
         "enabled": false,
@@ -658,217 +709,260 @@
         {
           "id": "140225600966098944",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "140273567253135360",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "140922019733569536",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "141005743951314944",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "142469515979128832",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "144577371121385473",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "145644779198218251",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "174677814220554251",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "182615528383184896",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "184135199716671488",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "226560211773685761",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "247482408620916738",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "296744137808543744",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "424757592208834563",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "428605068141395978",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "466147196908339203",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "480117186007007232",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "540376645161189377",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "133398673009672192",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "142462974987206656",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "164588832837206019",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "166286413027999744",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "111291033513398272",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "143489669168889857",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "267823366944063488",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "285201311874416640",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "308011346329468928",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "327635747727212545",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "329468735029116929",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "329686828804210698",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "408850503091617803",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "412689677569753088",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "419710900631764992",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "431559004901343232",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "467734063747432448",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "519647082005397514",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "520034051520856074",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "564119118677278751",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "637510191151054849",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "654507971954475018",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "682798822262702133",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "701212902601785355",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "702452497373200435",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         }
       ],
       "disabled_cmd_modules": [],
@@ -923,217 +1017,260 @@
         {
           "id": "140225600966098944",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "140273567253135360",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "140922019733569536",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "141005743951314944",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "142469515979128832",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "144577371121385473",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "145644779198218251",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "174677814220554251",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "182615528383184896",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "184135199716671488",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "226560211773685761",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "247482408620916738",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "296744137808543744",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "424757592208834563",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "428605068141395978",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "466147196908339203",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "480117186007007232",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "540376645161189377",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "133398673009672192",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "142462974987206656",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "164588832837206019",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "166286413027999744",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "111291033513398272",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "143489669168889857",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "267823366944063488",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "285201311874416640",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "308011346329468928",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "327635747727212545",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "329468735029116929",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "329686828804210698",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "408850503091617803",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "412689677569753088",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "419710900631764992",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "431559004901343232",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "467734063747432448",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "519647082005397514",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "520034051520856074",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "564119118677278751",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "637510191151054849",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "654507971954475018",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "682798822262702133",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "701212902601785355",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         },
         {
           "id": "702452497373200435",
           "messages": [],
-          "reactions": []
+          "reactions": [],
+          "reaction_notify": true
         }
       ],
       "disabled_cmd_modules": [],
