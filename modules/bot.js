@@ -390,14 +390,14 @@ module.exports = {
           const announcement = args.shift().toLowerCase();
           if (!validAnnouncements.includes(announcement)) return message.reply(`invalid announcement event: ${announcement}`);
 
-          db.set(`guilds.${message.guild.id}.announcements.${announcement}.enabled`, true);
+          db.set(`guilds.${message.guild.id}.announcements.${announcement}.enabled`, true).write();
           return message.reply(`successfully enabled the \`${announcement}\` event for this guild.`);
         }
         case 'disable': {
           const announcement = args.shift().toLowerCase();
           if (!validAnnouncements.includes(announcement)) return message.reply(`invalid announcement event: ${announcement}`);
 
-          db.set(`guilds.${message.guild.id}.announcements.${announcement}.enabled`, false);
+          db.set(`guilds.${message.guild.id}.announcements.${announcement}.enabled`, false).write();
           return message.reply(`successfully disabled the \`${announcement}\` event for this guild.`);
         }
         case 'addmessage': {
