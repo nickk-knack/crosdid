@@ -4,8 +4,8 @@ require('dotenv').config();
 // Environment constants
 const token = process.env.TOKEN;
 const port = process.env.PORT || 3000;
-const DEBUG = process.env.DEBUG || false;
 const dbFileName = process.env.DB_FILE_NAME || 'db.json';
+// const DEBUG = process.env.DEBUG || false;
 
 // Requirements
 const winston = require('winston');
@@ -15,6 +15,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const Discord = require('discord.js');
 const randomHex = require('random-hex');
+const DiscordTransport = require('winston-discordjs');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 const { getRandomFromArray, dbDefaultGuildObj, consoleFormat, fileFormat } = require('./util');
@@ -43,7 +44,6 @@ winston.info('Parsed environment variables, loaded requirements, and configured 
 const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
 client.commands = new Discord.Collection();
-client.winston = winston;
 
 // lowdb setup
 const dbDefault = {
@@ -117,7 +117,25 @@ client.once('ready', () => {
         });
       });
     }
+
+    // Add winston discord transport if bot_log_channel is not false
+    const dbBotLogChannel = db.get(`guilds.${g.id}.bot_log_channel`).value();
+    if (dbBotLogChannel !== false) {
+      const botLogChannel = g.channels.cache.find((c) => c.name === dbBotLogChannel);
+      if (typeof botLogChannel !== 'undefined' && botLogChannel.type === 'text') {
+        winston.add(new DiscordTransport.default({
+          discordChannel: botLogChannel,
+        }));
+
+        winston.log('info', `Added bot logging transport for the #${botLogChannel.name} channel in the "${g.name}" guild.`);
+      } else {
+        winston.info(`Could not set "${dbBotLogChannel}" as the bot log channel for the "${g.name}" guild. It may not exist.`);
+      }
+    }
   }
+
+  // Set the winston object in the client so command modules can use it
+  client.winston = winston;
 
   // Check if there are no operators listed. If so, notify the user
   if (!db.get('operators').size().value()) {
@@ -392,15 +410,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
         .addField('Your message', `> ${reaction.message.content}`)
         .addField('Reaction', `"${reaction.emoji}" from the "${reaction.message.guild.name}" guild.`);
 
-        // detect if the emoji is a guild emoji (true) or regular emoji (false), append to message, send
-      // if (typeof reaction.emoji.url !== 'undefined') {
-      //   embed
-      //     .setImage(reaction.emoji.url)
-      //     .addField('Reaction', `"${reaction.emoji.name}" from the guild "${reaction.message.guild.name}"`);
-      // } else {
-      //   embed.addField('Reaction', reaction.emoji);
-      // }
-
       dm.send(embed);
     } catch (err) {
       winston.error(`Could not send DM to ${author}. (${err})`);
@@ -482,7 +491,7 @@ client.on('channelUpdate', (oldChannel, newChannel) => {
 
 // Rate limiting event
 client.on('rateLimit', (info) => {
-  if (DEBUG) winston.warn(`Rate limit: ${info.route}:${info.method} (limit: ${info.limit}, timeout: ${info.timeout}ms)`);
+  winston.warn(`Rate limit: ${info.route}:${info.method} (limit: ${info.limit}, timeout: ${info.timeout}ms)`);
 });
 
 // Logging events

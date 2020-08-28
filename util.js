@@ -104,7 +104,8 @@ const addFieldIfNotEmpty = (embed, fieldName, fieldData, inline) => {
 
 const dbDefaultGuildObj = {
   last_command: '',
-  reactionNotify: false,
+  reaction_notify: false,
+  bot_log_channel: false,
   secret_messages: {
     enabled: false,
     chance: 0.05,

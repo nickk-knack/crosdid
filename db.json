@@ -17,8 +17,9 @@
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".rnotify disable",
+      "last_command": ".wc",
       "reaction_notify": true,
+      "bot_log_channel": "bot-log",
       "secret_messages": {
         "enabled": true,
         "chance": 0.04
@@ -349,7 +350,7 @@
           ]
         },
         "channel_update": {
-          "enabled": true,
+          "enabled": false,
           "messages": [
             "a channel doth been updated",
             "channel news"
@@ -388,7 +389,8 @@
     },
     "140225766720798721": {
       "last_command": "",
-      "reactionNotify": false,
+      "reaction_notify": false,
+      "bot_log_channel": false,
       "secret_messages": {
         "enabled": false,
         "chance": 0.05
@@ -696,7 +698,8 @@
     },
     "400513116376662017": {
       "last_command": "",
-      "reactionNotify": false,
+      "reaction_notify": false,
+      "bot_log_channel": false,
       "secret_messages": {
         "enabled": false,
         "chance": 0.05
@@ -1004,7 +1007,8 @@
     },
     "459534426246873090": {
       "last_command": "",
-      "reactionNotify": false,
+      "reaction_notify": false,
+      "bot_log_channel": false,
       "secret_messages": {
         "enabled": false,
         "chance": 0.05

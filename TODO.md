@@ -5,7 +5,10 @@
 1. switch db to fileasync? might improve speed, but that also might be unnecessary
    1. will likely cause more cmd modules to need to be async'd
 2. add some sort of error handling for "unhandled promise rejection" happening with secret reacts
-3. think about adding a `#bot-log` channel option and then use `winston-discordjs` to add a transport for logging to a discord channel. could be bad-fucking-ass.
+3. bot_log_channel
+   1. add support to `bot` cmd for changing this
+4. look into webhooks?
+   1. is it possible to create a webhook that can autowake/keep awake the bot on heroku?
 
 ## Bugs
 
@@ -14,6 +17,8 @@
    2. maybe try testing canvas separately to find out if its your canvas installation or your code
 2. reaction notifications
    1. theres some sort of bug with the bot's secret react feature that causes two notifications to be sent for one secret react
+3. bot_log_channel
+   1. messages are not being sent to the channel at the moment
 
 ## Existing command updates
 
@@ -40,7 +45,7 @@
    3. this would require adding support to index.js for loading in the reminders from db on bootup
    4. maybe create a **startup tasks** loading bit that can load `js` files from `/startup/` (or similar). that way, any modules can add code to index.js as well. extra modding functionality p much?
 8. `imageflip` (or similar) - meme making shit
-9.  `repeat` - repeat last_command for current guild (guildOnly)
+9. `repeat` - repeat last_command for current guild (guildOnly)
     1. this might actually seriously suck big time, not actually easy
 10. ps name gen
 
