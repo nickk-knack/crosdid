@@ -45,6 +45,7 @@
    3. this would require adding support to index.js for loading in the reminders from db on bootup
    4. maybe create a **startup tasks** loading bit that can load `js` files from `/startup/` (or similar). that way, any modules can add code to index.js as well. extra modding functionality p much?
 8. `imageflip` (or similar) - meme making shit
+   1. [ai meme](https://imgflip.com/ai-meme)
 9. `repeat` - repeat last_command for current guild (guildOnly)
     1. this might actually seriously suck big time, not actually easy
 10. ps name gen
