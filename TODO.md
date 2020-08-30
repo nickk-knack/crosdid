@@ -15,9 +15,11 @@
 1. `wordcloud`
    1. image generation does not fuckin work lmao
    2. maybe try testing canvas separately to find out if its your canvas installation or your code
-2. reaction notifications
+2. `quickpoll`
+   1. on a tie (maybe only with one vote each?), error occurs saying it can't get `count` of `undefined`. ope.
+3. reaction notifications
    1. theres some sort of bug with the bot's secret react feature that causes two notifications to be sent for one secret react
-3. bot_log_channel
+4. bot_log_channel
    1. messages are not being sent to the channel at the moment
 
 ## Existing command updates
@@ -45,7 +47,7 @@
    3. this would require adding support to index.js for loading in the reminders from db on bootup
    4. maybe create a **startup tasks** loading bit that can load `js` files from `/startup/` (or similar). that way, any modules can add code to index.js as well. extra modding functionality p much?
 8. `imageflip` (or similar) - meme making shit
-   1. [ai meme](https://imgflip.com/ai-meme)
+   1. [api](https://imgflip.com/api)
 9. `repeat` - repeat last_command for current guild (guildOnly)
     1. this might actually seriously suck big time, not actually easy
 10. ps name gen
