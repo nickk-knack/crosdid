@@ -24,7 +24,8 @@
 
 ## Existing command updates
 
-1. `strawpoll` - need to test poll creation reimplementation
+1. `quickpoll` - pin poll message
+2. `strawpoll` - need to test poll creation reimplementation
 2. `bot` - async it
 3. `fakeperson` - add address generation from fakeaddressgenerator?
 4. `youtube` - look at comments
