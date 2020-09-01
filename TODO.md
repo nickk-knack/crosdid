@@ -9,6 +9,8 @@
    1. add support to `bot` cmd for changing this
 4. look into webhooks?
    1. is it possible to create a webhook that can autowake/keep awake the bot on heroku?
+5. generalize auto 100 react to be able to read from a guild-specific db list of auto-react emojis
+   1. will likely need to add config subcommand to `bot` command
 
 ## Bugs
 
@@ -26,9 +28,9 @@
 
 1. `quickpoll` - pin poll message
 2. `strawpoll` - need to test poll creation reimplementation
-2. `bot` - async it
-3. `fakeperson` - add address generation from fakeaddressgenerator?
-4. `youtube` - look at comments
+3. `bot` - async it
+4. `fakeperson` - add address generation from fakeaddressgenerator?
+5. `youtube` - look at comments
 
 ## New command ideas
 
