@@ -1,7 +1,8 @@
 {
   "command_prefix": "[.]",
   "global_disabled_cmd_modules": [
-    "_translate"
+    "_translate",
+    "wordcloud"
   ],
   "operators": [
     "140225600966098944"
@@ -17,7 +18,7 @@
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".wc",
+      "last_command": ".I cow with antlers on pole",
       "reaction_notify": true,
       "bot_log_channel": "bot-log",
       "secret_messages": {
