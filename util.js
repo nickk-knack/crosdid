@@ -99,7 +99,7 @@ const addFieldIfNotEmpty = (embed, fieldName, fieldData, inline) => {
   if (typeof fieldData !== 'string') throw new Error('fieldData must be a string!');
   if (fieldData === '') return;
 
-  embed.addField(fieldName, fieldData, inline);
+  embed.addField(fieldName, trim(fieldData, 1024), inline);
 };
 
 const dbDefaultGuildObj = {
