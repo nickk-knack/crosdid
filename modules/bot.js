@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const randomHex = require('random-hex');
 const { stripIndent, stripIndents } = require('common-tags');
-const { dbDefaultGuildObj } = require('../util');
+const { trim, dbDefaultGuildObj } = require('../util');
 
 const validActivities = ['PLAYING', 'STREAMING', 'LISTENING', 'WATCHING'];
 const validAnnouncements = ['channel_create', 'channel_delete', 'channel_update', 'emoji_create', 'emoji_delete', 'emoji_update'];
@@ -172,7 +172,7 @@ module.exports = {
           let i = -1;
 
           for (const phrase of dbPhrases.value()) {
-            embed.addField(`[Trigger ${++i}]: **${phrase.trigger}**`, `Responses: [\n${phrase.responses.map((r) => `\t"${r}"`).join(',\n')}\n]`, true);
+            embed.addField(`[Trigger ${++i}]: **${phrase.trigger}**`, `Responses: [\n${trim(phrase.responses.map((r) => `\t"${r}"`).join(',\n'), 1024)}\n]`, true);
           }
 
           return message.reply(`secret phrases for ${message.guild.name}:`, embed);

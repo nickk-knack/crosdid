@@ -18,7 +18,7 @@ const randomHex = require('random-hex');
 const DiscordTransport = require('winston-discordjs');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
-const { getRandomFromArray, dbDefaultGuildObj, consoleFormat, fileFormat } = require('./util');
+const { getRandomFromArray, trim, dbDefaultGuildObj, consoleFormat, fileFormat } = require('./util');
 
 // Configure winston
 winston
@@ -407,7 +407,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
       const embed = new Discord.MessageEmbed()
         .setColor(randomHex.generate())
         .setTitle(`${user.tag} reacted to your message`)
-        .addField('Your message', `> ${reaction.message.content}`)
+        .addField('Your message', `> ${trim(reaction.message.content, 1024)}`)
         .addField('Reaction', `"${reaction.emoji}" from the "${reaction.message.guild.name}" guild.`);
 
       dm.send(embed);

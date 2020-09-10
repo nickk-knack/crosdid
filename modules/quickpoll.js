@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const { trim } = require('../util');
 const randomHex = require('random-hex');
 const moment = require('moment');
 const emojiRegex = /<:.+:(?<id>\d+)>/gu;
@@ -39,7 +40,7 @@ module.exports = {
         .setTitle(title);
 
       responses.forEach((val, index) => {
-        embed.addField(`${emojis[index]}`, val, true);
+        embed.addField(`${emojis[index]}`, trim(val, 1024), true);
       });
 
       const mPollTime = moment(moment() + pollTime);
