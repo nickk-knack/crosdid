@@ -2,7 +2,7 @@ const { stripIndents } = require('common-tags');
 const search = require('youtube-search');
 
 const opts = {
-  maxResults: 10,
+  maxResults: 1,
   key: process.env.YOUTUBE_API_KEY,
   safeSearch: 'none',
 };
@@ -17,7 +17,6 @@ module.exports = {
 
   Optional command flags:
   \`\`\`
-  -1, --top           | return the first result, rather than a random one (note: this is essentially shorthand for -l 1).
   -l, --limit (limit) | set the maximum number of results to 'limit' (1-50).
   -t, --type  (type)  | choose what types of search results you want. accepted types: [${acceptableTypes.join(', ')}] (one-letter short-hand is allowed). 
   -o, --order (order) | specify the ordering of search results (default is relevance). accepted orderings: [${acceptableOrderings.join(', ')}].
@@ -28,12 +27,6 @@ module.exports = {
   cooldown: 3,
   execute(message, args) {
     // Get flags from args
-    const topFlagIndex = args.findIndex((val) => /^-1$|^--top$/giu.test(val));
-    if (topFlagIndex > -1) {
-      opts.maxResults = 1;
-      args.splice(topFlagIndex, 1);
-    }
-
     const safeFlagIndex = args.findIndex((val) => /^-s$|^--safe$/giu.test(val));
     if (safeFlagIndex > -1) {
       opts.safeSearch = 'moderate';
