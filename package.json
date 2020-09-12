@@ -32,7 +32,7 @@
     "lowdb": "^1.0.0",
     "moment": "^2.27.0",
     "moment-duration-format": "^2.3.2",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "random-hex": "^1.0.2",
     "request": "^2.88.2",
     "strawpolljs": "^1.0.2",
