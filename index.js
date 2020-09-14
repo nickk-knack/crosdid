@@ -47,9 +47,10 @@ client.commands = new Discord.Collection();
 
 // lowdb setup
 const dbDefault = {
-  command_prefix: '.',
+  command_prefix: '\\.',
   global_disabled_cmd_modules: [
     '_translate',
+    'wordcloud',
   ],
   operators: [],
   activity_settings: {
@@ -389,11 +390,10 @@ client.on('messageReactionAdd', async (reaction, user) => {
   }
 
   // Auto-alert on react code (enabled on a per-guild basis)
-  if (typeof reaction.message.guild !== 'undefined' &&
-      reaction.message.guild.available &&
-      db.get(`guilds.${reaction.message.guild.id}.reaction_notify`).value()) {
+  const { author, guild } = reaction.message;
+  if (typeof guild !== 'undefined' && guild.available &&
+      db.get(`guilds.${guild.id}.reaction_notify`).value()) {
     // first check that you can send pms to the author! (i.e. that its not a bot)
-    const { author, guild } = reaction.message;
     if (author.bot) return;
 
     // then, check if the user has reaction_notify enabled

@@ -1,5 +1,5 @@
 {
-  "command_prefix": "[.]",
+  "command_prefix": "\\.",
   "global_disabled_cmd_modules": [
     "_translate",
     "wordcloud"
@@ -13,12 +13,12 @@
     "text": "the world burn"
   },
   "last_username_change_date": 1597938168486,
-  "global_good_count": 14,
-  "global_bad_count": 15,
+  "global_good_count": 15,
+  "global_bad_count": 17,
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".I cow with antlers on pole",
+      "last_command": ".rn enable",
       "reaction_notify": true,
       "bot_log_channel": "bot-log",
       "secret_messages": {
@@ -90,7 +90,7 @@
               "emoji": "669332349183590421"
             }
           ],
-          "reaction_notify": false
+          "reaction_notify": true
         },
         {
           "id": "206037113433620480",
@@ -384,8 +384,8 @@
           ]
         }
       },
-      "good_count": 14,
-      "bad_count": 15,
+      "good_count": 15,
+      "bad_count": 17,
       "thank_count": 8
     },
     "140225766720798721": {
@@ -698,7 +698,7 @@
       "thank_count": 0
     },
     "400513116376662017": {
-      "last_command": "",
+      "last_command": ".i cow standing in ocean",
       "reaction_notify": false,
       "bot_log_channel": false,
       "secret_messages": {
