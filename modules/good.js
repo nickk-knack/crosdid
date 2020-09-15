@@ -15,12 +15,13 @@ module.exports = {
   guildOnly: false,
   args: false,
   cooldown: 1,
-  execute(message, args) {
+  async execute(message, args) {
+    const { db } = message.client;
     if (typeof message.guild !== 'undefined' && message.guild.available) {
-      message.client.db.update(`guilds.${message.guild.id}.good_count`, (count) => count + 1).write();
+      db.update(`guilds.${message.guild.id}.good_count`, (count) => count + 1).write();
     }
 
-    message.client.db.update('global_good_count', (count) => count + 1).write();
+    db.update('global_good_count', (count) => count + 1).write();
 
     message.reply(responses[Math.floor(Math.random() * responses.length)]);
   },

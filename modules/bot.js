@@ -25,14 +25,14 @@ module.exports = {
   guildOnly: true,
   opOnly: true,
   cooldown: 1,
-  execute(message, args) {
-    const { db } = message.client;
+  async execute(message, args) {
+    const { db, user } = message.client;
     const subcommand = args.shift().toLowerCase();
     const subcommandArgOriginal = args.shift();
     const subcommandArg = subcommandArgOriginal.toLowerCase();
+    const prefix = await db.get('command_prefix').value() || user.toString();
 
     if (subcommand === 'help') {
-      const prefix = db.get('command_prefix').value() || message.client.user.toString();
       let msg = `\n${prefix}${module.exports.name} `;
 
       switch (subcommandArg) {
@@ -102,7 +102,6 @@ module.exports = {
         db.set('command_prefix', newPrefix).write();
         return message.reply(`set the command prefix to '${newPrefix}'`);
       } else if (subcommandArg === 'get') {
-        const prefix = db.get('command_prefix').value() || message.client.user.toString();
         return message.reply(`the current command prefix is '${prefix}'`);
       } else {
         return message.reply(`unknown subcommand argument '${subcommandArg}' for \`prefix\` subcommand.`);
@@ -139,15 +138,14 @@ module.exports = {
           return message.reply(`\`${subcommandArg}\` is not a valid subcommand argument! (Expected: enable, disable, type, text)`);
       }
 
-      const activitySettings = db.get('activity_settings').value();
-
+      const activitySettings = await db.get('activity_settings').value();
       if (activitySettings.enabled) {
-        message.client.user.setActivity(activitySettings.text, { type: activitySettings.type })
+        user.setActivity(activitySettings.text, { type: activitySettings.type })
           .catch((e) => {
             throw new Error(`There was an error setting the activity. (${e})`);
           });
       } else {
-        message.client.user.setActivity(null)
+        user.setActivity(null)
           .catch((e) => {
             throw new Error(`There was an error setting the activity. (${e})`);
           });
@@ -155,8 +153,8 @@ module.exports = {
     } else if (subcommand === 'phrases') {
       if (!args.length && subcommandArg !== 'list') return message.reply('you did not provide enough arguments to execute that command!');
 
-      const dbPhrases = db.get(`guilds.${message.guild.id}.phrases`);
-
+      const dbPhrases = await db.get(`guilds.${message.guild.id}.phrases`);
+      const dbPhrasesSize = await dbPhrases.size().value();
       switch (subcommandArg) {
         case 'enable':
         case 'e':
@@ -171,7 +169,8 @@ module.exports = {
           const embed = new MessageEmbed().setColor(randomHex.generate());
           let i = -1;
 
-          for (const phrase of dbPhrases.value()) {
+          const phrases = await dbPhrases.value();
+          for (const phrase of phrases) {
             embed.addField(`[Trigger ${++i}]: **${phrase.trigger}**`, `Responses: [\n${trim(phrase.responses.map((r) => `\t"${r}"`).join(',\n'), 1024)}\n]`, true);
           }
 
@@ -180,24 +179,27 @@ module.exports = {
         case 'addtrigger':
         case 'at': {
           const triggerPhrase = args.join(' ');
-          if (dbPhrases.find({ trigger: triggerPhrase }).value()) return message.reply(`"${triggerPhrase}" already exists!`);
+          const triggerExists = await dbPhrases.find({ trigger: triggerPhrase }).value();
+          if (triggerExists) return message.reply(`"${triggerPhrase}" already exists!`);
 
-          dbPhrases.push({
+          await dbPhrases.push({
             trigger: triggerPhrase,
             responses: [],
           }).write();
 
-          return message.reply(`successfully added trigger phrase: "${triggerPhrase}" (index: ${dbPhrases.size().value() - 1}).`);
+          const newPhrasesSize = await dbPhrases.size().value();
+          return message.reply(`successfully added trigger phrase: "${triggerPhrase}" (index: ${newPhrasesSize - 1}).`);
         }
         case 'addresponse':
         case 'ar': {
           const triggerIndex = parseInt(args.shift(), 10);
-          if (isNaN(triggerIndex) || triggerIndex >= dbPhrases.size().value()) return message.reply(`${triggerIndex} is out of bounds! [must be 0 - ${dbPhrases.size().value() - 1}]`);
+          if (isNaN(triggerIndex) || triggerIndex >= dbPhrasesSize) return message.reply(`${triggerIndex} is out of bounds! [must be 0 - ${dbPhrases.size().value() - 1}]`);
 
-          const dbPhraseObject = dbPhrases.get(triggerIndex);
-          const dbPhraseResponses = dbPhraseObject.get('responses');
+          const dbPhraseObject = await dbPhrases.get(triggerIndex);
+          const dbPhraseResponses = await dbPhraseObject.get('responses');
           const responsePhrase = args.join(' ');
-          if (dbPhraseResponses.includes(responsePhrase).value()) return message.reply(`${responsePhrase} already exists for the given trigger index!`);
+          const responseExists = await dbPhraseResponses.includes(responsePhrase).value();
+          if (responseExists) return message.reply(`${responsePhrase} already exists for the given trigger index!`);
 
           dbPhraseResponses.push(responsePhrase).write();
 
@@ -206,22 +208,23 @@ module.exports = {
         case 'removetrigger':
         case 'rt': {
           const triggerIndex = parseInt(args.shift(), 10);
-          if (isNaN(triggerIndex) || triggerIndex >= dbPhrases.size().value()) return message.reply(`${triggerIndex} is out of bounds! [must be 0 - ${dbPhrases.size().value() - 1}]`);
+          if (isNaN(triggerIndex) || triggerIndex >= dbPhrasesSize) return message.reply(`${triggerIndex} is out of bounds! [must be 0 - ${dbPhrases.size().value() - 1}]`);
 
-          const removed = dbPhrases.pullAt(triggerIndex).write();
+          const removed = await dbPhrases.pullAt(triggerIndex).write();
           return message.reply(`successfully removed "${removed[0].trigger}" as a trigger.`);
         }
         case 'removeresponse':
         case 'rr': {
           const triggerIndex = parseInt(args.shift(), 10);
-          if (isNaN(triggerIndex) || triggerIndex >= dbPhrases.size().value()) return message.reply(`${triggerIndex} is out of bounds! [must be 0 - ${dbPhrases.size().value() - 1}]`);
+          if (isNaN(triggerIndex) || triggerIndex >= dbPhrasesSize) return message.reply(`${triggerIndex} is out of bounds! [must be 0 - ${dbPhrases.size().value() - 1}]`);
 
-          const dbPhraseObject = dbPhrases.get(triggerIndex);
-          const dbPhraseResponses = dbPhraseObject.get('responses');
+          const dbPhraseObject = await dbPhrases.get(triggerIndex);
+          const dbPhraseResponses = await dbPhraseObject.get('responses');
           const responseIndex = parseInt(args.shift(), 10);
-          if (isNaN(responseIndex) || responseIndex >= dbPhraseResponses.size().value()) return message.reply(`${responseIndex} is out of bounds! [must be 0 - ${dbPhraseResponses.size().value() - 1}]`);
+          const responsesSize = await dbPhraseResponses.size().value();
+          if (isNaN(responseIndex) || responseIndex >= responsesSize) return message.reply(`${responseIndex} is out of bounds! [must be 0 - ${dbPhraseResponses.size().value() - 1}]`);
 
-          const removed = dbPhraseResponses.pullAt(responseIndex).write();
+          const removed = await dbPhraseResponses.pullAt(responseIndex).write();
           return message.reply(`successfully removed "${removed}" from the responses for "${dbPhraseObject.get('trigger').value()}".`);
         }
         default:
@@ -236,7 +239,7 @@ module.exports = {
           // This actually might be incredibly unsafe, since I'm not sanity checking the url.
           // It's possible that the url can be a path to a local file,
           // and that would be perfectly valid in this case.
-          message.client.user.setAvatar(avatarUrl)
+          user.setAvatar(avatarUrl)
             .then(() => message.reply(`successfully set avatar to ${avatarUrl}`))
             .catch((e) => {
               throw new Error(`There was an error setting the avatar. (${e})`);
@@ -245,7 +248,7 @@ module.exports = {
         }
         case 'get':
           return message.reply(
-            message.client.user.avatarURL({
+            user.avatarURL({
               dynamic: true,
               format: 'png',
               size: 1024,
@@ -260,11 +263,11 @@ module.exports = {
       }
 
       const now = (new Date()).valueOf();
-      const lastUsernameChangeDate = db.get('last_username_change_date').value();
+      const lastUsernameChangeDate = await db.get('last_username_change_date').value();
       const timeDiff = now - lastUsernameChangeDate;
 
       if (timeDiff > (30 * 60 * 1000)) {
-        message.client.user.setUsername(subcommandArgOriginal);
+        user.setUsername(subcommandArgOriginal);
         db.set('last_username_change_date', now).write();
         return message.reply(`successfully set bot's username to ${subcommandArgOriginal}`);
       } else {
@@ -329,15 +332,16 @@ module.exports = {
             if (!g.available) continue;
 
             // Create guild config if non-existent
-            const guildExists = db.has(`guilds.${g.id}`).value();
+            const guildExists = await db.has(`guilds.${g.id}`).value();
             if (!guildExists) {
-              db.set(`guilds.${g.id}`, dbDefaultGuildObj).write();
+              await db.set(`guilds.${g.id}`, dbDefaultGuildObj).write();
               guildsAdded.push(g.name);
 
-              g.members.fetch().then((fetched) => {
-                fetched.forEach((m) => {
-                  if (!m.user.bot && !db.get(`guilds.${g.id}.users`).find({ id: m.id }).value()) {
-                    db.get(`guilds.${g.id}.users`).push({
+              g.members.fetch().then(async (fetched) => {
+                fetched.forEach(async (m) => {
+                  const userExists = await db.get(`guilds.${g.id}.users`).find({ id: m.id }).value();
+                  if (!m.user.bot && !userExists) {
+                    await db.get(`guilds.${g.id}.users`).push({
                       id: m.id,
                       messages: [],
                       reactions: [],
@@ -355,10 +359,11 @@ module.exports = {
           const usersAdded = [];
 
           // go through all users in current guild, add shit to db for them
-          message.guild.members.fetch().then((fetched) => {
-            fetched.forEach((m) => {
-              if (!m.user.bot && !db.get(`guilds.${message.guild.id}.users`).find({ id: m.id }).value()) {
-                db.get(`guilds.${message.guild.id}.users`).push({
+          message.guild.members.fetch().then(async (fetched) => {
+            fetched.forEach(async (m) => {
+              const userExists = await db.get(`guilds.${g.id}.users`).find({ id: m.id }).value();
+              if (!m.user.bot && !userExists) {
+                await db.get(`guilds.${message.guild.id}.users`).push({
                   id: m.id,
                   messages: [],
                   reactions: [],

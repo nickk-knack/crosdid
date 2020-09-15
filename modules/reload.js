@@ -8,13 +8,13 @@ module.exports = {
   guildOnly: false,
   opOnly: true,
   cooldown: 3,
-  execute(message, args) {
+  async execute(message, args) {
     const mode = args.shift().toLowerCase();
     const { db, commands } = message.client;
     let reply = '';
 
     if (mode === '-d' || mode === 'all') {
-      db.read();
+      await db.read();
       reply += 'Read database into memory.';
     }
 
@@ -43,7 +43,9 @@ module.exports = {
 
         for (const file of commandModules) {
           if (!file.endsWith('.js')) continue;
-          if (db.get('global_disabled_cmd_modules').includes(file.split('.')[0]).value()) continue;
+
+          const blacklisted = await db.get('global_disabled_cmd_modules').includes(file.split('.')[0]).value();
+          if (blacklisted) continue;
 
           delete require.cache[require.resolve(`./${file}`)];
 
@@ -56,7 +58,9 @@ module.exports = {
         }
 
         reply += (reply.length ? '\n' : '');
-        reply += `Reloaded all command modules. Skipped the following: ${db.get('global_disabled_cmd_modules').value().join(', ')}.`;
+
+        const disabledCmdList = await db.get('global_disabled_cmd_modules').value().join(', ');
+        reply += `Reloaded all command modules. Skipped the following: ${disabledCmdList}.`;
       }
     }
 

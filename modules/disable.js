@@ -22,8 +22,8 @@ module.exports = {
   guildOnly: false,
   opOnly: true,
   cooldown: 1,
-  execute(message, args) {
-    const { db, commands } = message.client;
+  async execute(message, args) {
+    const { db, commands, guild } = message.client;
 
     // Set global flag
     let global = false;
@@ -34,9 +34,9 @@ module.exports = {
     }
 
     // Get db reference
-    const dbRef = (global || typeof message.guild === 'undefined' || message.guild === null) ?
-      db.get('global_disabled_cmd_modules') :
-      db.get(`guilds.${message.guild.id}.disabled_cmd_modules`);
+    const dbRef = (global || typeof guild === 'undefined' || guild === null) ?
+      await db.get('global_disabled_cmd_modules') :
+      await db.get(`guilds.${guild.id}.disabled_cmd_modules`);
 
     // Set enable flag
     let enable = false;
@@ -51,7 +51,7 @@ module.exports = {
 
     // If we are enabling a command, do it here and return
     if (enable) {
-      const index = dbRef.indexOf(commandName);
+      const index = await dbRef.indexOf(commandName);
       if (index === -1) return message.reply(`\`${commandName}\` is not disabled, cannot enable it.`);
 
       dbRef.splice(index, 1).write();

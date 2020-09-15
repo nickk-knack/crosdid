@@ -15,7 +15,7 @@ module.exports = {
   guildOnly: true,
   opOnly: true,
   cooldown: 1,
-  execute(message, args) {
+  async execute(message, args) {
     // Ensure that the mention target isn't @everyone or @here
     if (message.mentions.everyone) return message.reply('you cannot target @everyone/@here!');
 
@@ -28,18 +28,18 @@ module.exports = {
     const subcommandArg = args.shift().toLowerCase();
     const user = message.mentions.members.cache.first();
 
-    let dbUser = db.get(`guilds.${message.guild.id}.users`).find({ id: user.id });
+    let dbUser = await db.get(`guilds.${message.guild.id}.users`).find({ id: user.id });
 
     switch (subcommand) {
       case 'messages':
-        dbUser = dbUser.get('messages');
+        dbUser = await dbUser.get('messages');
         break;
       case 'reacts':
-        dbUser = dbUser.get('reactions');
+        dbUser = await dbUser.get('reactions');
         break;
       case 'op': {
         // Coerce subcommandArg into a boolean, write it to db
-        const ops = db.get('operators');
+        const ops = await db.get('operators');
 
         if (subcommandArg === 'true') {
           ops.push(user.id).write();
@@ -59,12 +59,15 @@ module.exports = {
       case 'list':
       case 'l': {
         let i = -1;
+        let replyMessage = '';
 
         if (subcommand === 'messages') {
-          return message.reply(dbUser.map((x) => `[${++i}.] "${x}"`).join('\n').value());
+          replyMessage = await dbUser.map((x) => `[${++i}.] "${x}"`).join('\n').value();
         } else {
-          return message.reply(dbUser.map((x) => `[${++i}.] ${x.custom ? message.guild.emojis.get(x.emoji) : x.emoji}`).join('\n').value());
+          replyMessage = await dbUser.map((x) => `[${++i}.] ${x.custom ? message.guild.emojis.get(x.emoji) : x.emoji}`).join('\n').value();
         }
+
+        return message.reply(replyMessage);
       }
       case 'add':
       case 'a':
@@ -76,7 +79,8 @@ module.exports = {
           const secretMessage = args.join(' ').trim();
 
           // Check if its a duplicate
-          if (dbUser.includes(secretMessage).value()) {
+          const duplicate = await dbUser.includes(secretMessage).value();
+          if (duplicate) {
             return message.reply(`${user} already has "${secretMessage}" as a secret message.`);
           }
 
@@ -96,7 +100,8 @@ module.exports = {
           }
 
           // Check if its a duplicate (this might not be actually work)
-          if (dbUser.includes(emojiObj).value()) {
+          const duplicate = await dbUser.includes(emojiObj).value();
+          if (duplicate) {
             return message.reply(`${user} already has ${emojiObj.emoji} as a secret react.`);
           }
 
@@ -114,10 +119,11 @@ module.exports = {
 
         // Get and parse index, check that its within bounds
         const index = parseInt(args.shift(), 10);
-        if (isNaN(index) || index >= dbUser.size().value()) return message.reply(`${index} is out of bounds! [0 - ${dbUser.size().value() - 1}]`);
+        const listLength = await dbUser.size().value();
+        if (isNaN(index) || index >= listLength) return message.reply(`${index} is out of bounds! [0 - ${listLength - 1}]`);
 
         // Remove the secret at the given index, save it and output it
-        const removed = dbUser.pullAt(index).write();
+        const removed = await dbUser.pullAt(index).write();
         return message.reply(`successfully removed ${removed} from ${user}'s secrets.`);
       }
       default:

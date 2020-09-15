@@ -82,7 +82,8 @@ let db = null;
     }
   }
 
-  winston.info(`Loaded command modules. Skipped the following: ${db.get('global_disabled_cmd_modules').value().join(', ')}`);
+  const disabledCmdList = await db.get('global_disabled_cmd_modules').value().join(', ');
+  winston.info(`Loaded command modules. Skipped the following: ${disabledCmdList}`);
 })();
 
 // Ready event

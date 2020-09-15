@@ -5,7 +5,7 @@ module.exports = {
   usage: '<disable | enable>',
   args: true,
   guildOnly: true,
-  execute(message, args) {
+  async execute(message, args) {
     const { db } = message.client;
     const action = args.shift().toLowerCase();
 

@@ -11,12 +11,12 @@ module.exports = {
   args: false,
   guildOnly: false,
   cooldown: 3,
-  execute(message, args) {
+  async execute(message, args) {
     const { db } = message.client;
 
-    const globalThankCount = db.get('global_thank_count').value();
-    const globalBadCount = db.get('global_bad_count').value();
-    const globalGoodCount = db.get('global_good_count').value();
+    const globalThankCount = await db.get('global_thank_count').value();
+    const globalBadCount = await db.get('global_bad_count').value();
+    const globalGoodCount = await db.get('global_good_count').value();
     const globalGoodBadSum = globalBadCount + globalGoodCount;
     const badPercent = globalGoodBadSum === 0 ? 0 : globalBadCount / globalGoodBadSum;
     const goodPercent = globalGoodBadSum === 0 ? 0 : globalGoodCount / globalGoodBadSum;
@@ -42,12 +42,17 @@ module.exports = {
     if (createdMoment.month() === nowMoment.month() && createdMoment.day() === nowMoment.day()) embed.addField('🎂 **Happy Birthday to Me!** 🎂', `I just turned **${life.years()}** years old.`, true);
 
     if (typeof message.guild !== 'undefined' && message.guild.available) {
-      embed
-        .addField("Number of times I've been called bad in this guild...", db.get(`guilds.${message.guild.id}.bad_count`).value(), true)
-        .addField("Number of times I've been called good in this guild!", db.get(`guilds.${message.guild.id}.good_count`).value(), true)
-        .addField("Number of times I've been thanked in this guild 😇", db.get(`guilds.${message.guild.id}.thank_count`).value(), true);
+      const guildBadCount = await db.get(`guilds.${message.guild.id}.bad_count`).value();
+      const guildGoodCount = await db.get(`guilds.${message.guild.id}.good_count`).value();
+      const guildThankCount = await db.get(`guilds.${message.guild.id}.thank_count`).value();
+      const lastCommand = await db.get(`guilds.${message.guild.id}.last_command`).value();
 
-      addFieldIfNotEmpty(embed, 'The last command executed on this guild', db.get(`guilds.${message.guild.id}.last_command`).value(), true);
+      embed
+        .addField("Number of times I've been called bad in this guild...", guildBadCount, true)
+        .addField("Number of times I've been called good in this guild!", guildGoodCount, true)
+        .addField("Number of times I've been thanked in this guild 😇", guildThankCount, true);
+
+      addFieldIfNotEmpty(embed, 'The last command executed on this guild', lastCommand, true);
     }
 
     const { lastMessage } = message.client.user;

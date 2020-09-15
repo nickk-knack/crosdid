@@ -8,9 +8,9 @@ module.exports = {
   description: 'List all commands/info about specific commands',
   usage: '[command name]',
   cooldown: 3,
-  execute(message, args) {
-    const { db, commands } = message.client;
-    const prefix = db.get('command_prefix').value() || message.client.user.toString();
+  async execute(message, args) {
+    const { db, commands, user } = message.client;
+    const prefix = await db.get('command_prefix').value() || user.toString();
 
     const embed = new MessageEmbed().setColor(randomHex.generate());
 
@@ -27,7 +27,7 @@ module.exports = {
       }
 
       if (command.opOnly) {
-        const isOp = db.get('operators').includes(message.author.id).value();
+        const isOp = await db.get('operators').includes(message.author.id).value();
 
         if (!isOp) {
           return message.reply('you do not have permission to view help for that command.');
