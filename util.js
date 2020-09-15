@@ -102,6 +102,25 @@ const addFieldIfNotEmpty = (embed, fieldName, fieldData, inline) => {
   embed.addField(fieldName, trim(fieldData, 1024), inline);
 };
 
+const dbDefault = {
+  command_prefix: '\\.',
+  global_disabled_cmd_modules: [
+    '_translate',
+    'wordcloud',
+  ],
+  operators: [],
+  activity_settings: {
+    enabled: true,
+    type: 'WATCHING',
+    text: 'over my children',
+  },
+  last_username_change_date: 0,
+  global_good_count: 0,
+  global_bad_count: 0,
+  global_thank_count: 0,
+  guilds: {},
+};
+
 const dbDefaultGuildObj = {
   last_command: '',
   reaction_notify: false,
@@ -163,5 +182,6 @@ module.exports = {
   generateRandomHexString: generateRandomHexString,
   generateUserHexString: generateUserHexString,
   addFieldIfNotEmpty: addFieldIfNotEmpty,
+  dbDefault: dbDefault,
   dbDefaultGuildObj: dbDefaultGuildObj,
 };

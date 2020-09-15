@@ -9,7 +9,7 @@ const dbFileName = process.env.DB_FILE_NAME || 'db.json';
 
 // Requirements
 const winston = require('winston');
-const fs = require('fs');
+const fs = require('fs/promises');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -17,8 +17,8 @@ const Discord = require('discord.js');
 const randomHex = require('random-hex');
 const DiscordTransport = require('winston-discordjs');
 const low = require('lowdb');
-const FileSync = require('lowdb/adapters/FileSync');
-const { getRandomFromArray, trim, dbDefaultGuildObj, consoleFormat, fileFormat } = require('./util');
+const FileAsync = require('lowdb/adapters/FileAsync');
+const { getRandomFromArray, trim, dbDefault, dbDefaultGuildObj, consoleFormat, fileFormat } = require('./util');
 
 // Configure winston
 winston
@@ -45,54 +45,48 @@ const client = new Discord.Client();
 const cooldowns = new Discord.Collection();
 client.commands = new Discord.Collection();
 
-// lowdb setup
-const dbDefault = {
-  command_prefix: '\\.',
-  global_disabled_cmd_modules: [
-    '_translate',
-    'wordcloud',
-  ],
-  operators: [],
-  activity_settings: {
-    enabled: true,
-    type: 'WATCHING',
-    text: 'over my children',
-  },
-  last_username_change_date: 0,
-  global_good_count: 0,
-  global_bad_count: 0,
-  global_thank_count: 0,
-  guilds: {},
-};
+// Global database variable
+let db = null;
 
-const adapter = new FileSync(dbFileName, {
-  defaultValue: dbDefault,
-});
+// Async setup
+(async () => {
+  // Instantiate database, initialize to defaults if nonexistant
+  db = await low(new FileAsync(dbFileName));
+  await db.defaults(dbDefault).value();
 
-const db = low(adapter);
-client.db = db;
-winston.info(`Loaded local database file from ${dbFileName}`);
-
-const commandModules = fs.readdirSync('./modules');
-
-for (const file of commandModules) {
-  // If file is not a .js file or contained in the blacklist, skip it
-  if (!file.endsWith('.js')) continue;
-  if (db.get('global_disabled_cmd_modules').includes(file.split('.')[0]).value()) continue;
-
-  // Require the command module and set it in the client
-  try {
-    const command = require(`./modules/${file}`); // eslint-disable-line global-require
-    client.commands.set(command.name, command);
-  } catch (e) {
-    winston.error(`Error loading ${file}: ${e}`);
+  // Throw an error if the db is still null for some reason
+  if (db === null) {
+    winston.error('Database was not successfully loaded. Aborting...');
+    process.exit(1);
   }
-}
 
-winston.info(`Loaded command modules. Skipped the following: ${db.get('global_disabled_cmd_modules').value().join(', ')}`);
+  // Add db to the discord.js client object (for use in commands)
+  client.db = db;
+  winston.info(`Loaded local database file from ${dbFileName}`);
+
+  // Load command modules
+  const commandModules = await fs.readdir('./modules');
+
+  for (const file of commandModules) {
+    // If file is not a .js file or contained in the blacklist, skip it
+    if (!file.endsWith('.js')) continue;
+    const blacklisted = await db.get('global_disabled_cmd_modules').includes(file.split('.')[0]).value();
+    if (blacklisted) continue;
+
+    // Require the command module and set it in the client
+    try {
+      const command = require(`./modules/${file}`); // eslint-disable-line global-require
+      client.commands.set(command.name, command);
+    } catch (e) {
+      winston.error(`Error loading ${file}: ${e}`);
+    }
+  }
+
+  winston.info(`Loaded command modules. Skipped the following: ${db.get('global_disabled_cmd_modules').value().join(', ')}`);
+})();
 
 // Ready event
-client.once('ready', () => {
+client.once('ready', async () => {
   winston.info(`Logged in as: ${client.user.tag}`);
 
   // Go through joined guilds, make sure there is a per-guild config in db
@@ -101,14 +95,15 @@ client.once('ready', () => {
     if (!g.available) continue;
 
     // Create guild config if non-existent
-    const guildExists = db.has(`guilds.${g.id}`).value();
+    const guildExists = await db.has(`guilds.${g.id}`).value();
     if (!guildExists) {
-      db.set(`guilds.${g.id}`, dbDefaultGuildObj).write();
+      await db.set(`guilds.${g.id}`, dbDefaultGuildObj).write();
 
-      g.members.fetch().then((fetched) => {
-        fetched.forEach((m) => {
-          if (!m.user.bot && !db.get(`guilds.${g.id}.users`).find({ id: m.id }).value()) {
-            db.get(`guilds.${g.id}.users`).push({
+      g.members.fetch().then(async (fetched) => {
+        fetched.forEach(async (m) => {
+          const userExists = await db.get(`guilds.${g.id}.users`).find({ id: m.id }).value();
+          if (!m.user.bot && !userExists) {
+            await db.get(`guilds.${g.id}.users`).push({
               id: m.id,
               messages: [],
               reactions: [],
@@ -120,7 +115,7 @@ client.once('ready', () => {
     }
 
     // Add winston discord transport if bot_log_channel is not false
-    const dbBotLogChannel = db.get(`guilds.${g.id}.bot_log_channel`).value();
+    const dbBotLogChannel = await db.get(`guilds.${g.id}.bot_log_channel`).value();
     if (dbBotLogChannel !== false) {
       const botLogChannel = g.channels.cache.find((c) => c.name === dbBotLogChannel);
       if (typeof botLogChannel !== 'undefined' && botLogChannel.type === 'text') {
@@ -139,12 +134,13 @@ client.once('ready', () => {
   client.winston = winston;
 
   // Check if there are no operators listed. If so, notify the user
-  if (!db.get('operators').size().value()) {
+  const operatorCount = await db.get('operators').size().value();
+  if (!operatorCount) {
     winston.warn('WARNING: You have no operators listed in db.json, consider adding at least your discord user ID to the operators array.');
   }
 
   // Set the bot activity text
-  const activitySettings = db.get('activity_settings').value();
+  const activitySettings = await db.get('activity_settings').value();
   if (activitySettings.enabled) {
     client.user
       .setActivity(activitySettings.text, { type: activitySettings.type })
@@ -157,7 +153,7 @@ client.once('ready', () => {
 // Message event (command processing)
 client.on('message', async (msg) => {
   // Get prefix from db
-  const prefix = db.get('command_prefix').value();
+  const prefix = await db.get('command_prefix').value();
 
   // Command needs to start with prefix
   const prefixRegex = new RegExp(`^(<@!?${client.user.id}> |${prefix})\\s*`, 'u');
@@ -170,14 +166,14 @@ client.on('message', async (msg) => {
     if (msg.system || msg.author.bot || msg.guild === null || !msg.guild.available || msg.webhookID) return;
 
     // Secret messages & reactions
-    const dbUser = db.get(`guilds.${msg.guild.id}.users`).find({ id: msg.author.id });
+    const dbUser = await db.get(`guilds.${msg.guild.id}.users`).find({ id: msg.author.id });
 
     // Check that messages are enabled, and that the user has some defined
-    const secretMessagesEnabled = db.get(`guilds.${msg.guild.id}.secret_messages.enabled`).value();
-    const userSecretMessages = dbUser.get('messages').value();
+    const secretMessagesEnabled = await db.get(`guilds.${msg.guild.id}.secret_messages.enabled`).value();
+    const userSecretMessages = await dbUser.get('messages').value();
     if (secretMessagesEnabled && userSecretMessages) {
       // Calculate if we want to send a message
-      const secretMessageChance = db.get(`guilds.${msg.guild.id}.secret_messages.chance`).value();
+      const secretMessageChance = await db.get(`guilds.${msg.guild.id}.secret_messages.chance`).value();
       const sendSecretMessage = Math.random() > (1 - secretMessageChance);
 
       // Send a random secret mesage
@@ -185,11 +181,11 @@ client.on('message', async (msg) => {
     }
 
     // Check that reactions are enabled, and that the user has some defined
-    const secretReactsEnabled = db.get(`guilds.${msg.guild.id}.secret_reacts.enabled`).value();
-    const userSecretReacts = dbUser.get('reactions').value();
+    const secretReactsEnabled = await db.get(`guilds.${msg.guild.id}.secret_reacts.enabled`).value();
+    const userSecretReacts = await dbUser.get('reactions').value();
     if (secretReactsEnabled && userSecretReacts) {
       // Calculate if we want to react
-      const secretReactChance = db.get(`guilds.${msg.guild.id}.secret_reacts.chance`).value();
+      const secretReactChance = await db.get(`guilds.${msg.guild.id}.secret_reacts.chance`).value();
       const secretlyReact = Math.random() > (1 - secretReactChance);
 
       // Get random reaction, react with it
@@ -200,9 +196,9 @@ client.on('message', async (msg) => {
     }
 
     // Guild-specific, phrase-activated messages
-    const enablePhrases = db.get(`guilds.${msg.guild.id}.enable_phrases`).value();
+    const enablePhrases = await db.get(`guilds.${msg.guild.id}.enable_phrases`).value();
     if (enablePhrases) {
-      const guildPhrases = db.get(`guilds.${msg.guild.id}.phrases`).value();
+      const guildPhrases = await db.get(`guilds.${msg.guild.id}.phrases`).value();
 
       if (typeof guildPhrases !== 'undefined') {
         for (const guildPhrase of guildPhrases) {
@@ -244,14 +240,14 @@ client.on('message', async (msg) => {
 
   // Check if the command is in the guild's disabled_cmd_modules list
   if (msg.guild !== null && msg.guild.available) {
-    const disabledCmdModules = db.get(`guilds.${msg.guild.id}.disabled_cmd_modules`).value();
+    const disabledCmdModules = await db.get(`guilds.${msg.guild.id}.disabled_cmd_modules`).value();
     if (disabledCmdModules && disabledCmdModules.includes(command.name)) {
       return msg.reply('that command does not exist!');
     }
   }
 
   // Check if the user can execute the command (opOnly)
-  const isOp = db.get('operators').includes(msg.author.id).value();
+  const isOp = await db.get('operators').includes(msg.author.id).value();
   if (command.opOnly && !isOp) {
     return msg.reply('you do not have permission to execute that command!');
   }
@@ -313,14 +309,14 @@ client.on('message', async (msg) => {
 });
 
 // Emoji creation event
-client.on('emojiCreate', (emoji) => {
+client.on('emojiCreate', async (emoji) => {
   // Return early if this feature is disabled
-  const settings = db.get(`guilds.${emoji.guild.id}.announcements.emoji_create`).value();
+  const settings = await db.get(`guilds.${emoji.guild.id}.announcements.emoji_create`).value();
   if (!settings.enabled) return;
 
   // Get config from db
   const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
-    settings.channel_override : db.get(`guilds.${emoji.guild.id}.announcements.channel`).value();
+    settings.channel_override : await db.get(`guilds.${emoji.guild.id}.announcements.channel`).value();
   const emojiChannel = emoji.guild.channels.cache.find((c) => c.name === emojiChannelName);
   const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Created';
 
@@ -335,14 +331,14 @@ client.on('emojiCreate', (emoji) => {
 });
 
 // Emoji delete event
-client.on('emojiDelete', (emoji) => {
+client.on('emojiDelete', async (emoji) => {
   // Return early if this feature is disabled
-  const settings = db.get(`guilds.${emoji.guild.id}.announcements.emoji_delete`).value();
+  const settings = await db.get(`guilds.${emoji.guild.id}.announcements.emoji_delete`).value();
   if (!settings.enabled) return;
 
   // Get config from db
   const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
-    settings.channel_override : db.get(`guilds.${emoji.guild.id}.announcements.channel`).value();
+    settings.channel_override : await db.get(`guilds.${emoji.guild.id}.announcements.channel`).value();
   const emojiChannel = emoji.guild.channels.cache.find((c) => c.name === emojiChannelName);
   const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Deleted';
 
@@ -357,14 +353,14 @@ client.on('emojiDelete', (emoji) => {
 });
 
 // Emoji update event
-client.on('emojiUpdate', (oldEmoji, newEmoji) => {
+client.on('emojiUpdate', async (oldEmoji, newEmoji) => {
   // Return early if this feature is disabled
-  const settings = db.get(`guilds.${newEmoji.guild.id}.announcements.emoji_update`).value();
+  const settings = await db.get(`guilds.${newEmoji.guild.id}.announcements.emoji_update`).value();
   if (!settings.enabled) return;
 
   // Get config from db
   const emojiChannelName = typeof settings.channel_override !== 'undefined' ?
-    settings.channel_override : db.get(`guilds.${newEmoji.guild.id}.announcements.channel`).value();
+    settings.channel_override : await db.get(`guilds.${newEmoji.guild.id}.announcements.channel`).value();
   const emojiChannel = newEmoji.guild.channels.cache.find((c) => c.name === emojiChannelName);
   const title = settings.messages.length ? getRandomFromArray(settings.messages) : 'Emoji Updated';
 
@@ -389,15 +385,16 @@ client.on('messageReactionAdd', async (reaction, user) => {
     reaction.message.react('💯');
   }
 
-  // Auto-alert on react code (enabled on a per-guild basis)
+  // Reaction notifications
   const { author, guild } = reaction.message;
-  if (typeof guild !== 'undefined' && guild.available &&
-      db.get(`guilds.${guild.id}.reaction_notify`).value()) {
+  const guildReactionNotifyEnabled = await db.get(`guilds.${guild.id}.reaction_notify`).value();
+  if (typeof guild !== 'undefined' && guild.available && guildReactionNotifyEnabled) {
     // first check that you can send pms to the author! (i.e. that its not a bot)
     if (author.bot) return;
 
     // then, check if the user has reaction_notify enabled
-    if (!db.get(`guilds.${guild.id}.users`).find({ id: author.id }).get('reaction_notify').value()) return;
+    const userReactionNotifyEnabled = await db.get(`guilds.${guild.id}.users`).find({ id: author.id }).get('reaction_notify').value();
+    if (!userReactionNotifyEnabled) return;
 
     try {
       // Create a DM channel to user
@@ -418,12 +415,12 @@ client.on('messageReactionAdd', async (reaction, user) => {
 });
 
 // Channel creation event
-client.on('channelCreate', (channel) => {
+client.on('channelCreate', async (channel) => {
   // Only notify the creation of text and voice channels
   if (channel.type !== 'text' && channel.type !== 'voice') return;
 
   // Check if the event is enabled, return otherwise (has to happen after channel type check)
-  const settings = db.get(`guilds.${channel.guild.id}.announcements.channel_create`).value();
+  const settings = await db.get(`guilds.${channel.guild.id}.announcements.channel_create`).value();
   if (!settings.enabled) return;
 
   // Bail if the channel doesn't exist
@@ -441,12 +438,12 @@ client.on('channelCreate', (channel) => {
 });
 
 // Channel deletion event
-client.on('channelDelete', (channel) => {
+client.on('channelDelete', async (channel) => {
   // Only notify the deletion of text and voice channels
   if (channel.type !== 'text' && channel.type !== 'voice') return;
 
   // Check if the event is enabled, return otherwise (has to happen after channel type check)
-  const settings = db.get(`guilds.${channel.guild.id}.announcements.channel_delete`).value();
+  const settings = await db.get(`guilds.${channel.guild.id}.announcements.channel_delete`).value();
   if (!settings.enabled) return;
 
   // Bail if the channel doesn't exist
@@ -464,16 +461,17 @@ client.on('channelDelete', (channel) => {
 });
 
 // Channel update event
-client.on('channelUpdate', (oldChannel, newChannel) => {
+client.on('channelUpdate', async (oldChannel, newChannel) => {
   // Only notify the deletion of text and voice channels (when enabled)
   if (newChannel.type !== 'text' && newChannel.type !== 'voice') return;
 
   // Check if the event is enabled, return otherwise (has to happen after channel type check)
-  const settings = db.get(`guilds.${newChannel.guild.id}.announcements.channel_update`).value();
+  const settings = await db.get(`guilds.${newChannel.guild.id}.announcements.channel_update`).value();
   if (!settings.enabled) return;
 
   // Bail if the channel doesn't exist
-  const announcementsChannel = newChannel.guild.channels.cache.find((c) => c.name === db.get(`guilds.${newChannel.guild.id}.announcements.channel`).value());
+  const announcementsChannelName = await db.get(`guilds.${newChannel.guild.id}.announcements.channel`).value();
+  const announcementsChannel = newChannel.guild.channels.cache.find((c) => c.name === announcementsChannelName);
   if (typeof announcementsChannel === 'undefined') return winston.error(`The defined announcements channel for guild id ${newChannel.guild.id} is invalid!`);
 
   // Send random message from appropriate messages array + a bunch of updated info for the old->new channel
