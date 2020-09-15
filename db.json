@@ -18,7 +18,7 @@
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".rn enable",
+      "last_command": ".about",
       "reaction_notify": true,
       "bot_log_channel": "bot-log",
       "secret_messages": {
