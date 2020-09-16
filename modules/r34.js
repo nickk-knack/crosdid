@@ -4,10 +4,6 @@ const randomHex = require('random-hex');
 const fetch = require('node-fetch');
 const parser = require('xml2js').parseStringPromise;
 
-// Todo: Rewrite to use node-fetch, fetch raw image data
-// and put it in a rich embed
-// Look at the groupme bot version
-
 module.exports = {
   name: 'r34',
   aliases: ['rule34'],
