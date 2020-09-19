@@ -31,8 +31,8 @@ module.exports = {
           color: parseInt(randomHex.generate(), 16),
         },
       });
-    } catch (err) {
-      throw new Error(`An error occurred while fetching that gravestone: \`${err}\``);
+    } catch (e) {
+      throw new Error(`An error occurred while fetching that gravestone: \`${e.message}\``);
     }
   },
 };

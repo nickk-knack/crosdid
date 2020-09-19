@@ -38,8 +38,8 @@ module.exports = {
         .setImage(fileUrl);
 
       await message.channel.send(embed);
-    } catch (err) {
-      throw new Error(`Something went wrong while making the request. (\`${err}\`)`);
+    } catch (e) {
+      throw new Error(`Something went wrong while making the request. (\`${e.message}\`)`);
     }
   },
 };

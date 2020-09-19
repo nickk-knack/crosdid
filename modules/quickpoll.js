@@ -57,7 +57,7 @@ module.exports = {
 
         // react
         await sent.react(react).catch((e) => {
-          throw new Error(`Error reacting with ${react} - ${e}`);
+          throw new Error(`Error reacting with ${react}: ${e.message}`);
         });
       });
 
@@ -67,14 +67,14 @@ module.exports = {
       if (winningReacts.size > 1) {
         // tie between some reacts
         sent.edit(`There was a tie between ${winningReacts.map((react) => `"**${responses[emojis.indexOf(react.emoji.toString())]}**"`).join(', ')}, with each getting **${winningReacts[0].count - 1} votes**`)
-          .catch((err) => { throw new Error(`Error editing message. (${err})`); });
+          .catch((e) => { throw new Error(`Error editing message. (${e.message})`); });
       } else if (winningReacts.size === 1) {
         const winningReact = winningReacts.first();
         sent.edit(`The winning choice is "**${responses[emojis.indexOf(winningReact.emoji.toString())]}**" with **${winningReact.count - 1} votes**`)
-          .catch((err) => { throw new Error(`Error editing message. (${err})`); });
+          .catch((e) => { throw new Error(`Error editing message. (${e.message})`); });
       } else {
         sent.edit('There were no winners????')
-          .catch((err) => { throw new Error(`Error editing message. (${err})`); });
+          .catch((e) => { throw new Error(`Error editing message. (${e.message})`); });
       }
     } catch (e) {
       throw new Error(`An error occurred while creating the poll. (${e.message})`);

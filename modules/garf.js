@@ -35,8 +35,8 @@ module.exports = {
           color: parseInt(randomHex.generate(), 16),
         },
       });
-    } catch (err) {
-      throw new Error(`An error occured while trying to get your garfield. (${err})`);
+    } catch (e) {
+      throw new Error(`An error occured while trying to get your garfield. (${e.message})`);
     }
   },
 };

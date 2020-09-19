@@ -78,7 +78,7 @@ let db = null;
       const command = require(`./modules/${file}`); // eslint-disable-line global-require
       client.commands.set(command.name, command);
     } catch (e) {
-      winston.error(`Error loading ${file}: ${e}`);
+      winston.error(`Error loading ${file}: ${e.message}`);
     }
   }
 
@@ -192,7 +192,11 @@ client.on('message', async (msg) => {
       // Get random reaction, react with it
       if (secretlyReact) {
         const reaction = getRandomFromArray(userSecretReacts);
-        msg.react(reaction.custom ? msg.guild.emojis.cache.get(reaction.emoji) : reaction.emoji);
+        try {
+          msg.react(reaction.custom ? msg.guild.emojis.cache.get(reaction.emoji) : reaction.emoji);
+        } catch (e) {
+          winston.error(e.message);
+        }
       }
     }
 
@@ -297,9 +301,9 @@ client.on('message', async (msg) => {
   try {
     msg.channel.startTyping();
     await command.execute(msg, args); // might need to make all commands async for this
-  } catch (error) {
-    winston.error(error.message);
-    msg.reply(`an error occurred while executing the \`${commandName}\` command: ${error.message}`);
+  } catch (e) {
+    winston.error(e.message);
+    msg.reply(`an error occurred while executing the \`${commandName}\` command: ${e.message}`);
   } finally {
     msg.channel.stopTyping(true);
 
@@ -409,8 +413,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
         .addField('Reaction', `"${reaction.emoji}" from the "${reaction.message.guild.name}" guild.`);
 
       dm.send(embed);
-    } catch (err) {
-      winston.error(`Could not send DM to ${author}. (${err})`);
+    } catch (e) {
+      winston.error(`Could not send DM to ${author}. (${e.message})`);
     }
   }
 });

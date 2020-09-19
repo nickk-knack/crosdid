@@ -24,8 +24,8 @@ module.exports = {
         .setImage(data);
 
       await message.channel.send(embed);
-    } catch (err) {
-      throw new Error(`I had trouble getting inspired... (${err})`);
+    } catch (e) {
+      throw new Error(`I had trouble getting inspired... (${e.message})`);
     }
   },
 };

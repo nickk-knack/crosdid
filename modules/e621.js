@@ -67,8 +67,8 @@ module.exports = {
       addFieldIfNotEmpty(embed, 'Meta tags', result.tags.meta.join(', '), true);
 
       await message.channel.send(embed);
-    } catch (err) {
-      throw new Error(`An error occurred while performing the request to the API: ${err}`);
+    } catch (e) {
+      throw new Error(`An error occurred while performing the request to the API: ${e.message}`);
     }
   },
 };

@@ -142,12 +142,12 @@ module.exports = {
       if (activitySettings.enabled) {
         user.setActivity(activitySettings.text, { type: activitySettings.type })
           .catch((e) => {
-            throw new Error(`There was an error setting the activity. (${e})`);
+            throw new Error(`There was an error setting the activity. (${e.message})`);
           });
       } else {
         user.setActivity(null)
           .catch((e) => {
-            throw new Error(`There was an error setting the activity. (${e})`);
+            throw new Error(`There was an error setting the activity. (${e.message})`);
           });
       }
     } else if (subcommand === 'phrases') {
@@ -242,7 +242,7 @@ module.exports = {
           user.setAvatar(avatarUrl)
             .then(() => message.reply(`successfully set avatar to ${avatarUrl}`))
             .catch((e) => {
-              throw new Error(`There was an error setting the avatar. (${e})`);
+              throw new Error(`There was an error setting the avatar. (${e.message})`);
             });
           break;
         }
@@ -361,7 +361,7 @@ module.exports = {
           // go through all users in current guild, add shit to db for them
           message.guild.members.fetch().then(async (fetched) => {
             fetched.forEach(async (m) => {
-              const userExists = await db.get(`guilds.${g.id}.users`).find({ id: m.id }).value();
+              const userExists = await db.get(`guilds.${message.guild.id}.users`).find({ id: m.id }).value();
               if (!m.user.bot && !userExists) {
                 await db.get(`guilds.${message.guild.id}.users`).push({
                   id: m.id,

@@ -72,7 +72,7 @@ module.exports = {
           }
         }
       }).catch((e) => {
-        throw new Error(`Something went wrong while trying to send a DM. (${e})`);
+        throw new Error(`Something went wrong while trying to send a DM. (${e.message})`);
       });
   },
 };

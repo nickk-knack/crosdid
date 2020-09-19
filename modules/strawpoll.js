@@ -37,8 +37,8 @@ const read = async (args) => {
     }
 
     return `Winning result for "${json.title.trim()}": "${topResult.result.trim()}" with ${topResult.votes} votes.`;
-  } catch (err) {
-    throw new Error(`An error occurred while processing the read request! ${err}`);
+  } catch (e) {
+    throw new Error(`An error occurred while processing the read request! ${e.message}`);
   }
 };
 
@@ -101,8 +101,8 @@ const create = async (args) => {
     } else {
       return 'something went wrong while creating that strawpoll...';
     }
-  } catch (error) {
-    throw new Error(`An error occurred while creating the strawpoll. (${error})`);
+  } catch (e) {
+    throw new Error(`An error occurred while creating the strawpoll. (${e.message})`);
   }
 
   // strawpoll.createPoll({
@@ -116,8 +116,8 @@ const create = async (args) => {
   // 	} else {
   // 		bot.sendMessage('Ruh roh, raggy! [Something went wrong processing that request...]');
   // 	}
-  // }).catch(err => {
-  // 	console.error(err);
+  // }).catch(e => {
+  // 	console.error(e);
   // 	bot.sendMessage('Ruh roh, raggy! [Something went wrong processing that request...]');
   // });
 };

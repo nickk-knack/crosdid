@@ -89,8 +89,8 @@ module.exports = {
       // Finish embed and send
       embed.setTitle(result.title);
       await message.channel.send(embed);
-    } catch (err) {
-      throw new Error(`An error occurred while making the request: ${err}`);
+    } catch (e) {
+      throw new Error(`An error occurred while making the request: ${e.message}`);
     }
   },
 };

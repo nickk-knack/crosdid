@@ -2,14 +2,11 @@
 
 ## General bot work
 
-1. switch db to fileasync? might improve speed, but that also might be unnecessary
-   1. will likely cause more cmd modules to need to be async'd
-2. add some sort of error handling for "unhandled promise rejection" happening with secret reacts
-3. bot_log_channel
+1. move bot stuff out to a bot.js file and include it in index
+   1. modularizing a lot of stuff to make it easier to read would be beneficial
+2. bot_log_channel
    1. add support to `bot` cmd for changing this
-4. look into webhooks?
-   1. is it possible to create a webhook that can autowake/keep awake the bot on heroku?
-5. generalize auto 100 react to be able to read from a guild-specific db list of auto-react emojis
+3. generalize auto 100 react to be able to read from a guild-specific db list of auto-react emojis
    1. will likely need to add config subcommand to `bot` command
 
 ## Bugs

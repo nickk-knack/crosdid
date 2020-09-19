@@ -36,8 +36,8 @@ module.exports = {
         .addField('Rating', `${answer.thumbs_up} thumbs up.\n${answer.thumbs_down} thumbs down.`);
 
       await message.channel.send(embed);
-    } catch (err) {
-      throw new Error(`An error occurred while querying the API! (${err})`);
+    } catch (e) {
+      throw new Error(`An error occurred while querying the API! (${e.message})`);
     }
   },
 };
