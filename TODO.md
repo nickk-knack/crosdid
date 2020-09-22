@@ -8,6 +8,7 @@
    1. add support to `bot` cmd for changing this
 3. generalize auto 100 react to be able to read from a guild-specific db list of auto-react emojis
    1. will likely need to add config subcommand to `bot` command
+4. webhooks for weather notifications? (separate project?)
 
 ## Bugs
 
@@ -23,11 +24,10 @@
 
 ## Existing command updates
 
-1. `quickpoll` - pin poll message
+1. `wikipedia` - consider removing wikijs and reimplementing api on your own
 2. `strawpoll` - need to test poll creation reimplementation
-3. `bot` - async it
-4. `fakeperson` - add address generation from fakeaddressgenerator?
-5. `youtube` - look at comments
+3. `fakeperson` - add address generation from fakeaddressgenerator?
+4. `youtube` - look at comments
 
 ## New command ideas
 
@@ -40,7 +40,7 @@
 3. `amazon` - search amazon for items
 4. `quote` - generate and send a random quote? might be dumb idk
 5. unicode text fucker, given input perform replacements on text to get funky text
-6. `ask` - based on question form, give a quasirealistic answer (speech processing???)
+6. `ask` - based on question form, give a quasi-realistic answer (speech processing???)
 7. `remind` - set a reminder for a user, store info for reminder in db for keeping them when offline
    1. on bot startup, check for existing reminders and re-set interval
    2. db should keep time set, time to remind, text, and maybe more?
