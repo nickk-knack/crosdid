@@ -35,18 +35,23 @@ module.exports = {
     if (responses.length !== emojis.length) return message.reply(`you fool! You only provided ${emojis.length} emoji options for ${responses.length} questions!`);
 
     try {
+      // Create embed
       const embed = new MessageEmbed()
         .setColor(randomHex.generate())
         .setTitle(title);
 
+      // Add a field to embed for each response
       responses.forEach((val, index) => {
         embed.addField(`${emojis[index]}`, trim(val, 1024), true);
       });
 
+      // Send embed, pin message, force typing to stop early
       const mPollTime = moment(moment() + pollTime);
       const sent = await message.channel.send(`This poll will end ${mPollTime.fromNow()}, at ${mPollTime.format('h:mm:ss A ([UTC]ZZ) [on] dddd, MMMM Do, YYYY')}.`, { embed: embed });
+      sent.pin({ reason: 'poll' });
       message.channel.stopTyping(true);
 
+      // React to message with each possible response emoji
       emojis.forEach(async (emoji) => {
         // get proper react emoji
         const guildEmoji = emojiRegex.exec(emoji);
@@ -61,9 +66,11 @@ module.exports = {
         });
       });
 
+      // Wait for poll length and collect reactions, sort out the winner(s)
       const collected = await sent.awaitReactions((reaction) => emojis.includes(reaction.emoji.toString()), { time: pollTime });
       const winningReacts = collected.sort((a, b) => a.count - b.count).filter((val, index, col) => val.count === col.last().count && val.count > 1);
 
+      // Display poll results
       if (winningReacts.size > 1) {
         // tie between some reacts
         sent.edit(`There was a tie between ${winningReacts.map((react) => `"**${responses[emojis.indexOf(react.emoji.toString())]}**"`).join(', ')}, with each getting **${winningReacts[0].count - 1} votes**`)
