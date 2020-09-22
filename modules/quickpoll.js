@@ -73,7 +73,7 @@ module.exports = {
       // Display poll results
       if (winningReacts.size > 1) {
         // tie between some reacts
-        sent.edit(`There was a tie between ${winningReacts.map((react) => `"**${responses[emojis.indexOf(react.emoji.toString())]}**"`).join(', ')}, with each getting **${winningReacts[0].count - 1} votes**`)
+        sent.edit(`There was a tie between ${winningReacts.map((react) => `"**${responses[emojis.indexOf(react.emoji.toString())]}**"`).join(', ')}, with each getting **${winningReacts.first().count - 1} votes**`)
           .catch((e) => { throw new Error(`Error editing message. (${e.message})`); });
       } else if (winningReacts.size === 1) {
         const winningReact = winningReacts.first();
