@@ -13,12 +13,12 @@
     "text": "the world burn"
   },
   "last_username_change_date": 1597938168486,
-  "global_good_count": 15,
+  "global_good_count": 16,
   "global_bad_count": 17,
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".about",
+      "last_command": ".good",
       "reaction_notify": true,
       "bot_log_channel": "bot-log",
       "secret_messages": {
@@ -384,7 +384,7 @@
           ]
         }
       },
-      "good_count": 15,
+      "good_count": 16,
       "bad_count": 17,
       "thank_count": 8
     },
@@ -698,7 +698,7 @@
       "thank_count": 0
     },
     "400513116376662017": {
-      "last_command": ".i cow standing in ocean",
+      "last_command": ".choose taquitos | nuggies | mac n cheez",
       "reaction_notify": false,
       "bot_log_channel": false,
       "secret_messages": {
