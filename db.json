@@ -13,12 +13,12 @@
     "text": "the world burn"
   },
   "last_username_change_date": 1597938168486,
-  "global_good_count": 16,
-  "global_bad_count": 17,
+  "global_good_count": 17,
+  "global_bad_count": 22,
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".good",
+      "last_command": ".I gamer emoji",
       "reaction_notify": true,
       "bot_log_channel": "bot-log",
       "secret_messages": {
@@ -90,7 +90,7 @@
               "emoji": "669332349183590421"
             }
           ],
-          "reaction_notify": true
+          "reaction_notify": false
         },
         {
           "id": "206037113433620480",
@@ -125,7 +125,8 @@
             "smart ass grad school lookin motherfucker",
             "QUICK MAC WHAT DOES IT MEAN????? MMMAC!!!!!!!!",
             "mac",
-            "hot teen big breats porn hub"
+            "hot teen big breats porn hub",
+            "My bih got me a walle hat from didney lan"
           ],
           "reactions": [
             {
@@ -384,12 +385,12 @@
           ]
         }
       },
-      "good_count": 16,
+      "good_count": 17,
       "bad_count": 17,
       "thank_count": 8
     },
     "140225766720798721": {
-      "last_command": "",
+      "last_command": ".d",
       "reaction_notify": false,
       "bot_log_channel": false,
       "secret_messages": {
@@ -698,7 +699,7 @@
       "thank_count": 0
     },
     "400513116376662017": {
-      "last_command": ".choose taquitos | nuggies | mac n cheez",
+      "last_command": ".d",
       "reaction_notify": false,
       "bot_log_channel": false,
       "secret_messages": {
