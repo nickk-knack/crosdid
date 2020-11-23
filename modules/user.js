@@ -3,13 +3,13 @@ const { stripIndent } = require('common-tags');
 module.exports = {
   name: 'user',
   description: 'Modify guild user db information for the **mentioned** user',
-  usage: stripIndent`<@user> <messages <list |
-                   add <string> |
-                   remove <index>>> |
-        <reacts <list |
-                 add <string> |
-                 remove <index>>> |
-        <op <true | false>>`,
+  usage: stripIndent`<@user> <messages <list             |
+                                        add <string>     |
+                                        remove <index>>> |
+                             <reacts   <list             |
+                                        add <string>     |
+                                        remove <index>>> |
+                             <op <true | false>>`,
   args: true,
   minArgsLength: 3,
   guildOnly: true,
@@ -26,7 +26,7 @@ module.exports = {
     const { db } = message.client;
     const subcommand = args.shift().toLowerCase();
     const subcommandArg = args.shift().toLowerCase();
-    const user = message.mentions.members.cache.first();
+    const user = message.mentions.members.first();
 
     let dbUser = await db.get(`guilds.${message.guild.id}.users`).find({ id: user.id });
 
@@ -64,7 +64,7 @@ module.exports = {
         if (subcommand === 'messages') {
           replyMessage = await dbUser.map((x) => `[${++i}.] "${x}"`).join('\n').value();
         } else {
-          replyMessage = await dbUser.map((x) => `[${++i}.] ${x.custom ? message.guild.emojis.get(x.emoji) : x.emoji}`).join('\n').value();
+          replyMessage = await dbUser.map((x) => `[${++i}.] ${x.custom ? message.guild.emojis.cache.get(x.emoji) : x.emoji}`).join('\n').value();
         }
 
         return message.reply(replyMessage);
