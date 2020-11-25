@@ -99,7 +99,7 @@ const addFieldIfNotEmpty = (embed, fieldName, fieldData, inline) => {
   if (typeof fieldData !== 'string') throw new Error('fieldData must be a string!');
   if (fieldData === '') return;
 
-  embed.addField(fieldName, trim(fieldData, 1024), inline);
+  embed.addField(fieldName, trim(fieldData.replace(/_/gui, '\\_'), 1024), inline);
 };
 
 const dbDefault = {

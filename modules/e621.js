@@ -55,7 +55,7 @@ module.exports = {
         .setImage(result.file.url)
         .setThumbnail(result.preview.url)
         .setURL(`https://e621.net/posts/${result.id}?q=${query}`)
-        .setAuthor(result.tags.artist.join(', '))
+        .setAuthor(result.tags.artist.join(', ').replace(/_/gui, '\\_'))
         .setTimestamp(new Date(result.updated_at))
         .setFooter(`score: ${result.score.total}`);
 
