@@ -18,7 +18,7 @@
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".I gamer emoji",
+      "last_command": ".e6 cucumber",
       "reaction_notify": true,
       "bot_log_channel": "bot-log",
       "secret_messages": {
@@ -84,10 +84,6 @@
             {
               "custom": true,
               "emoji": "653690343237353472"
-            },
-            {
-              "custom": true,
-              "emoji": "669332349183590421"
             }
           ],
           "reaction_notify": false
@@ -98,7 +94,8 @@
             "go photoshop a bigger dick on yourself, jake",
             ".bad jake",
             "shut up anprim",
-            "stay in nam"
+            "stay in nam",
+            "jesus var kommunist"
           ],
           "reactions": [
             {
@@ -112,6 +109,14 @@
             {
               "custom": true,
               "emoji": "663079480255840287"
+            },
+            {
+              "custom": true,
+              "emoji": "652197768550678541"
+            },
+            {
+              "custom": true,
+              "emoji": "665681699325345833"
             }
           ],
           "reaction_notify": true
@@ -220,11 +225,7 @@
             },
             {
               "custom": true,
-              "emoji": "654752279517331457"
-            },
-            {
-              "custom": true,
-              "emoji": "654752346534051855"
+              "emoji": "694694657027866684"
             }
           ]
         },
