@@ -5,7 +5,7 @@ require('dotenv').config();
 const token = process.env.TOKEN;
 const port = process.env.PORT || 3000;
 const dbFileName = process.env.DB_FILE_NAME || 'db.json';
-// const DEBUG = process.env.DEBUG || false;
+const DEBUG = process.env.DEBUG || false;
 
 // Requirements
 const winston = require('winston');
@@ -500,7 +500,7 @@ client.on('rateLimit', (info) => {
 // Logging events
 client.on('error', (error) => winston.error(error));
 client.on('warn', (warn) => winston.warn(warn));
-// if (DEBUG) client.on('debug', (info) => winston.info(info));
+if (DEBUG) client.on('debug', (info) => winston.info(info));
 
 winston.info('Loaded events');
 
