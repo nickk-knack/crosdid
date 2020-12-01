@@ -1,5 +1,13 @@
 # crosdid todo list
 
+## Roles shit
+
+- [permissions guide](https://discordjs.guide/popular-topics/permissions.html#terminology)
+- [role manager](https://discord.js.org/#/docs/main/stable/class/RoleManager)
+- [role](https://discord.js.org/#/docs/main/stable/class/Role)
+- [role data](https://discord.js.org/#/docs/main/stable/typedef/RoleData)
+- [color resolvable](https://discord.js.org/#/docs/main/stable/typedef/ColorResolvable)
+
 ## General bot work
 
 1. move bot stuff out to a bot.js file and include it in index
