@@ -51,6 +51,7 @@
 9. `repeat` - repeat last_command for current guild (guildOnly)
     1. this might actually seriously suck big time, not actually easy
 10. ps name gen
+11. something that uses a messagecollector with a filter for a starting phrase (given in command) and also potentially only allowing one suggestion per user idk
 
 ## Links
 
