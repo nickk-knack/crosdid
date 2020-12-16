@@ -31,11 +31,14 @@ module.exports = {
       if (json.posts.$.count === '0') return message.channel.send(`No results found for **${searchTerms}**`);
 
       const { post } = json.posts;
-      const fileUrl = post[Math.floor(Math.random() * post.length)].$.file_url;
+      const postObject = post[Math.floor(Math.random() * post.length)].$;
       const embed = new MessageEmbed()
         .setColor(randomHex.generate())
-        .setTitle(args.join(' '))
-        .setImage(fileUrl);
+        .setTitle(args.map((e) => `"${e}"`).join(' + '))
+        .setImage(postObject.file_url)
+        .setTimestamp(postObject.created_at)
+        .setFooter(`score: ${postObject.score}`)
+        .addField('Tags', postObject.tags);
 
       await message.channel.send(embed);
     } catch (e) {
