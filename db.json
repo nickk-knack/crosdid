@@ -14,11 +14,11 @@
   },
   "last_username_change_date": 1597938168486,
   "global_good_count": 18,
-  "global_bad_count": 22,
+  "global_bad_count": 27,
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".I rats we're rats we're the rats",
+      "last_command": ".r34 grilled_cheese",
       "reaction_notify": true,
       "bot_log_channel": "bot-log",
       "secret_messages": {
@@ -701,7 +701,7 @@
       "thank_count": 0
     },
     "400513116376662017": {
-      "last_command": ".r34 fujiwara_chika",
+      "last_command": ".cot",
       "reaction_notify": false,
       "bot_log_channel": false,
       "secret_messages": {
