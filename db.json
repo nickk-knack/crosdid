@@ -13,12 +13,12 @@
     "text": "the world burn"
   },
   "last_username_change_date": 1597938168486,
-  "global_good_count": 18,
-  "global_bad_count": 27,
+  "global_good_count": 21,
+  "global_bad_count": 35,
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".r34 grilled_cheese",
+      "last_command": ".I best political ideology",
       "reaction_notify": true,
       "bot_log_channel": "bot-log",
       "secret_messages": {
@@ -271,7 +271,8 @@
             "OK now THIS... is EPIC",
             "ok now THIS... is EPIC",
             "ok now THIS... is epic",
-            "ok now THIS... this is epic."
+            "ok now THIS... this is epic.",
+            "epid"
           ]
         },
         {
@@ -387,7 +388,7 @@
           ]
         }
       },
-      "good_count": 18,
+      "good_count": 21,
       "bad_count": 17,
       "thank_count": 8
     },
@@ -701,7 +702,7 @@
       "thank_count": 0
     },
     "400513116376662017": {
-      "last_command": ".cot",
+      "last_command": ".r34 overwatch",
       "reaction_notify": false,
       "bot_log_channel": false,
       "secret_messages": {
