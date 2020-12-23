@@ -4,6 +4,9 @@ const fetch = require('node-fetch');
 const randomHex = require('random-hex');
 const { addFieldIfNotEmpty } = require('../util');
 
+const LENGTH = 10;
+const MIN_SCORE = -25;
+
 module.exports = {
   name: 'e621',
   aliases: ['e6'],
@@ -14,7 +17,6 @@ module.exports = {
   cooldown: 5,
   async execute(message, args) {
     const searchTerms = args.join(' ');
-    const length = 10;
 
     const opts = {
       method: 'GET',
@@ -25,7 +27,7 @@ module.exports = {
 
     const query = querystring.stringify({
       tags: searchTerms,
-      limit: length,
+      limit: LENGTH,
     }).replace(/%20/gu, '+');
 
     try {
@@ -46,8 +48,22 @@ module.exports = {
         return message.reply(`no results were found for \`${searchTerms}\``);
       }
 
-      const result = posts[Math.floor(Math.random() * posts.length)];
+      // Pick random post, if score < min score, keep picking random post until list exhausted or a valid post is found
+      let index = Math.floor(Math.random() * posts.length);
+      let result = posts[index];
+      let tries = 0;
+      while (result.score.total < MIN_SCORE && tries < posts.length) {
+        posts.splice(index, 1);
+        index = Math.floor(Math.random() * posts.length);
+        result = posts[index];
+        tries++;
+      }
 
+      if (result === null) {
+        return message.reply(`no results with a score greater than ${MIN_SCORE} were found for \`${searchTerms}\``);
+      }
+
+      // Create and send embed
       const embed = new MessageEmbed()
         .setColor(randomHex.generate())
         .setTitle(args.map((e) => `"${e}"`).join(' + '))
