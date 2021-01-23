@@ -3,6 +3,7 @@ const querystring = require('querystring');
 const randomHex = require('random-hex');
 const fetch = require('node-fetch');
 const parser = require('xml2js').parseStringPromise;
+const { trim } = require('../util');
 
 module.exports = {
   name: 'r34',
@@ -38,7 +39,7 @@ module.exports = {
         .setImage(postObject.file_url)
         .setTimestamp(postObject.created_at)
         .setFooter(`score: ${postObject.score}`)
-        .addField('Tags', postObject.tags);
+        .addField('Tags', trim(postObject.tags.replace(/_/gui, '\\_'), 1024));
 
       await message.channel.send(embed);
     } catch (e) {
