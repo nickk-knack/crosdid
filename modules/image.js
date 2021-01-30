@@ -1,8 +1,7 @@
 const { MessageEmbed } = require('discord.js');
-const GoogleImages = require('google-images');
+// eslint-disable-next-line camelcase
+const { image_search } = require('duckduckgo-images-api');
 const randomHex = require('random-hex');
-const GoogleAPIKey = process.env.GOOGLE_API_KEY;
-const GoogleCSEID = process.env.GOOGLE_CSE_ID;
 
 module.exports = {
   name: 'image',
@@ -14,10 +13,13 @@ module.exports = {
   cooldown: 3,
   async execute(message, args) {
     const query = args.join(' ').trim();
-    const client = new GoogleImages(GoogleCSEID, GoogleAPIKey);
 
     try {
-      const images = await client.search(query);
+      const images = await image_search({
+        query: query,
+        iterations: 1,
+        retries: 3,
+      });
 
       // Check if there were no results
       if (!images.length) return message.reply(`no results found for \`${query}\``);
@@ -29,21 +31,12 @@ module.exports = {
 
       const embed = new MessageEmbed()
         .setColor(randomHex.generate())
-        .setTitle(query)
-        .setImage(randomImage.url);
+        .setTitle(`"${query}"`)
+        .setImage(randomImage.image);
 
       await message.channel.send(embed);
     } catch (e) {
-      switch (e.statusCode) {
-        case 403:
-          message.reply("I literally can't search anymore");
-          break;
-        case 404:
-          message.reply(`no results found for \`${query}\``);
-          break;
-        default:
-          throw new Error(`An error occurred requesting your image. (${e.message})`);
-      }
+      throw new Error(`An error occurred requesting your image (code: ${e.statusCode}). [${e.message}]`);
     }
   },
 };
