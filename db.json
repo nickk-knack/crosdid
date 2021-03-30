@@ -13,12 +13,12 @@
     "text": "the world burn"
   },
   "last_username_change_date": 1597938168486,
-  "global_good_count": 21,
-  "global_bad_count": 35,
+  "global_good_count": 24,
+  "global_bad_count": 58,
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".I best political ideology",
+      "last_command": ".i test",
       "reaction_notify": true,
       "bot_log_channel": "bot-log",
       "secret_messages": {
@@ -336,6 +336,12 @@
           "responses": [
             "❓"
           ]
+        },
+        {
+          "trigger": "oial",
+          "responses": [
+            "o i am laffin"
+          ]
         }
       ],
       "announcements": {
@@ -388,7 +394,7 @@
           ]
         }
       },
-      "good_count": 21,
+      "good_count": 24,
       "bad_count": 17,
       "thank_count": 8
     },
@@ -702,7 +708,7 @@
       "thank_count": 0
     },
     "400513116376662017": {
-      "last_command": ".r34 overwatch",
+      "last_command": ".i corn porn",
       "reaction_notify": false,
       "bot_log_channel": false,
       "secret_messages": {
