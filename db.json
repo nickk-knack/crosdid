@@ -13,12 +13,12 @@
     "text": "the world burn"
   },
   "last_username_change_date": 1597938168486,
-  "global_good_count": 24,
-  "global_bad_count": 58,
+  "global_good_count": 25,
+  "global_bad_count": 60,
   "global_thank_count": 8,
   "guilds": {
     "625766841779879967": {
-      "last_command": ".i test",
+      "last_command": ".i epic halo",
       "reaction_notify": true,
       "bot_log_channel": "bot-log",
       "secret_messages": {
@@ -394,7 +394,7 @@
           ]
         }
       },
-      "good_count": 24,
+      "good_count": 25,
       "bad_count": 17,
       "thank_count": 8
     },
