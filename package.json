@@ -27,7 +27,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "google-images": "^2.1.0",
-    "i": "^0.3.6",
+    "i": "^0.3.7",
     "lowdb": "^1.0.0",
     "moment": "^2.28.0",
     "moment-duration-format": "^2.3.2",
